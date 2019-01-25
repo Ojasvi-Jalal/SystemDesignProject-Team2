@@ -32,12 +32,12 @@ void loop(){
 }
 
 void goRight(){
-    motorForward(0, 50);
+    motorForward(0, 200);
     delay(2500);
     motorAllStop();
 }
 void goLeft(){
-    motorBackward(0, 50);
+    motorBackward(0, 200);
     delay(2500);
     motorAllStop();
 }
