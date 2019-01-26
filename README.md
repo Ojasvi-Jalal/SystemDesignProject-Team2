@@ -2,6 +2,12 @@
 
 ## contributing
 
+# useful commands
+
+Before you get started, this git cheat sheet is super handy, so have it with you all the time ;)
+
+https://www.git-tower.com/blog/git-cheat-sheet/
+
 # git workflow
 
 The Gitflow Workflow defines a strict branching model designed around the project release. This workflow doesn’t add any new concepts or commands beyond what’s required for the Feature Branch Workflow. Instead, it assigns very specific roles to different branches and defines how and when they should interact.
