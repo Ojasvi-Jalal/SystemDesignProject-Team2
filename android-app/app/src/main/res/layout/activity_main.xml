@@ -50,4 +50,5 @@
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.498"
         app:srcCompat="@drawable/bread" />
+
 </android.support.constraint.ConstraintLayout>
