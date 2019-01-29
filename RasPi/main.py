@@ -1,5 +1,9 @@
 import serial_io
 import logging
+from request import Request
+
+HOST = "utrecht"
+PORT = "8000"
 
 def main():
     logging.basicConfig(
@@ -12,6 +16,9 @@ def main():
 
     logging.getLogger().addHandler(stream_handler)
 
-    serial_io.create_test_serial_console()
+    #serial_io.create_test_serial_console()
+    logging.info("testing request")
+    req = Request(HOST, PORT)
+    print(req.get(params={"test": 12, "another": 13}))
 
 if __name__=="__main__":main()
