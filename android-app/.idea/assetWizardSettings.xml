@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_exclamation" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/exclamation.svg" />
+                            <entry key="outputName" value="ic_searching_magnifying_glass" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/searching-magnifying-glass.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -1,3 +1,3 @@
 package com.example.ojasvi.roboreachapp
 
-data class Notification(val id: Int, var shelf: Shelf)
+data class Notification(var shelf: Shelf)

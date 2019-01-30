@@ -9,12 +9,22 @@
     android:weightSum="20"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/shelves_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Overview"
+        android:textSize="20sp" />
+
     <GridLayout
         android:id="@+id/mainGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_weight="8"
+        android:layout_weight="10"
         android:alignmentMode="alignMargins"
         android:columnCount="3"
         android:columnOrderPreserved="false"
@@ -25,6 +35,7 @@
         <!-- COLUMN 1  -->
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -79,6 +90,7 @@
         <!-- COLUMN 2  -->
 
         <android.support.v7.widget.CardView
+            android:id="@+id/a2_card"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -133,6 +145,7 @@
         <!-- COLUMN 3  -->
 
         <android.support.v7.widget.CardView
+            android:id="@+id/a3_card"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -188,6 +201,7 @@
         <!-- COLUMN 1  -->
 
         <android.support.v7.widget.CardView
+            android:id="@+id/b1_card"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -242,6 +256,7 @@
         <!-- COLUMN 2  -->
 
         <android.support.v7.widget.CardView
+            android:id="@+id/b2_card"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -296,6 +311,7 @@
         <!-- COLUMN 3  -->
 
         <android.support.v7.widget.CardView
+            android:id="@+id/b3_card"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -353,15 +369,17 @@
         android:id="@+id/dashboard_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         android:text="Dashboard"
         android:textSize="20sp" />
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/notifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp" />
+        android:layout_weight="8" />
 
 
 </LinearLayout>
