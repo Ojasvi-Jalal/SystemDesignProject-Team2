@@ -1,7 +1,9 @@
 # Basic Robot Device States
 
- needs to be expanded, based on:  
-https://ifile.inf.ed.ac.uk/index.php?path=%2Fafs%2Finf.ed.ac.uk%2Fuser%2Fs16%2Fs1658173%2FSDP%2FPI&finishid=59e0f3945eb1dc69c31e8bd4e9ab38bd
+needs to be properly expanded and implemented
+
+current skeleton used this refence:  
+https://python-3-patterns-idioms-test.readthedocs.io/en/latest/StateMachine.html
 
 ## Instructions
 
