@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/shelf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -21,12 +22,14 @@
         app:layout_constraintVertical_bias="0.060000002">
 
         <LinearLayout
+            android:id="@+id/row1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/a1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/border"
@@ -50,6 +53,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/a2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/border"
@@ -73,6 +77,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/a3"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/border"
@@ -98,12 +103,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/row2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/b1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/border"
@@ -127,6 +134,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/b2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/border"
@@ -150,6 +158,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/b3"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/border"
@@ -175,5 +184,46 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="350dp"
+        android:layout_height="2dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shelf"
+        app:layout_constraintVertical_bias="0.07999998" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.06999999" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Dashboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintVertical_bias="0.060000002" />
 
 </android.support.constraint.ConstraintLayout>
