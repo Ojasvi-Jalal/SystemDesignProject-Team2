@@ -1,4 +1,3 @@
-import serial_io
 import logging
 from request import Request
 
