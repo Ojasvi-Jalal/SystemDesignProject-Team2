@@ -8,8 +8,13 @@ https://ifile.inf.ed.ac.uk/index.php?path=%2Fafs%2Finf.ed.ac.uk%2Fuser%2Fs16%2Fs
 At the moment, if terminal dir is in same directory
 
  $ python
- >>> from robot_device import RobotDevice()
- >>> robot = RobotDevice()
+ 
+ \>\>\> from robot_device import RobotDevice()
+ 
+ \>\>\> robot = RobotDevice()
+ 
  // Outputs origin state
- >>> robot.on_event('item_placed')
+ 
+ \>\>\> robot.on_event('item_placed')
+ 
  // Outputs new state
