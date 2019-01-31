@@ -19,6 +19,9 @@
         <activity
             android:name=".ShelfActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".EditActivity"
+            android:parentActivityName=".EditActivity"/>
     </application>
 
 </manifest>
