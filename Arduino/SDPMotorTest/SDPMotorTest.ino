@@ -3,6 +3,9 @@
 int i = 0;
 int state = 0;
 
+//Position of the robot. The first entry of the array corresponds to x, the second to y
+int position[2] = {0,0};
+
 void setup(){
   SDPsetup();
   helloWorld();
@@ -29,6 +32,34 @@ void loop(){
         default:
             break;
     }
+}
+
+void moveToPlace (int[] moveTo){
+    int moveRight = moveTo[0] - position[0];
+    int moveUp = moveTo[1] - position[1];
+    //Move the appropriate amount towards the right or the left
+    if(moveRight <0){
+        for(int i = 0, i<abs(moveRight), i++){
+            goLeft();
+        }
+    }
+    else{
+        for(int i = 0, i<moveRight, i++){
+            goRight();
+        }
+    }
+
+    if(moveUp<0){
+        for(int i = 0, i<abs(moveRight), i++){
+            //Move the corresponding motor downwards;
+        }
+    }
+    else{
+        for(int i = 0, i<moveRight, i++){
+            //Move the corresponding motor upwards;
+        }
+    }
+
 }
 
 void goRight(){
