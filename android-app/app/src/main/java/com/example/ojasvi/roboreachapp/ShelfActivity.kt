@@ -14,7 +14,7 @@ class ShelfActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Edit button trigger
-        val editButton = findViewById<Button>(R.id.editButton)
+        val editButton = findViewById<Button>(R.id.De)
         editButton.setOnClickListener {
             startActivity(Intent(this, EditActivity::class.java))
         }

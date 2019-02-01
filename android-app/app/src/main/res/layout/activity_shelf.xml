@@ -6,183 +6,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        app:backgroundTint="@color/colorPrimary"
-        app:fabSize="auto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.97"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:text="2019/02/01"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/expiresTitle"
-        app:layout_constraintTop_toBottomOf="@+id/a1_card"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_conversion_absoluteHeight="19dp"
-        tools:layout_conversion_absoluteWidth="154dp" />
-
-    <Button
-        android:id="@+id/retrieveButton"
-        style="@android:style/Widget.Material.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:drawablePadding="10dp"
-        android:drawableRight="@android:drawable/stat_sys_download_done"
-        android:text="Retrieve item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/expiresTitle"
-        app:layout_constraintTop_toBottomOf="@+id/expiresTitle"
-        app:layout_constraintVertical_bias="0.060000002"
-        tools:layout_conversion_absoluteHeight="48dp"
-        tools:layout_conversion_absoluteWidth="123dp" />
-
-    <Button
-        android:id="@+id/editButton"
-        style="@android:style/Widget.Material.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:drawablePadding="10dp"
-        android:drawableRight="@android:drawable/stat_notify_sync"
-        android:text="Edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/detailsButton"
-        app:layout_constraintTop_toBottomOf="@+id/detailsButton"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_conversion_absoluteHeight="48dp"
-        tools:layout_conversion_absoluteWidth="88dp" />
-
-    <Button
-        android:id="@+id/detailsButton"
-        style="@android:style/Widget.Material.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:drawablePadding="10dp"
-        android:drawableRight="@drawable/ic_searching_magnifying_glass"
-        android:text="Details"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/retrieveButton"
-        app:layout_constraintTop_toBottomOf="@+id/retrieveButton"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_conversion_absoluteHeight="48dp"
-        tools:layout_conversion_absoluteWidth="88dp" />
-
-    <TextView
-        android:id="@+id/expiresTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:text="Expires on:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/a1_card"
-        app:layout_constraintTop_toBottomOf="@+id/a1_card"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_conversion_absoluteHeight="19dp"
-        tools:layout_conversion_absoluteWidth="146dp" />
-
     <android.support.v7.widget.CardView
-        android:id="@+id/a1_card"
-        android:layout_width="wrap_content"
+        android:id="@+id/card"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
         android:layout_margin="16dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
         android:layout_rowWeight="1"
+        android:transitionName="@string/transition_string"
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.04000002"
-        android:transitionName="@string/transition_string">
+        app:layout_constraintVertical_bias="0.48000002">
 
         <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/linearLayout"
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
             android:orientation="vertical"
-            android:padding="15dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            app:layout_constraintVertical_bias="0.13999999">
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="A3"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Jam"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/textView6"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="A3"
-                    android:textSize="18sp" />
+                    android:gravity="center_vertical"
+                    android:text="Expires:"
+                    android:textAlignment="textStart"
+                    tools:layout_editor_absoluteX="36dp"
+                    tools:layout_editor_absoluteY="117dp" />
 
-                <ImageView
-                    android:id="@+id/warn"
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/editText2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="visible"
-                    app:srcCompat="@drawable/ic_exclamation" />
+                    android:ems="10"
+                    android:inputType="date"
+                    android:text="2019/02/14" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/title"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:autoSizeTextType="uniform"
-                android:gravity="bottom"
-                android:text="Jam"
-                android:textSize="20sp" />
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Barcode:"
+                    android:textAlignment="textStart"
+                    tools:layout_editor_absoluteX="36dp"
+                    tools:layout_editor_absoluteY="117dp" />
+
+                <EditText
+                    android:id="@+id/editText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="978123456789712345" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
+
 
 </android.support.constraint.ConstraintLayout>
