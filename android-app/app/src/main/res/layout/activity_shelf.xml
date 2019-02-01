@@ -22,19 +22,19 @@
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48000002">
+        app:layout_constraintVertical_bias="0.396">
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="278dp"
+            android:layout_width="313dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginStart="32dp"
             android:orientation="vertical"
+            android:paddingLeft="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,8 +42,8 @@
             app:layout_constraintVertical_bias="0.13999999">
 
             <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="178dp"
+                android:layout_height="136dp"
                 android:orientation="vertical"
                 android:padding="15dp">
 
@@ -54,85 +54,138 @@
 
                     <TextView
                         android:id="@+id/name"
-                        android:layout_width="match_parent"
+                        android:layout_width="199dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
                         android:text="A3"
-                        android:textSize="18sp" />
+                        android:textSize="30sp" />
 
                     <ImageView
                         android:id="@+id/warn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:paddingTop="10sp"
                         android:visibility="visible"
                         app:srcCompat="@drawable/ic_exclamation" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="148dp"
+                    android:layout_height="66dp"
                     android:autoSizeTextType="uniform"
-                    android:gravity="bottom"
+                    android:gravity="center_vertical|fill_vertical|center_horizontal"
                     android:text="Jam"
-                    android:textSize="20sp" />
+                    android:textSize="50sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="100dp"
+                    android:layout_width="176dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="Expires:"
                     android:textAlignment="textStart"
+                    android:textSize="20sp"
                     tools:layout_editor_absoluteX="36dp"
-                    tools:layout_editor_absoluteY="117dp" />
+                    tools:layout_editor_absoluteY="117dp"
+                    tools:ignore="RtlCompat" />
 
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/expiry"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:inputType="date"
-                    android:text="2019/02/14" />
+                    android:inputType="none"
+                    android:editable="false"
+                    android:text="14/02/2019"
+                    android:textSize="20sp" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/editButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="15dp"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:fabSize="auto"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.92"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.982"
+                    app:srcCompat="@android:drawable/ic_menu_edit" />
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="100dp"
+                    android:id="@+id/textView7"
+                    android:layout_width="155dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="Barcode:"
                     android:textAlignment="textStart"
+                    android:textSize="20sp"
                     tools:layout_editor_absoluteX="36dp"
-                    tools:layout_editor_absoluteY="117dp" />
+                    tools:layout_editor_absoluteY="117dp"
+
+                    tools:ignore="RtlCompat" />
 
                 <EditText
-                    android:id="@+id/editText3"
+                    android:id="@+id/barcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_weight="1"
+                    android:editable="false"
+                    android:ems="10"
+                    android:inputType="none"
+                    android:text="9781234567897" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/editButton2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="978123456789712345" />
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:paddingRight="1dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:fabSize="auto"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.92"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.982"
+                    app:srcCompat="@android:drawable/ic_menu_edit" />
 
             </LinearLayout>
         </LinearLayout>
@@ -140,5 +193,46 @@
     </android.support.v7.widget.CardView>
 
 
+    <Button
+        android:id="@+id/retrieveButton"
+        style="@android:style/Widget.Material.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:drawablePadding="10dp"
+        android:drawableRight="@android:drawable/stat_sys_download_done"
+        android:gravity="left|center"
+        android:text="Retrieve item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+        app:layout_constraintHorizontal_bias="0.164"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card"
+        app:layout_constraintVertical_bias="0.859"
+        tools:layout_conversion_absoluteHeight="48dp"
+        tools:layout_conversion_absoluteWidth="123dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.982"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </android.support.constraint.ConstraintLayout>
