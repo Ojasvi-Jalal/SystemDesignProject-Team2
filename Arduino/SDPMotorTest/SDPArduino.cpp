@@ -138,7 +138,7 @@ int readAnalogSensorData(int portNum){	//PortNum is the Sensor port used
   }
 }
 
-int readDigitalSensorData(int portNum){ //PortNum is the Sensor port used
+int readTouchSensorData(int portNum){ //PortNum is the Sensor port used
   if (portNum >= 0 and portNum <= 3){
     int sensorData = -1;
     switch (portNum) {
