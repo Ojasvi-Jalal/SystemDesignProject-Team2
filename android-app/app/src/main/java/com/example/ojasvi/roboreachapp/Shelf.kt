@@ -1,5 +1,7 @@
 package com.example.ojasvi.roboreachapp
 
-class Shelf(var item: Item? = null, val name: String) {
+import java.io.Serializable
+
+class Shelf(var item: Item? = null, val name: String): Serializable {
 
 }

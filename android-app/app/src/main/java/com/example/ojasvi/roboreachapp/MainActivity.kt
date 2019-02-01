@@ -6,21 +6,19 @@ import android.os.Bundle
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.view.View
 
 
 class MainActivity : AppCompatActivity() {
 
     private var recyclerView: RecyclerView? = null
 
-    private lateinit var shelf_a1: Shelf
-    private lateinit var shelf_a2: Shelf
-    private lateinit var shelf_a3: Shelf
-    private lateinit var shelf_b1: Shelf
-    private lateinit var shelf_b2: Shelf
-    private lateinit var shelf_b3: Shelf
+    lateinit var shelf_a1: Shelf
+    lateinit var shelf_a2: Shelf
+    lateinit var shelf_a3: Shelf
+    lateinit var shelf_b1: Shelf
+    lateinit var shelf_b2: Shelf
+    lateinit var shelf_b3: Shelf
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -28,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.card_shelves)
         supportActionBar?.title = "RoboReach"
 
-        val a1CardView = findViewById<CardView>(R.id.a1_card)
+        val a1CardView = findViewById<CardView>(R.id.card)
         val a2CardView = findViewById<CardView>(R.id.a2_card)
         val a3CardView = findViewById<CardView>(R.id.a3_card)
         val b1CardView = findViewById<CardView>(R.id.b1_card)
@@ -37,27 +35,27 @@ class MainActivity : AppCompatActivity() {
 
         a1CardView.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("name", "A1"), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a1), options.toBundle())
         }
         a2CardView.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("name", "A2"), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a2), options.toBundle())
         }
         a3CardView.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("name", "A3"), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a3), options.toBundle())
         }
         b1CardView.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("name", "B1"), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b1), options.toBundle())
         }
         b2CardView.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("name", "B2"), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b2), options.toBundle())
         }
         b3CardView.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("name", "B3"), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b3), options.toBundle())
         }
 
         shelf_a1 = Shelf(null, "A1")
@@ -71,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         /* DEBUG code - REMOVE LATER */
 
         // Creates fake Item and Notification objects
-        val jam = Item("Jam", "Delicious goodie")
+        val jam = Item("Jam")
         shelf_a3.item = jam
         val notification = Notification(shelf_a3)
         val listOfNotifications = mutableListOf<Notification>()
@@ -89,15 +87,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    // Method to have nice transitions for the cards
-//    fun animateIntent(view: View) {
-//
-//        val intent = Intent(this, ShelfActivity::class.java)
-//
-//        val options =
-//                ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, getString(R.string.transition_string))
-//
-//        ActivityCompat.startActivity(this, intent, options.toBundle())
-//    }
 
 }

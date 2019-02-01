@@ -12,10 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_columnWeight="1"
         android:layout_margin="16dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
         android:layout_rowWeight="1"
         android:transitionName="@string/transition_string"
         app:cardCornerRadius="8dp"
@@ -24,13 +20,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.396">
+        app:layout_constraintVertical_bias="0.100000024">
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="313dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginStart="32dp"
             android:orientation="vertical"
@@ -97,18 +94,18 @@
                     android:text="Expires:"
                     android:textAlignment="textStart"
                     android:textSize="20sp"
+                    tools:ignore="RtlCompat"
                     tools:layout_editor_absoluteX="36dp"
-                    tools:layout_editor_absoluteY="117dp"
-                    tools:ignore="RtlCompat" />
+                    tools:layout_editor_absoluteY="117dp" />
 
                 <EditText
                     android:id="@+id/expiry"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:editable="false"
                     android:ems="10"
                     android:inputType="none"
-                    android:editable="false"
                     android:text="14/02/2019"
                     android:textSize="20sp" />
 
@@ -150,10 +147,10 @@
                     android:text="Barcode:"
                     android:textAlignment="textStart"
                     android:textSize="20sp"
+                    tools:ignore="RtlCompat"
                     tools:layout_editor_absoluteX="36dp"
-                    tools:layout_editor_absoluteY="117dp"
 
-                    tools:ignore="RtlCompat" />
+                    tools:layout_editor_absoluteY="117dp" />
 
                 <EditText
                     android:id="@+id/barcode"
@@ -199,40 +196,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/colorPrimary"
         android:drawablePadding="10dp"
         android:drawableRight="@android:drawable/stat_sys_download_done"
         android:gravity="left|center"
         android:text="Retrieve item"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-        app:layout_constraintHorizontal_bias="0.164"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card"
-        app:layout_constraintVertical_bias="0.859"
+        app:layout_constraintVertical_bias="0.0"
         tools:layout_conversion_absoluteHeight="48dp"
         tools:layout_conversion_absoluteWidth="123dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        app:backgroundTint="@color/colorPrimary"
-        app:fabSize="auto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.982"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </android.support.constraint.ConstraintLayout>
