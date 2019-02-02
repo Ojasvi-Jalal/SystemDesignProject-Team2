@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.support.design.widget.FloatingActionButton
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_shelf.view.*
 import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -23,31 +25,21 @@ class ShelfActivity : AppCompatActivity() {
 
         getShelfData()
 
-        val retrieveButton = findViewById<Button>(R.id.retrieveButton)
-        retrieveButton.setOnClickListener {
-        val progress = indeterminateProgressDialog("Scanning item...")
-            progress.show()
-            progress.setCancelable(false)
-            Timer().schedule(object : TimerTask() {
-                override fun run() {
-                    progress.dismiss()
-                }
-            }, 3000) // fake 3sec delay
-
-        }
+        val mEdit1 = findViewById<EditText>(R.id.expiry)
+        val mEdit2 = findViewById<EditText>(R.id.barcode)
+        mEdit1.isEnabled = false
+        mEdit2.isEnabled = false
 
         // Edit button trigger
         val editButton1 = findViewById<FloatingActionButton>(R.id.editButton1)
         val editButton2 = findViewById<FloatingActionButton>(R.id.editButton2)
 
         editButton1.setOnClickListener {
-            val mEdit = findViewById<EditText>(R.id.expiry)
-            mEdit.isEnabled= true
+            mEdit1.isEnabled  = true
         }
 
         editButton2.setOnClickListener {
-            val mEdit = findViewById<EditText>(R.id.barcode)
-            mEdit.isEnabled = true
+            mEdit2.isEnabled = true
         }
     }
 
@@ -68,6 +60,36 @@ class ShelfActivity : AppCompatActivity() {
         }
         expirationDate.setText(item?.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
         barcode.setText(item?.barcode)
+
+        val retrieveButton = findViewById<Button>(R.id.retrieveButton)
+        val storeButton = findViewById<Button>(R.id.putButton)
+
+        if(itemTitle.text == "Empty")
+            retrieveButton.visibility = View.GONE
+        else
+            storeButton.visibility = View.GONE
+
+        retrieveButton.setOnClickListener {
+            val progress = indeterminateProgressDialog("Retrieving item...")
+            progress.show()
+            progress.setCancelable(false)
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    progress.dismiss()
+                }
+            }, 3000) // fake 3sec delay
+        }
+
+        storeButton.setOnClickListener {
+            val progress = indeterminateProgressDialog("Storing item...")
+            progress.show()
+            progress.setCancelable(false)
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    progress.dismiss()
+                }
+            }, 3000) // fake 3sec delay
+        }
 
     }
 

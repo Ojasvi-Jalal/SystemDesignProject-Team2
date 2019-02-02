@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v4.app.ActivityOptionsCompat
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_shelf.*
+import java.time.LocalDate
 
 
 class MainActivity : AppCompatActivity() {
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         /* DEBUG code - REMOVE LATER */
 
         // Creates fake Item and Notification objects
-        val jam = Item("Jam")
+        val jam = Item("Jam", LocalDate.now().plusWeeks(1),"1234567891234567")
         shelf_a3.item = jam
         val notification = Notification(shelf_a3)
         val listOfNotifications = mutableListOf<Notification>()

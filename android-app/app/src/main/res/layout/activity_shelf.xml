@@ -105,8 +105,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:editable="false"
                     android:ems="10"
+                    android:textColor="#808080"
                     android:paddingTop="5dp"
                     android:text="14/02/2019"
                     android:textSize="14sp" />
@@ -156,10 +156,10 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:editable="false"
                     android:ems="10"
+                    android:textColor="#808080"
                     android:paddingTop="5dp"
-                    android:text="9781234567897"
+                    android:text=""
                     android:textSize="14sp" />
 
                 <android.support.design.widget.FloatingActionButton
@@ -190,9 +190,29 @@
                 android:layout_marginTop="24dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/colorPrimary"
-                android:drawableEnd="@android:drawable/stat_sys_download_done"
                 android:drawablePadding="10dp"
                 android:text="Retrieve item"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/a1_card"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_conversion_absoluteHeight="48dp"
+                tools:layout_conversion_absoluteWidth="123dp" />
+
+            <Button
+                android:id="@+id/putButton"
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:drawablePadding="10dp"
+                android:text="Store item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.502"
