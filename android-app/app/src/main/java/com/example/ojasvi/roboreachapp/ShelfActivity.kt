@@ -25,23 +25,6 @@ class ShelfActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         getShelfData()
-
-        val mEdit1 = findViewById<EditText>(R.id.expiry)
-        val mEdit2 = findViewById<EditText>(R.id.barcode)
-        mEdit1.isEnabled = false
-        mEdit2.isEnabled = false
-
-        // Edit button trigger
-        val editButton1 = findViewById<FloatingActionButton>(R.id.editButton1)
-        val editButton2 = findViewById<FloatingActionButton>(R.id.editButton2)
-
-        editButton1.setOnClickListener {
-            mEdit1.isEnabled  = true
-        }
-
-        editButton2.setOnClickListener {
-            mEdit2.isEnabled = true
-        }
     }
 
     private fun getShelfData() {
@@ -73,8 +56,21 @@ class ShelfActivity : AppCompatActivity() {
         val retrieveButton = findViewById<Button>(R.id.retrieveButton)
         val storeButton = findViewById<Button>(R.id.putButton)
 
-        if(itemTitle.text == "Empty")
+
+        val mEdit1 = findViewById<EditText>(R.id.expiry)
+        val mEdit2 = findViewById<EditText>(R.id.barcode)
+        mEdit1.isEnabled = false
+        mEdit2.isEnabled = false
+
+        // Edit button trigger
+        val editButton1 = findViewById<FloatingActionButton>(R.id.editButton1)
+        val editButton2 = findViewById<FloatingActionButton>(R.id.editButton2)
+
+        if(itemTitle.text == "Empty"){
             retrieveButton.visibility = View.GONE
+            editButton1.visibility = View.GONE
+            editButton2.visibility = View.GONE
+        }
         else
             storeButton.visibility = View.GONE
 
@@ -98,6 +94,15 @@ class ShelfActivity : AppCompatActivity() {
                     progress.dismiss()
                 }
             }, 3000) // fake 3sec delay
+        }
+
+
+        editButton1.setOnClickListener {
+            mEdit1.isEnabled  = true
+        }
+
+        editButton2.setOnClickListener {
+            mEdit2.isEnabled = true
         }
 
     }
