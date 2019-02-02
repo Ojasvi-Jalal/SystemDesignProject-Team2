@@ -23,7 +23,6 @@
         android:id="@+id/mainGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:alignmentMode="alignMargins"
         android:columnCount="3"
         android:columnOrderPreserved="false"
@@ -41,6 +40,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
             android:layout_rowWeight="1"
             android:transitionName="@string/transition_string"
             app:cardCornerRadius="8dp"
@@ -78,11 +78,10 @@
                 <TextView
                     android:id="@+id/a1_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
-                    android:text="Empty"
-                    android:textSize="20sp" />
+                    android:text="Empty" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -97,6 +96,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
             android:layout_rowWeight="1"
             android:transitionName="@string/transition_string"
             app:cardCornerRadius="8dp"
@@ -123,7 +123,7 @@
                         android:textSize="18sp" />
 
                     <ImageView
-                        android:id="@+id/warn"
+                        android:id="@+id/a2_warn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -132,13 +132,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/a2_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
-                    android:text="Empty"
-                    android:textSize="20sp" />
+                    android:text="Empty" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -153,6 +152,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
             android:layout_rowWeight="1"
             android:transitionName="@string/transition_string"
             app:cardCornerRadius="8dp"
@@ -190,11 +190,10 @@
                 <TextView
                     android:id="@+id/a3_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
-                    android:text="Jam"
-                    android:textSize="20sp" />
+                    android:text="Jam" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -236,7 +235,7 @@
                         android:textSize="18sp" />
 
                     <ImageView
-                        android:id="@+id/warn"
+                        android:id="@+id/b1_warn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -245,13 +244,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/b1_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
-                    android:text="Bread"
-                    android:textSize="20sp" />
+                    android:text="Bread" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -292,7 +290,7 @@
                         android:textSize="18sp" />
 
                     <ImageView
-                        android:id="@+id/warn"
+                        android:id="@+id/b2_warn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -301,13 +299,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/b2_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
-                    android:text="Empty"
-                    android:textSize="20sp" />
+                    android:text="Empty" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -348,7 +345,7 @@
                         android:textSize="18sp" />
 
                     <ImageView
-                        android:id="@+id/warn"
+                        android:id="@+id/b3_warn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -357,13 +354,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/b3_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
-                    android:text="Empty"
-                    android:textSize="20sp" />
+                    android:text="Empty" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -376,7 +372,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
         android:text="Dashboard"
         android:textSize="20sp" />
 
