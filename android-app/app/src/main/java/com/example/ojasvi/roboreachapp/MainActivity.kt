@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v4.app.ActivityOptionsCompat
+import android.widget.TextView
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.card_shelves)
         supportActionBar?.title = "RoboReach"
 
-        val a1CardView = findViewById<CardView>(R.id.card)
+        val a1CardView = findViewById<CardView>(R.id.a1_card)
         val a2CardView = findViewById<CardView>(R.id.a2_card)
         val a3CardView = findViewById<CardView>(R.id.a3_card)
         val b1CardView = findViewById<CardView>(R.id.b1_card)
@@ -85,6 +86,10 @@ class MainActivity : AppCompatActivity() {
 
         /* DEBUG CODE ABOVE */
 
+    }
+
+    fun displayShelfInfo() {
+        val a1_id = findViewById<TextView>(R.id.a1_id)
     }
 
 

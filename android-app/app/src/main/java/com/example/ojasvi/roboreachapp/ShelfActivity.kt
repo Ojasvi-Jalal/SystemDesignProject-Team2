@@ -1,14 +1,15 @@
 package com.example.ojasvi.roboreachapp
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.EditText
 import android.support.design.widget.FloatingActionButton
+import android.widget.Button
 import android.widget.TextView
+import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ShelfActivity : AppCompatActivity() {
 
@@ -22,6 +23,18 @@ class ShelfActivity : AppCompatActivity() {
 
         getShelfData()
 
+        val retrieveButton = findViewById<Button>(R.id.retrieveButton)
+        retrieveButton.setOnClickListener {
+        val progress = indeterminateProgressDialog("Scanning item...")
+            progress.show()
+            progress.setCancelable(false)
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    progress.dismiss()
+                }
+            }, 3000) // fake 3sec delay
+
+        }
 
         // Edit button trigger
         val editButton1 = findViewById<FloatingActionButton>(R.id.editButton1)
@@ -49,7 +62,10 @@ class ShelfActivity : AppCompatActivity() {
         val barcode: EditText = findViewById(R.id.barcode)
 
         shelfName.text = shelf.name
-        itemTitle.text = item?.title
+        when (item) {
+            null -> itemTitle.text = "Empty"
+            else -> itemTitle.text = item.title
+        }
         expirationDate.setText(item?.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
         barcode.setText(item?.barcode)
 
