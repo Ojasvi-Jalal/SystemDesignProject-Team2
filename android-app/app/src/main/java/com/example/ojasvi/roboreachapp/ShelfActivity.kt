@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.support.design.widget.FloatingActionButton
+import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
@@ -60,11 +62,19 @@ class ShelfActivity : AppCompatActivity() {
         val itemTitle: TextView = findViewById(R.id.title)
         val expirationDate: EditText = findViewById(R.id.expiry)
         val barcode: EditText = findViewById(R.id.barcode)
+        val warning: ImageView = findViewById(R.id.warn)
 
         shelfName.text = shelf.name
         when (item) {
-            null -> itemTitle.text = "Empty"
-            else -> itemTitle.text = item.title
+            null -> {
+                itemTitle.text = "Empty"
+                warning.visibility = View.GONE
+            }
+            else -> {
+                itemTitle.text = item.title
+                if(item.expiresSoon()) warning.visibility = View.VISIBLE
+                else warning.visibility = View.GONE
+            }
         }
         expirationDate.setText(item?.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
         barcode.setText(item?.barcode)
@@ -73,7 +83,6 @@ class ShelfActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // Respond to the action bar's Up/Home button
             android.R.id.home -> {
                 supportFinishAfterTransition()
                 return true
