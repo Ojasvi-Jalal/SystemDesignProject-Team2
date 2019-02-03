@@ -34,24 +34,30 @@ void loop(){
   int vrt = vrtMove(shelf[state][1], shelf[inp][1]);
   Serial.print("Vertical ");
   Serial.println(vrt);
-  for (int i =0; i<abs(hrz); i++){
+  //for (int i =0; i<abs(hrz); i++){
     if(hrz<0){
-      goLeft();
-      delay(1410);
+      goLeft(abs(hrz)*800);
+      delay(1000);
+      //motorAllStop();
     }
     else if(hrz>0){
-      goRight();
-      delay(1410);
+      goRight(hrz*800);
+      delay(1000);
+      //motorAllStop();
     }
-  }
+  //}
+  //motorAllStop();
   if(vrt<0){
     goDown();
-    delay(1410);
+    delay(1100);
+    //motorAllStop();
   }
   else if(vrt>0){
     goUp();
-    delay(1410);
+    delay(1100);
+    //motorAllStop();
   }
+  //motorAllStop();
   state = inp;
 }
 
@@ -113,29 +119,29 @@ int vrtMove(int from, int to){
   return (to-from);
 }
 
-void goRight(){
+void goRight(int i){
   Serial.println("MOVING RIGHT");
     motorBackward(0, 500);
-    delay(1400);
+    delay(i);
     motorAllStop();
 }
-void goLeft(){
+void goLeft(int i){
   Serial.println("MOVING LEFT");
     motorForward(0, 500);
-    delay(1400);
+    delay(i);
     motorAllStop();
 }
 
 void goUp(){
   Serial.println("MOVING UP");
     motorBackward(1, 200);
-    delay(1500);
+    delay(900);
     motorStop(1);
 }
 
 void goDown(){
   Serial.println("MOVING DOWN");
     motorForward(1, 200);
-    delay(1500);
+    delay(900);
     motorStop(1);
   }
