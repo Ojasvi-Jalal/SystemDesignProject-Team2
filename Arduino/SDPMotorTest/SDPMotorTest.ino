@@ -6,6 +6,9 @@ int pos [2] = {0,0};
 int shelf [9][2] = {{0,0}, {1,0}, {2, 0}, {3, 0}, {4, 0},
                            {1,1}, {2, 1}, {3, 1}, {4, 1}};
 
+//Position of the robot. The first entry of the array corresponds to x, the second to y
+int position[2] = {0,0};
+
 void setup(){
   SDPsetup();
   helloWorld();
@@ -23,13 +26,13 @@ Right now the shelf is the following:
 
 void loop(){
   while (Serial.available() == 0);
-  int inp = Serial.parseInt(); 
-  
+  int inp = Serial.parseInt();
+
   //Decide how much it needs to move horizontally
   int hrz = hrzMove(shelf[state][0], shelf[inp][0]);
   Serial.print("Horizontal ");
   Serial.println(hrz);
-  
+
   //Decide how much it needs to move vertically
   int vrt = vrtMove(shelf[state][1], shelf[inp][1]);
   Serial.print("Vertical ");
@@ -65,7 +68,7 @@ void loop(){
     //if(readAnalogSensorData(0)>0){
      // Serial.println("Pushed");
     //}
-    
+
     int next = Serial.read();
     switch(state){
         case 0:
@@ -87,7 +90,7 @@ void loop(){
         default:
             break;
     }
-    
+
     switch(height){
         case 0:
           if(next == 'u'){
@@ -97,7 +100,7 @@ void loop(){
               delay(2500);
           }
           break;
-        
+
         case 1:
            if(next =='d'){
                height = 0;
@@ -106,7 +109,7 @@ void loop(){
                delay(2500);
            }
            break;
-         default: 
+         default:
            break;
     }
 }*/
