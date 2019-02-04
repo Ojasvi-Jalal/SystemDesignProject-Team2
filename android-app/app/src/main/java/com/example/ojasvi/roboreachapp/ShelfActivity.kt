@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_shelf.view.*
 import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
 import java.util.*

@@ -23,20 +23,21 @@
         android:id="@+id/mainGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
-        android:columnCount="3"
+        android:alignmentMode="alignBounds"
+        android:columnCount="4"
         android:columnOrderPreserved="false"
         android:padding="14dp"
-        android:rowCount="2">
+        android:rowCount="3">
 
         <!-- ROW 1  -->
         <!-- COLUMN 1  -->
 
         <android.support.v7.widget.CardView
             android:id="@+id/a1_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
+            android:layout_gravity="fill"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -49,9 +50,9 @@
             <LinearLayout
                 android:id="@+id/a1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,10 +62,10 @@
                     <TextView
                         android:id="@+id/a1_id"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="A1"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/a1_warn"
@@ -78,7 +79,7 @@
                 <TextView
                     android:id="@+id/a1_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
                     android:text="Empty" />
@@ -90,9 +91,10 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/a2_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
+            android:layout_gravity="fill"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -105,9 +107,9 @@
             <LinearLayout
                 android:id="@+id/a2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -117,10 +119,10 @@
                     <TextView
                         android:id="@+id/id"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="A2"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/a2_warn"
@@ -134,7 +136,7 @@
                 <TextView
                     android:id="@+id/a2_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
                     android:text="Empty" />
@@ -146,9 +148,10 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/a3_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
+            android:layout_gravity="fill"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -161,9 +164,9 @@
             <LinearLayout
                 android:id="@+id/a3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -173,11 +176,11 @@
                     <TextView
                         android:id="@+id/a3_id"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:autoSizeTextType="uniform"
                         android:text="A3"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/a3_warn"
@@ -190,7 +193,7 @@
                 <TextView
                     android:id="@+id/a3_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
                     android:text="Jam" />
@@ -203,9 +206,10 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/b1_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
+            android:layout_gravity="fill"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -219,7 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -229,10 +233,10 @@
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="B1"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/b1_warn"
@@ -246,7 +250,7 @@
                 <TextView
                     android:id="@+id/b1_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
                     android:text="Bread" />
@@ -258,9 +262,10 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/b2_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
+            android:layout_gravity="fill"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -274,7 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -284,10 +289,10 @@
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="B2"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/b2_warn"
@@ -301,7 +306,7 @@
                 <TextView
                     android:id="@+id/b2_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
                     android:text="Empty" />
@@ -313,9 +318,10 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/b3_card"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
+            android:layout_gravity="fill"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -329,7 +335,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -339,10 +345,10 @@
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="B3"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/b3_warn"
@@ -356,7 +362,331 @@
                 <TextView
                     android:id="@+id/b3_title"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Long title" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/d1_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_rowWeight="1"
+            android:transitionName="@string/transition_string"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/d1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="D1"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/d1_warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/d1_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Empty" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/d2_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_rowWeight="1"
+            android:transitionName="@string/transition_string"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/d2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="D2"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/d2_warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/d2_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Empty" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/d3_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_rowWeight="1"
+            android:transitionName="@string/transition_string"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/d3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="D3"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/d3_warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/d3_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Empty" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/e1_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_rowWeight="1"
+            android:transitionName="@string/transition_string"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/e1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="E1"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/e1_warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/e1_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Empty" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/e2_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_rowWeight="1"
+            android:transitionName="@string/transition_string"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/e2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="E2"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/e2_warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/e2_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="bottom"
+                    android:text="Empty" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/e3_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_rowWeight="1"
+            android:transitionName="@string/transition_string"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/e3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="E3"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/e3_warn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_exclamation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/e3_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
                     android:gravity="bottom"
                     android:text="Empty" />
