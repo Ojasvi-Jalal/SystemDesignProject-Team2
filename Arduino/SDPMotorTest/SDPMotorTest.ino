@@ -114,7 +114,8 @@ void goOrigin(){
     while(digitalRead(3) == 1){
         delay(10);
     }
-    Serial.println("Arrived to origin")
+    Serial.println("Arrived to origin");
     motorStop(0);
+    goDown();
     state = 0;
 }
