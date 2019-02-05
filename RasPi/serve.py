@@ -1,5 +1,5 @@
 from flask import Flask
-from ..serial_io import *
+from serial_io import *
 sio = SerialIO("/dev/ttyACM0","/dev/ttyACM0")
 bool = False
 app = Flask(__name__)
