@@ -7,7 +7,7 @@
 void SDPsetup() {
   //Initial set up for arduino connected to the power board.
   pinMode(2,INPUT);
-  pinMode(3,OUTPUT);
+  pinMode(3,INPUT_PULLUP);
   pinMode(4,INPUT);
   pinMode(5,OUTPUT);
   pinMode(6,OUTPUT);

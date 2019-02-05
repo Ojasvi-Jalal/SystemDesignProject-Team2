@@ -8,7 +8,7 @@ void setup(){
 
 void loop(){
     delay(1000);
-    int a = digitalRead(A3);
+    //int a = digitalRead(A3);
     int b = digitalRead(3);
-    Serial.println("3 = " + (String) b + " A3 = " + (String) a);
+    Serial.println("3 = " + (String) b);
 }
