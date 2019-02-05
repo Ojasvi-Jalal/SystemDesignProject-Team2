@@ -22,7 +22,7 @@ import java.util.*
 class ShelfActivity : AppCompatActivity() {
 
     private lateinit var requestQueue: RequestQueue
-    private val requestUrl = "192.168.105.131"
+    private val requestUrl = "http://192.168.105.131:8000" // static gabumon IP. did not seem to work as http://gabumon:8000
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -39,7 +39,7 @@ class ShelfActivity : AppCompatActivity() {
 
     private fun httpRequest(request: String) {
         // Request a string response from the provided URL.
-        val stringRequest = StringRequest(Request.Method.GET, "$requestUrl/$request",
+        val stringRequest = StringRequest(Request.Method.GET, "$requestUrl",
                 Response.Listener<String> { response ->
                     AlertDialog.Builder(this)
                             .setTitle("Response")
@@ -112,7 +112,7 @@ class ShelfActivity : AppCompatActivity() {
                     progress.dismiss()
                 }
             }, 3000) // fake 3sec delay
-            httpRequest("test")
+            httpRequest("")
         }
 
         storeButton.setOnClickListener {
@@ -124,6 +124,7 @@ class ShelfActivity : AppCompatActivity() {
                     progress.dismiss()
                 }
             }, 3000) // fake 3sec delay
+            httpRequest("")
         }
 
 
