@@ -478,6 +478,8 @@
 
         </android.support.v7.widget.CardView>
 
+        <!-- disabled
+
         <android.support.v7.widget.CardView
             android:id="@+id/d3_card"
             android:layout_width="0dp"
@@ -693,6 +695,8 @@
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
+
+        -->
 
     </GridLayout>
 
