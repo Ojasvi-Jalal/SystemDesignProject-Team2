@@ -28,7 +28,7 @@ void loop(){
   while (Serial.available() == 0);
   int inp = Serial.parseInt();
 
-  if(inp == 9){
+  if(inp == 0){
       goOrigin();
   }
   else{
