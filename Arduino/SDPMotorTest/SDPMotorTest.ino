@@ -11,8 +11,8 @@ int position[2] = {0,0};
 
 void setup(){
   SDPsetup();
-  helloWorld();
   while(!Serial){;} // Wait until serial is established
+  Serial.println("Serial Connected")
 }
 
 /*
