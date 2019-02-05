@@ -11,8 +11,8 @@ int position[2] = {0,0};
 
 void setup(){
   SDPsetup();
-  helloWorld();
   while(!Serial){;} // Wait until serial is established
+  Serial.println("Serial Connected")
 }
 
 /*
@@ -37,114 +37,67 @@ void loop(){
   int vrt = vrtMove(shelf[state][1], shelf[inp][1]);
   Serial.print("Vertical ");
   Serial.println(vrt);
-  //for (int i =0; i<abs(hrz); i++){
-    if(hrz<0){
+
+  //Move horizontally if necessary
+  if(hrz<0){
       goLeft(abs(hrz)*800);
       delay(1000);
-      //motorAllStop();
-    }
-    else if(hrz>0){
-      goRight(hrz*800);
-      delay(1000);
-      //motorAllStop();
-    }
-  //}
-  //motorAllStop();
+  }
+  else if(hrz>0){
+    goRight(hrz*800);
+    delay(1000);
+  }
+  //Move vertically if necessary
   if(vrt<0){
     goDown();
     delay(1100);
-    //motorAllStop();
   }
   else if(vrt>0){
     goUp();
     delay(1100);
-    //motorAllStop();
   }
-  //motorAllStop();
+  //Change the state to the one it just got to
   state = inp;
 }
 
-/*void loop(){
-    //if(readAnalogSensorData(0)>0){
-     // Serial.println("Pushed");
-    //}
-
-    int next = Serial.read();
-    switch(state){
-        case 0:
-            if (next == 'r'){
-                state = 1;
-                Serial.println("GO RIGHT");
-                goRight();
-                delay(2500); //Added this delay for it to follow commands of the lrlrl style (only does one otherwise)
-            }
-            break;
-        case 1:
-            if (next == 'l'){
-                state = 0;
-                Serial.println("GO LEFT");
-                goLeft();
-                delay(2500);
-            }
-            break;
-        default:
-            break;
-    }
-
-    switch(height){
-        case 0:
-          if(next == 'u'){
-              height =1;
-              Serial.println("GO UP");
-              goUp();
-              delay(2500);
-          }
-          break;
-
-        case 1:
-           if(next =='d'){
-               height = 0;
-               Serial.println("GO DOWN");
-               goDown();
-               delay(2500);
-           }
-           break;
-         default:
-           break;
-    }
-}*/
-
+//Return how much it needs to move horizontally. Negative is to the left, positive to the right
 int hrzMove(int from, int to){
   return (to-from);
 }
 
+//Return how much ot needs to move vertically. Negative down, positive up.
 int vrtMove(int from, int to){
   return (to-from);
 }
 
+//Make the robot go to the right
 void goRight(int i){
   Serial.println("MOVING RIGHT");
-    motorBackward(0, 500);
-    delay(i);
-    motorAllStop();
+  motorBackward(0, 500);
+  delay(i);
+  motorAllStop();
 }
+
+//Make the robot go to the left
 void goLeft(int i){
   Serial.println("MOVING LEFT");
-    motorForward(0, 500);
-    delay(i);
-    motorAllStop();
+  motorForward(0, 500);
+  delay(i);
+  motorAllStop();
 }
 
+//Make the platform go up
 void goUp(){
   Serial.println("MOVING UP");
-    motorBackward(1, 200);
-    delay(5000);
-    motorStop(1);
+  motorBackward(1, 200);
+  delay(5000);
+  motorStop(1);
 }
 
+//Make the platform go down
 void goDown(){
   Serial.println("MOVING DOWN");
-    motorForward(1, 200);
-    delay(5000);
-    motorStop(1);
+  motorForward(1, 200);
+  delay(5000);
+  motorStop(1);
   }
