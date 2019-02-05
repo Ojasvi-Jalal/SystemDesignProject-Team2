@@ -110,8 +110,9 @@ void goDown(){
 
 //Go to the origin
 void goOrigin(){
+    motorForward(0, 500);
     while(digitalRead(3) != 1){
-        motorForward(0, 500);
+        delay(10);
     }
     motorStop(0);
     state = 0;
