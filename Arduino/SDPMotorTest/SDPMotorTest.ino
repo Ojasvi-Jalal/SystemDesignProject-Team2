@@ -12,7 +12,7 @@ int position[2] = {0,0};
 void setup(){
   SDPsetup();
   while(!Serial){;} // Wait until serial is established
-  Serial.println("Serial Connected")
+  Serial.println("Serial Connected");
 }
 
 /*
