@@ -5,25 +5,55 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ShelfActivity : AppCompatActivity() {
 
+    private lateinit var requestQueue: RequestQueue
+    private val requestUrl = "192.168.105.131"
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shelf)
 
+        requestQueue = Volley.newRequestQueue(this)
+
         supportActionBar?.title = "Shelf"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         getShelfData()
+    }
+
+    private fun httpRequest(request: String) {
+        // Request a string response from the provided URL.
+        val stringRequest = StringRequest(Request.Method.GET, "$requestUrl/$request",
+                Response.Listener<String> { response ->
+                    AlertDialog.Builder(this)
+                            .setTitle("Response")
+                            .setMessage(response)
+                            .show()
+
+                },
+                Response.ErrorListener {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage("${it.networkResponse}")
+                            .show()
+                })
+        requestQueue.add(stringRequest)
     }
 
     private fun getShelfData() {
@@ -82,6 +112,7 @@ class ShelfActivity : AppCompatActivity() {
                     progress.dismiss()
                 }
             }, 3000) // fake 3sec delay
+            httpRequest("test")
         }
 
         storeButton.setOnClickListener {

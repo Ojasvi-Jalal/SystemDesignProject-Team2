@@ -12,8 +12,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.volley.Request
+import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import java.time.LocalDate
 
 
@@ -47,21 +49,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun httpRequest(request: String) {
-        // Request a string response from the provided URL.
-        val stringRequest = StringRequest(Request.Method.GET, "student@gabumon/$request",
-                Response.Listener<String> { response ->
-                    AlertDialog.Builder(this)
-                            .setMessage("Response is: $response")
-                            .show()
-
-                },
-                Response.ErrorListener { it ->
-                    AlertDialog.Builder(this)
-                            .setMessage("That didn't work! : ${it.networkResponse}")
-                            .show()
-                    })
-    }
 
     private fun initializeShelves() {
         // Should get shelf data from hardware/local database
