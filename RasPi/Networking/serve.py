@@ -6,10 +6,10 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     if(bool):
-        sio.write_char('t')
+        sio.write_char('1')
         return 'Turned on'
     else:
-        sio.write_char('f')
+        sio.write_char('0')
         return 'Turned off'
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host='0.0.0.0')
