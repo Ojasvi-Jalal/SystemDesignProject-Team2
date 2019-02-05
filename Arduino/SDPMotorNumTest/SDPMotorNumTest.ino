@@ -8,6 +8,8 @@ void setup(){
 }
 
 void loop(){
+    delay(1000);
     int a = digitalRead(A3);
-    Serial.println(a);
+    int b = digitalRead(3);
+    Serial.println("3 = " + (String) a + " A3 = " + (String) b);
 }

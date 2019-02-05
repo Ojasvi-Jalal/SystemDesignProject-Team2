@@ -22,6 +22,7 @@ void SDPsetup() {
   pinMode(A1,INPUT);
   pinMode(A2,INPUT);
   pinMode(A3,INPUT);
+  pinmode(3, INPUT_PULLUP);
   digitalWrite(8,HIGH); //Pin 8 must be high to turn the radio on!
   Serial.begin(115200); // Serial rate the radio is configured to.
   Wire.begin(); //Makes arduino master of the I2C line.
@@ -44,7 +45,7 @@ void motorForward(int motorNum, int motorPower) { //Makes Motor motorNum go forw
     byte motor2 = int(motorPower * 2.55);
     uint8_t sender[2] = {motor1, motor2};
     Wire.beginTransmission(MotorBoardI2CAddress); //open I2C communation to Motor Board.
-    Wire.write(sender,2);                    //send data. 
+    Wire.write(sender,2);                    //send data.
     byte fred = Wire.endTransmission();		//end I2C communcation.
   }
 }
@@ -62,7 +63,7 @@ void motorBackward(int motorNum, int motorPower) { //Makes Motor motorNum go bac
     byte motor2 = int(motorPower * 2.55); //Power Byte.
     uint8_t sender[2] = {motor1, motor2};
     Wire.beginTransmission(MotorBoardI2CAddress); //open I2C communation to Motor Board.
-    Wire.write(sender,2);        	 // sends two byte  
+    Wire.write(sender,2);        	 // sends two byte
     byte fred = Wire.endTransmission();//end I2C communcation.
 
   }
@@ -74,13 +75,13 @@ void motorStop(int motorNum) { // stop motor motorNum
     byte motor1 = motorNum<<5 | 16 | motorMode<<1; //Set up I2C byte to be send.
     uint8_t sender[1] = {motor1};
     Wire.beginTransmission(MotorBoardI2CAddress); //open I2C communation to Motor Board.
-    Wire.write(sender,1);        	          // sends a byte  
+    Wire.write(sender,1);        	          // sends a byte
     byte fred = Wire.endTransmission();		  // close commucation.
   }
 }
 
 void motorAllStop() {
-  //I2C command to stop all Motors. 
+  //I2C command to stop all Motors.
   byte allStop = 1;				//Motor Board stops all motors if bit 0 is high.
   uint8_t sender[1] = {allStop};
   Wire.beginTransmission(MotorBoardI2CAddress); //open I2C communation to Motor Board.
@@ -111,7 +112,7 @@ void setPWMpin(int portNum, int power){ //PortNum is the Sensor port used, pwm i
       analogWrite(6,pwm_value);
       break;
     }
-  }  
+  }
 }
 
 int readAnalogSensorData(int portNum){	//PortNum is the Sensor port used
@@ -134,7 +135,7 @@ int readAnalogSensorData(int portNum){	//PortNum is the Sensor port used
     return sensorData;
   }
   else{
-    return -2; 
+    return -2;
   }
 }
 
@@ -158,8 +159,6 @@ int readTouchSensorData(int portNum){ //PortNum is the Sensor port used
     return sensorData;
   }
   else{
-    return -2; 
+    return -2;
   }
 }
-
-
