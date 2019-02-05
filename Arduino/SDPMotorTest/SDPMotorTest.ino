@@ -28,36 +28,42 @@ void loop(){
   while (Serial.available() == 0);
   int inp = Serial.parseInt();
 
-  //Decide how much it needs to move horizontally
-  int hrz = hrzMove(shelf[state][0], shelf[inp][0]);
-  Serial.print("Horizontal ");
-  Serial.println(hrz);
+  if(inp == 9){
+      goOrigin();
+  }
+  else{
 
-  //Decide how much it needs to move vertically
-  int vrt = vrtMove(shelf[state][1], shelf[inp][1]);
-  Serial.print("Vertical ");
-  Serial.println(vrt);
+        //Decide how much it needs to move horizontally
+        int hrz = hrzMove(shelf[state][0], shelf[inp][0]);
+        Serial.print("Horizontal ");
+        Serial.println(hrz);
 
-  //Move horizontally if necessary
-  if(hrz<0){
-      goLeft(abs(hrz)*800);
-      delay(1000);
+        //Decide how much it needs to move vertically
+        int vrt = vrtMove(shelf[state][1], shelf[inp][1]);
+        Serial.print("Vertical ");
+        Serial.println(vrt);
+
+        //Move horizontally if necessary
+        if(hrz<0){
+            goLeft(abs(hrz)*800);
+            delay(1000);
+        }
+        else if(hrz>0){
+          goRight(hrz*800);
+          delay(1000);
+        }
+        //Move vertically if necessary
+        if(vrt<0){
+          goDown();
+          delay(1100);
+        }
+        else if(vrt>0){
+          goUp();
+          delay(1100);
+        }
+        //Change the state to the one it just got to
+        state = inp;
   }
-  else if(hrz>0){
-    goRight(hrz*800);
-    delay(1000);
-  }
-  //Move vertically if necessary
-  if(vrt<0){
-    goDown();
-    delay(1100);
-  }
-  else if(vrt>0){
-    goUp();
-    delay(1100);
-  }
-  //Change the state to the one it just got to
-  state = inp;
 }
 
 //Return how much it needs to move horizontally. Negative is to the left, positive to the right
@@ -100,4 +106,13 @@ void goDown(){
   motorForward(1, 200);
   delay(5000);
   motorStop(1);
-  }
+}
+
+//Go to the origin
+void goOrigin(){
+    while(digitalRead(3) != 1){
+        motorForward(0, 500);
+    }
+    motorStop(0);
+    state = 0;
+}
