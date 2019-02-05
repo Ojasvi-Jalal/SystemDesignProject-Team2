@@ -1,7 +1,15 @@
 from flask import Flask
+from ..serial_io import *
+sio = SerialIO("/dev/ttyACM0","/dev/ttyACM0")
+bool = False
 app = Flask(__name__)
 @app.route('/')
 def index():
-    return 'Hello world'
+    if(bool):
+        sio.write_char('t')
+        return 'Turned on'
+    else:
+        sio.write_char('f')
+        return 'Turned off'
 if __name__ == '__main__':
-    app.run(debug=True, port=80, host='0.0.0.0')
+    app.run(debug=True, port=8000, host='0.0.0.0')
