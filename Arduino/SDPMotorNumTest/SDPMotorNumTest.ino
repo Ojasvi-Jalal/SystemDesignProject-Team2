@@ -4,7 +4,6 @@ int i = 0;
 
 void setup(){
   SDPsetup();
-  helloWorld();
 }
 
 void loop(){
