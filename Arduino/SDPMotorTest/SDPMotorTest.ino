@@ -111,9 +111,10 @@ void goDown(){
 //Go to the origin
 void goOrigin(){
     motorForward(0, 500);
-    while(digitalRead(3) != 1){
+    while(digitalRead(3) == 1){
         delay(10);
     }
+    Serial.println("Arrived to origin")
     motorStop(0);
     state = 0;
 }
