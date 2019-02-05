@@ -138,13 +138,13 @@ void goLeft(int i){
 void goUp(){
   Serial.println("MOVING UP");
     motorBackward(1, 200);
-    delay(900);
+    delay(2000);
     motorStop(1);
 }
 
 void goDown(){
   Serial.println("MOVING DOWN");
     motorForward(1, 200);
-    delay(900);
+    delay(2000);
     motorStop(1);
   }
