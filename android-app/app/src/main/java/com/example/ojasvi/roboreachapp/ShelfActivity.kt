@@ -50,7 +50,7 @@ class ShelfActivity : AppCompatActivity() {
                 Response.ErrorListener {
                     AlertDialog.Builder(this)
                             .setTitle("Error")
-                            .setMessage("${it.networkResponse}")
+                            .setMessage("${it.networkResponse.statusCode}")
                             .show()
                 })
         requestQueue.add(stringRequest)

@@ -16,7 +16,6 @@ class LauncherActivity : AppCompatActivity() {
         var continueButton = findViewById<Button>(R.id.continueButton)
         continueButton.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
-            finish()
         }
 
     }

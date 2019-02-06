@@ -7,15 +7,9 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import java.time.LocalDate
 
 
@@ -23,14 +17,14 @@ class MainActivity : AppCompatActivity() {
 
     private var recyclerView: RecyclerView? = null
 
-    private lateinit var shelf_a1: Shelf
-    private lateinit var shelf_a2: Shelf
-    private lateinit var shelf_a3: Shelf
-    private lateinit var shelf_b1: Shelf
-    private lateinit var shelf_b2: Shelf
-    private lateinit var shelf_b3: Shelf
-    private lateinit var shelf_d1: Shelf
-    private lateinit var shelf_d2: Shelf
+    private lateinit var shelf_1: Shelf
+    private lateinit var shelf_2: Shelf
+    private lateinit var shelf_3: Shelf
+    private lateinit var shelf_4: Shelf
+    private lateinit var shelf_5: Shelf
+    private lateinit var shelf_6: Shelf
+    private lateinit var shelf_7: Shelf
+    private lateinit var shelf_8: Shelf
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -52,24 +46,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeShelves() {
         // Should get shelf data from hardware/local database
-        shelf_a1 = Shelf(null, "A1")
-        shelf_a2 = Shelf(null, "A2")
-        shelf_a3 = Shelf(null, "A3")
-        shelf_b1 = Shelf(null, "B1")
-        shelf_b2 = Shelf(null, "B2")
-        shelf_b3 = Shelf(null, "B3")
-        shelf_d1 = Shelf(null, "D1")
-        shelf_d2 = Shelf(null, "D2")
+        shelf_1 = Shelf(null, "1")
+        shelf_2 = Shelf(null, "2")
+        shelf_3 = Shelf(null, "3")
+        shelf_1 = Shelf(null, "4")
+        shelf_2 = Shelf(null, "5")
+        shelf_3 = Shelf(null, "6")
+        shelf_1 = Shelf(null, "7")
+        shelf_2 = Shelf(null, "8")
     }
 
     private fun generateFakeItems() {
         // Creates fake Item and Notification objects
-        val jam = Item("Jam")
-        shelf_a3.item = jam
-        val bread = Item("Bread")
-        shelf_b1.item = bread
+        val jam = Item("Jam", LocalDate.now().plusDays(16), "564648646464")
+        shelf_7.item = jam
+        val bread = Item("Bread", LocalDate.now().plusDays(4), "548674646464")
+        shelf_8.item = bread
         val biscuits = Item("Biscuits", LocalDate.now().plusDays(8), "34696453453")
-        shelf_b2.item = biscuits
+        shelf_1.item = biscuits
     }
 
 
@@ -77,43 +71,43 @@ class MainActivity : AppCompatActivity() {
 
         val listOfNotifications = mutableListOf<Notification>()
 
-        if(shelf_a1.item != null && shelf_a1.item!!.expiresSoon()) {
-            val notification = Notification(shelf_a1)
+        if(shelf_1.item != null && shelf_1.item!!.expiresSoon()) {
+            val notification = Notification(shelf_1)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_a2.item != null && shelf_a2.item!!.expiresSoon()) {
-            val notification = Notification(shelf_a2)
+        if(shelf_2.item != null && shelf_2.item!!.expiresSoon()) {
+            val notification = Notification(shelf_2)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_a3.item != null && shelf_a3.item!!.expiresSoon()) {
-            val notification = Notification(shelf_a3)
+        if(shelf_3.item != null && shelf_3.item!!.expiresSoon()) {
+            val notification = Notification(shelf_3)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_b1.item != null && shelf_b1.item!!.expiresSoon()) {
-            val notification = Notification(shelf_b1)
+        if(shelf_4.item != null && shelf_4.item!!.expiresSoon()) {
+            val notification = Notification(shelf_4)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_b2.item != null && shelf_b2.item!!.expiresSoon()) {
-            val notification = Notification(shelf_b2)
+        if(shelf_5.item != null && shelf_5.item!!.expiresSoon()) {
+            val notification = Notification(shelf_5)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_b3.item != null && shelf_b3.item!!.expiresSoon()) {
-            val notification = Notification(shelf_b3)
+        if(shelf_6.item != null && shelf_6.item!!.expiresSoon()) {
+            val notification = Notification(shelf_6)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_d1.item != null && shelf_d1.item!!.expiresSoon()) {
-            val notification = Notification(shelf_d1)
+        if(shelf_7.item != null && shelf_7.item!!.expiresSoon()) {
+            val notification = Notification(shelf_7)
             listOfNotifications.add(notification)
         }
 
-        if(shelf_d2.item != null && shelf_d2.item!!.expiresSoon()) {
-            val notification = Notification(shelf_d2)
+        if(shelf_8.item != null && shelf_8.item!!.expiresSoon()) {
+            val notification = Notification(shelf_8)
             listOfNotifications.add(notification)
         }
 
@@ -128,46 +122,46 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshShelfInfo() {
 
-        val a1CardView = findViewById<CardView>(R.id.a1_card)
-        val a2CardView = findViewById<CardView>(R.id.a2_card)
-        val a3CardView = findViewById<CardView>(R.id.a3_card)
-        val b1CardView = findViewById<CardView>(R.id.b1_card)
-        val b2CardView = findViewById<CardView>(R.id.b2_card)
-        val b3CardView = findViewById<CardView>(R.id.b3_card)
-        val d1CardView = findViewById<CardView>(R.id.d1_card)
-        val d2CardView = findViewById<CardView>(R.id.d2_card)
+        val `1CardView` = findViewById<CardView>(R.id.1_card)
+        val `2CardView` = findViewById<CardView>(R.id.2_card)
+        val `3CardView` = findViewById<CardView>(R.id.3_card)
+        val `4CardView` = findViewById<CardView>(R.id.4_card)
+        val `5CardView` = findViewById<CardView>(R.id.b2_card)
+        val `6CardView` = findViewById<CardView>(R.id.b3_card)
+        val `7CardView` = findViewById<CardView>(R.id.d1_card)
+        val `8CardView` = findViewById<CardView>(R.id.d2_card)
 
-        a1CardView.setOnClickListener {
+        `1CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a1), options.toBundle())
         }
-        a2CardView.setOnClickListener {
+        `2CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a2), options.toBundle())
         }
-        a3CardView.setOnClickListener {
+        `3CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a3), options.toBundle())
         }
-        b1CardView.setOnClickListener {
+        `4CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b1), options.toBundle())
         }
-        b2CardView.setOnClickListener {
+        `5CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b2), options.toBundle())
         }
-        b3CardView.setOnClickListener {
+        `6CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b3), options.toBundle())
         }
 
-        d1CardView.setOnClickListener {
+        `7CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_d1), options.toBundle())
         }
 
-        d2CardView.setOnClickListener {
+        `8CardView`.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
             startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_d2), options.toBundle())
         }
