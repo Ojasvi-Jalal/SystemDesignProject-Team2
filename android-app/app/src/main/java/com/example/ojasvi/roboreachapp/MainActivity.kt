@@ -49,11 +49,11 @@ class MainActivity : AppCompatActivity() {
         shelf_1 = Shelf(null, "1")
         shelf_2 = Shelf(null, "2")
         shelf_3 = Shelf(null, "3")
-        shelf_1 = Shelf(null, "4")
-        shelf_2 = Shelf(null, "5")
-        shelf_3 = Shelf(null, "6")
-        shelf_1 = Shelf(null, "7")
-        shelf_2 = Shelf(null, "8")
+        shelf_4 = Shelf(null, "4")
+        shelf_5 = Shelf(null, "5")
+        shelf_6 = Shelf(null, "6")
+        shelf_7 = Shelf(null, "7")
+        shelf_8 = Shelf(null, "8")
     }
 
     private fun generateFakeItems() {
@@ -122,161 +122,161 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshShelfInfo() {
 
-        val `1CardView` = findViewById<CardView>(R.id.1_card)
-        val `2CardView` = findViewById<CardView>(R.id.2_card)
-        val `3CardView` = findViewById<CardView>(R.id.3_card)
-        val `4CardView` = findViewById<CardView>(R.id.4_card)
-        val `5CardView` = findViewById<CardView>(R.id.b2_card)
-        val `6CardView` = findViewById<CardView>(R.id.b3_card)
-        val `7CardView` = findViewById<CardView>(R.id.d1_card)
-        val `8CardView` = findViewById<CardView>(R.id.d2_card)
+        val card_1 = findViewById<CardView>(R.id.card_1)
+        val card_2 = findViewById<CardView>(R.id.card_2)
+        val card_3 = findViewById<CardView>(R.id.card_3)
+        val card_4 = findViewById<CardView>(R.id.card_4)
+        val card_5 = findViewById<CardView>(R.id.card_5)
+        val card_6 = findViewById<CardView>(R.id.card_6)
+        val card_7 = findViewById<CardView>(R.id.card_7)
+        val card_8 = findViewById<CardView>(R.id.card_8)
 
-        `1CardView`.setOnClickListener {
+        card_1.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a1), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_1), options.toBundle())
         }
-        `2CardView`.setOnClickListener {
+        card_2.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a2), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_2), options.toBundle())
         }
-        `3CardView`.setOnClickListener {
+        card_3.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_a3), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_3), options.toBundle())
         }
-        `4CardView`.setOnClickListener {
+        card_4.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b1), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_4), options.toBundle())
         }
-        `5CardView`.setOnClickListener {
+        card_5.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b2), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_5), options.toBundle())
         }
-        `6CardView`.setOnClickListener {
+        card_6.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_b3), options.toBundle())
-        }
-
-        `7CardView`.setOnClickListener {
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_d1), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_6), options.toBundle())
         }
 
-        `8CardView`.setOnClickListener {
+        card_7.setOnClickListener {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
-            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_d2), options.toBundle())
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_7), options.toBundle())
         }
 
-        val a1_title = findViewById<TextView>(R.id.a1_title)
-        val a2_title = findViewById<TextView>(R.id.a2_title)
-        val a3_title = findViewById<TextView>(R.id.a3_title)
-        val b1_title = findViewById<TextView>(R.id.b1_title)
-        val b2_title = findViewById<TextView>(R.id.b2_title)
-        val b3_title = findViewById<TextView>(R.id.b3_title)
-        val d1_title = findViewById<TextView>(R.id.d1_title)
-        val d2_title = findViewById<TextView>(R.id.d2_title)
+        card_8.setOnClickListener {
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, it, getString(R.string.transition_string))
+            startActivity(Intent(this, ShelfActivity::class.java).putExtra("shelf", shelf_8), options.toBundle())
+        }
 
-        val a1_warn = findViewById<ImageView>(R.id.a1_warn)
-        val a2_warn = findViewById<ImageView>(R.id.a2_warn)
-        val a3_warn = findViewById<ImageView>(R.id.a3_warn)
-        val b1_warn = findViewById<ImageView>(R.id.b1_warn)
-        val b2_warn = findViewById<ImageView>(R.id.b2_warn)
-        val b3_warn = findViewById<ImageView>(R.id.b3_warn)
-        val d1_warn = findViewById<ImageView>(R.id.d1_warn)
-        val d2_warn = findViewById<ImageView>(R.id.d2_warn)
+        val title_1 = findViewById<TextView>(R.id.title_1)
+        val title_2 = findViewById<TextView>(R.id.title_2)
+        val title_3 = findViewById<TextView>(R.id.title_3)
+        val title_4 = findViewById<TextView>(R.id.title_4)
+        val title_5 = findViewById<TextView>(R.id.title_5)
+        val title_6 = findViewById<TextView>(R.id.title_6)
+        val title_7 = findViewById<TextView>(R.id.title_7)
+        val title_8 = findViewById<TextView>(R.id.title_8)
 
-        when(shelf_a1.item) {
+        val warn_1 = findViewById<ImageView>(R.id.warn_1)
+        val warn_2 = findViewById<ImageView>(R.id.warn_2)
+        val warn_3 = findViewById<ImageView>(R.id.warn_3)
+        val warn_4 = findViewById<ImageView>(R.id.warn_4)
+        val warn_5 = findViewById<ImageView>(R.id.warn_5)
+        val warn_6 = findViewById<ImageView>(R.id.warn_6)
+        val warn_7 = findViewById<ImageView>(R.id.warn_7)
+        val warn_8 = findViewById<ImageView>(R.id.warn_8)
+
+        when(shelf_1.item) {
             null -> {
-                a1_title.text = "Empty"
-                a1_warn.visibility = View.GONE
+                title_1.text = "Empty"
+                warn_1.visibility = View.GONE
             }
             else -> {
-                a1_title.text = shelf_a1.item!!.title
-                if(shelf_a1.item!!.expiresSoon()) a1_warn.visibility = View.VISIBLE
-                else a1_warn.visibility = View.GONE
+                title_1.text = shelf_1.item!!.title
+                if(shelf_1.item!!.expiresSoon()) warn_1.visibility = View.VISIBLE
+                else warn_1.visibility = View.GONE
             }
         }
 
-        when(shelf_a2.item) {
+        when(shelf_2.item) {
             null -> {
-                a2_title.text = "Empty"
-                a2_warn.visibility = View.GONE
+                title_2.text = "Empty"
+                warn_2.visibility = View.GONE
             }
             else -> {
-                a2_title.text = shelf_a2.item!!.title
-                if(shelf_a2.item!!.expiresSoon()) a2_warn.visibility = View.VISIBLE
-                else a2_warn.visibility = View.GONE
+                title_2.text = shelf_2.item!!.title
+                if(shelf_2.item!!.expiresSoon()) warn_2.visibility = View.VISIBLE
+                else warn_2.visibility = View.GONE
             }
         }
 
-        when(shelf_a3.item) {
+        when(shelf_3.item) {
             null -> {
-                a3_title.text = "Empty"
-                a3_warn.visibility = View.GONE
+                title_3.text = "Empty"
+                warn_3.visibility = View.GONE
             }
             else -> {
-                a3_title.text = shelf_a3.item!!.title
-                if(shelf_a3.item!!.expiresSoon()) a3_warn.visibility = View.VISIBLE
-                else a3_warn.visibility = View.GONE
+                title_3.text = shelf_3.item!!.title
+                if(shelf_3.item!!.expiresSoon()) warn_3.visibility = View.VISIBLE
+                else warn_3.visibility = View.GONE
             }
         }
 
-        when(shelf_b1.item) {
+        when(shelf_4.item) {
             null -> {
-                b1_title.text = "Empty"
-                b1_warn.visibility = View.GONE
+                title_4.text = "Empty"
+                warn_4.visibility = View.GONE
             }
             else -> {
-                b1_title.text = shelf_b1.item!!.title
-                if(shelf_b1.item!!.expiresSoon()) b1_warn.visibility = View.VISIBLE
-                else b1_warn.visibility = View.GONE
+                title_4.text = shelf_4.item!!.title
+                if(shelf_4.item!!.expiresSoon()) warn_4.visibility = View.VISIBLE
+                else warn_4.visibility = View.GONE
             }
         }
 
-        when(shelf_b2.item) {
+        when(shelf_5.item) {
             null -> {
-                b2_title.text = "Empty"
-                b2_warn.visibility = View.GONE
+                title_5.text = "Empty"
+                warn_5.visibility = View.GONE
             }
             else -> {
-                b2_title.text = shelf_b2.item!!.title
-                if(shelf_b2.item!!.expiresSoon()) b2_warn.visibility = View.VISIBLE
-                else b2_warn.visibility = View.GONE
+                title_5.text = shelf_5.item!!.title
+                if(shelf_5.item!!.expiresSoon()) warn_5.visibility = View.VISIBLE
+                else warn_5.visibility = View.GONE
             }
         }
 
-        when(shelf_b3.item) {
+        when(shelf_6.item) {
             null -> {
-                b3_title.text = "Empty"
-                b3_warn.visibility = View.GONE
+                title_6.text = "Empty"
+                warn_6.visibility = View.GONE
             }
             else -> {
-                b3_title.text = shelf_b3.item!!.title
-                if(shelf_b3.item!!.expiresSoon()) b3_warn.visibility = View.VISIBLE
-                else b3_warn.visibility = View.GONE
+                title_6.text = shelf_6.item!!.title
+                if(shelf_6.item!!.expiresSoon()) warn_6.visibility = View.VISIBLE
+                else warn_6.visibility = View.GONE
             }
         }
 
-        when(shelf_d1.item) {
+        when(shelf_7.item) {
             null -> {
-                d1_title.text = "Empty"
-                d1_warn.visibility = View.GONE
+                title_7.text = "Empty"
+                warn_7.visibility = View.GONE
             }
             else -> {
-                d1_title.text = shelf_d1.item!!.title
-                if(shelf_d1.item!!.expiresSoon()) d1_warn.visibility = View.VISIBLE
-                else d1_warn.visibility = View.GONE
+                title_7.text = shelf_7.item!!.title
+                if(shelf_7.item!!.expiresSoon()) warn_7.visibility = View.VISIBLE
+                else warn_7.visibility = View.GONE
             }
         }
 
-        when(shelf_d2.item) {
+        when(shelf_8.item) {
             null -> {
-                d2_title.text = "Empty"
-                d2_warn.visibility = View.GONE
+                title_8.text = "Empty"
+                warn_8.visibility = View.GONE
             }
             else -> {
-                d2_title.text = shelf_d2.item!!.title
-                if(shelf_d2.item!!.expiresSoon()) d2_warn.visibility = View.VISIBLE
-                else d2_warn.visibility = View.GONE
+                title_8.text = shelf_8.item!!.title
+                if(shelf_8.item!!.expiresSoon()) warn_8.visibility = View.VISIBLE
+                else warn_8.visibility = View.GONE
             }
         }
 

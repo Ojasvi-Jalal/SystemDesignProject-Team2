@@ -39,18 +39,17 @@ class ShelfActivity : AppCompatActivity() {
 
     private fun httpRequest(request: String) {
         // Request a string response from the provided URL.
-        val stringRequest = StringRequest(Request.Method.GET, "$requestUrl",
+        val stringRequest = StringRequest(Request.Method.GET, "$requestUrl/$request",
                 Response.Listener<String> { response ->
                     AlertDialog.Builder(this)
                             .setTitle("Response")
                             .setMessage(response)
                             .show()
-
                 },
                 Response.ErrorListener {
                     AlertDialog.Builder(this)
                             .setTitle("Error")
-                            .setMessage("${it.networkResponse.statusCode}")
+                            .setMessage("Request $request failed:\n${if (it.networkResponse == null) "No response from $requestUrl" else "Error: $it.networkResponse"}")
                             .show()
                 })
         requestQueue.add(stringRequest)
@@ -111,8 +110,8 @@ class ShelfActivity : AppCompatActivity() {
                 override fun run() {
                     progress.dismiss()
                 }
-            }, 3000) // fake 3sec delay
-            httpRequest("")
+            }, 10000) // fake 10sec delay
+            httpRequest("move_to?pos=${shelf.name}")
         }
 
         storeButton.setOnClickListener {
@@ -123,8 +122,8 @@ class ShelfActivity : AppCompatActivity() {
                 override fun run() {
                     progress.dismiss()
                 }
-            }, 3000) // fake 3sec delay
-            httpRequest("")
+            }, 10000) // fake 10sec delay
+            httpRequest("move_to?pos=${shelf.name}")
         }
 
 

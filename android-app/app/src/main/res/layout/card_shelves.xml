@@ -33,7 +33,7 @@
         <!-- COLUMN 1  -->
 
         <android.support.v7.widget.CardView
-            android:id="@+id/5_card"
+            android:id="@+id/card_5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -48,7 +48,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -60,7 +59,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/5_id"
+                        android:id="@+id/id_5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -68,7 +67,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/5_warn"
+                        android:id="@+id/warn_5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -77,7 +76,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/5_title"
+                    android:id="@+id/title_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -90,7 +89,7 @@
         <!-- COLUMN 2  -->
 
         <android.support.v7.widget.CardView
-            android:id="@+id/6_card"
+            android:id="@+id/card_6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -105,7 +104,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -117,7 +115,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/id"
+                        android:id="@+id/id_6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -125,7 +123,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/6_warn"
+                        android:id="@+id/warn_6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -134,7 +132,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/6_title"
+                    android:id="@+id/title_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -147,7 +145,7 @@
         <!-- COLUMN 3  -->
 
         <android.support.v7.widget.CardView
-            android:id="@+id/7_card"
+            android:id="@+id/card_7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -162,7 +160,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -174,7 +171,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/7_id"
+                        android:id="@+id/id_7"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -183,7 +180,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/7_warn"
+                        android:id="@+id/warn_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -191,7 +188,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/7_title"
+                    android:id="@+id/title_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -205,7 +202,7 @@
         <!-- COLUMN 1  -->
 
         <android.support.v7.widget.CardView
-            android:id="@+id/8_card"
+            android:id="@+id/card_8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -219,7 +216,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -231,7 +227,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/id_8"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -239,7 +235,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/8_warn"
+                        android:id="@+id/warn_8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -248,7 +244,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/8_title"
+                    android:id="@+id/title_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -261,7 +257,7 @@
         <!-- COLUMN 2  -->
 
         <android.support.v7.widget.CardView
-            android:id="@+id/1_card"
+            android:id="@+id/card_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -275,7 +271,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -287,7 +282,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/id_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -295,7 +290,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/1_warn"
+                        android:id="@+id/warn_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -304,7 +299,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/1_title"
+                    android:id="@+id/title_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -317,7 +312,7 @@
         <!-- COLUMN 3  -->
 
         <android.support.v7.widget.CardView
-            android:id="@+id/2_card"
+            android:id="@+id/card_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -331,7 +326,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -343,7 +337,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/id_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -351,7 +345,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/2_warn"
+                        android:id="@+id/warn_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -360,7 +354,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/2_title"
+                    android:id="@+id/title_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -371,7 +365,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/3_card"
+            android:id="@+id/card_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -385,7 +379,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -397,7 +390,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/id_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -405,7 +398,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/3_warn"
+                        android:id="@+id/warn_3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -414,7 +407,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/3_title"
+                    android:id="@+id/title_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
@@ -425,7 +418,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/4_card"
+            android:id="@+id/card_4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -439,7 +432,6 @@
             app:cardElevation="8dp">
 
             <LinearLayout
-                android:id="@+id/4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -451,7 +443,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/id_4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -459,7 +451,7 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/4_warn"
+                        android:id="@+id/warn_4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -468,7 +460,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/4_title"
+                    android:id="@+id/title_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autoSizeTextType="uniform"
