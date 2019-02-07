@@ -4,26 +4,32 @@ import logging
 
 class SerialIO:
 
-    def __init__(self, input_device:str, output_device: str):
-        self.serial_in = serial.Serial(
-            port=input_device,
-            baudrate = 9600,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=1
-        )
+    def __init__(self, input_device:str, output_device: str, mock_io = False):
+        self.mock_io = mock_io
 
-        self.serial_out = serial.Serial(
-            port=output_device,
-            baudrate = 9600,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=1
-        )
+        if not mock_io:
+            self.serial_in = serial.Serial(
+                port=input_device,
+                baudrate = 9600,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                bytesize=serial.EIGHTBITS,
+                timeout=1
+            )
+
+            self.serial_out = serial.Serial(
+                port=output_device,
+                baudrate = 9600,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                bytesize=serial.EIGHTBITS,
+                timeout=1
+            )
 
     def write(self, message: str):
+        if self.mock_io:
+            print("SEND {}".format(message))
+            return
         self.serial_out.write(message)
 
     def write_char(self, char: str) -> bool:
