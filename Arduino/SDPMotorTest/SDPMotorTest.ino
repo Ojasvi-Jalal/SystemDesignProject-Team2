@@ -116,6 +116,9 @@ void goOrigin(){
     }
     Serial.println("Arrived to origin");
     motorStop(0);
-    goDown();
+    //If the platform is up, move it down
+    if(shelf[state][1] != 0){
+        goDown();
+    }
     state = 0;
 }
