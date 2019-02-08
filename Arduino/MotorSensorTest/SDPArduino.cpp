@@ -23,7 +23,7 @@ void SDPsetup() {
   pinMode(A2,INPUT);
   pinMode(A3,INPUT);
   digitalWrite(8,HIGH); //Pin 8 must be high to turn the radio on!
-  Serial.begin(2000000); // Serial rate the radio is configured to.
+  Serial.begin(115200); // Serial rate the radio is configured to.
   Wire.begin(); //Makes arduino master of the I2C line.
 }
 
@@ -161,3 +161,4 @@ int readDigitalSensorData(int portNum){ //PortNum is the Sensor port used
     return -2;
   }
 }
+
