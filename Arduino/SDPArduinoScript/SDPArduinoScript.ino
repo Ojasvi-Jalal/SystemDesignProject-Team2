@@ -13,6 +13,8 @@ void setup(){
   SDPsetup();
   while(!Serial){;} // Wait until serial is established
   Serial.println("Serial Connected");
+  Serial.println("Going to Origin");
+  goOrigin();
 }
 
 /*
