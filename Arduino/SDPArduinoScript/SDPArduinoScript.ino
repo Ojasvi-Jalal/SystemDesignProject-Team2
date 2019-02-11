@@ -81,7 +81,7 @@ int vrtMove(int from, int to){
 //Make the robot go to the right
 void goRight(int i){
   Serial.println("MOVING RIGHT");
-  motorBackward(0, 500);
+  motorForward(0, 500);
   delay(i);
   motorAllStop();
 }
@@ -89,7 +89,7 @@ void goRight(int i){
 //Make the robot go to the left
 void goLeft(int i){
   Serial.println("MOVING LEFT");
-  motorForward(0, 500);
+  motorBackward(0, 500);
   delay(i);
   motorAllStop();
 }
@@ -112,7 +112,7 @@ void goDown(){
 
 //Go to the origin
 void goOrigin(){
-    motorForward(0, 500);
+    motorBackward(0, 500);
     while(digitalRead(3) == 1){
         delay(10);
     }
