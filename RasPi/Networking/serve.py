@@ -3,6 +3,7 @@ from flask import Flask, request
 from serial_io import *
 import argparse
 from config import * 
+import flask_socketio 
 
 app = Flask(__name__)
 

@@ -1,5 +1,9 @@
 # SystemDesignProject-Team2
 
+## RasPi-SocketIO
+
+R&D into replacing the flask API with socketIO
+
 ## RasPi 
 
 A flask HTTP server runs on the Raspberry Pi. Requests can be send to this HTTP server to control
@@ -17,27 +21,6 @@ python3 RasPi/Networking/serve.py
 
 Once you see the line `Running on http://0.0.0.0:8000/ (Press CTRL+C to quit)` printed to the console
 then the server is started and ready to start receiving requests.
-
-## Flask Server API Reference
-
-
-| URL 						 | Description |
-| ------------- 			 | ------------- |
-| `GET /move_to?pos=<pos>`   | Move the robot to a position. `<pos>` is a shelf position|
-
-## Troubleshooting
-
-### SerialException: Could not open port
-If you see the following output (probably repeated twice):
-
-```
-Traceback (most recent call last):
-  File "/afs/inf.ed.ac.uk/user/s16/s1633754/SystemDesignProject-Team2/RasPi/Networking/serial/serialposix.py", line 288, in open
-    self.fd = os.open(self.portstr, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
-FileNotFoundError: [Errno 2] No such file or directory: '/dev/ttyACM0'
-```
-
-then the raspberry pi **could not open the RF dongle**
 
 #### Resolution steps
 1. Ensure the RF dongle is plugged into the Raspberry PI USB port
