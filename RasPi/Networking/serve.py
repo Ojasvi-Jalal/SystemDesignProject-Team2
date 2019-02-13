@@ -3,36 +3,28 @@ from flask import Flask, request
 from serial_io import *
 import argparse
 from config import * 
-import flask_socketio 
+from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
-@app.route('/')
-def index():
-    global at_final_position
-    if(at_final_position):
-        at_final_position = False
-        sio.write_char('0')
-        return 'Going to 0'
-    else:
-        at_final_position = True
-        sio.write_char('8')
-        return 'Going to 8'
-
-@app.route('/move_to_pos')
-def move_to():
-    pos = request.args.get("pos", type=int)
+    
+# Move the shelf to a position. Example
+# move_to, {pos: "8"}
+# This endpoint probabily won't be needed in the future but useful for testing
+@socketio.on('move_to')
+def handle_message(message):
+    pos = message.get("pos")
     if pos is None:
-        return "No valid pos provided. Format: /move_to_pos?pos=<int>", 400
+        emit("move_to", {"success": False, "message": "No pos provided"})
+        return 
 
     if not (ROBOT_MIN_POS <= pos <= ROBOT_MAX_POS):
-        return "Provided pos {} is out of range. pos must be between {} and {}".format(pos, ROBOT_MIN_POS, ROBOT_MAX_POS), 400
+        emit("move_to", {"success": False, "message": "Provided pos is out of range. Expected value between {} and {}".format(ROBOT_MIN_POS, ROBOT_MAX_POS)})
+        return 
 
-    # We write the ascii value of a number, not the actual number
     sio.write_char(pos.__str__())
-
-    return "Moving to pos {}".format(pos)
-    
+    emit("move_to", {"success": True})
 
 if __name__ == '__main__':
     global sio

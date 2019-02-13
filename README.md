@@ -22,6 +22,34 @@ python3 RasPi/Networking/serve.py
 Once you see the line `Running on http://0.0.0.0:8000/ (Press CTRL+C to quit)` printed to the console
 then the server is started and ready to start receiving requests.
 
+## SocketIO API
+
+### move_to
+
+Move the robot to a shelf position. The event name is 'move_to' and takes one integer parameter called "pos" (the shelf position)
+
+```python
+# Send to position 5
+socketio.send("move_to", {"pos", 5})
+```
+
+In response the server sends back a message (also on the "move_to" event):
+
+```json
+{
+  "success": true
+}
+```
+
+or alternativly, an error
+
+```json
+{
+  "success": false,
+  "message": "No pos provided"
+}
+```
+
 #### Resolution steps
 1. Ensure the RF dongle is plugged into the Raspberry PI USB port
 2. Ensure that the RF dongle has a green LED lit
