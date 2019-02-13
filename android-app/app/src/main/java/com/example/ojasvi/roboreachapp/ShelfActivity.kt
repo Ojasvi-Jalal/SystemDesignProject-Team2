@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -18,8 +19,21 @@ import com.android.volley.toolbox.Volley
 import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
 import java.util.*
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import io.socket.client.Ack
+import io.socket.client.IO
+import io.socket.client.Socket
+import io.socket.emitter.Emitter
+import org.json.JSONArray
+import org.json.JSONObject
+
+@GlideModule
+class MyAppGlideModule : AppGlideModule()
 
 class ShelfActivity : AppCompatActivity() {
+
+    private lateinit var socket: Socket
 
     private lateinit var requestQueue: RequestQueue
     private val requestUrl = "http://192.168.105.131:8000" // static gabumon IP. did not seem to work as http://gabumon:8000
@@ -145,6 +159,32 @@ class ShelfActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setImageView(view: ImageView, searchTerm: String) {
+        val url: String = "https://source.unsplash.com/random/?$searchTerm"
+        GlideApp.with(this).load(url).into(view)
+    }
+
+
+    private fun setupSocket(host: String) {
+        socket = IO.socket(host)
+        socket
+                .on(Socket.EVENT_CONNECT) {
+                    Log.d("SocketIO", "Connected to $host")
+                    socket.emit("connected") } // emit successful connect message
+                .on("some_event") {
+                    Log.d("SocketIO", "test event response sent")
+                    socket.emit("some_response_back_to_server", Ack {
+                        // you can do some stuff here when server sends back an acknowledgment of receipt
+                    }) } // emit message to server
+                .on("some_json") {
+                    Log.d("SocketIO", "received JSONObject as first argument of event some_json")
+                    var someJsonObject = it[0] as JSONObject } // receive JSon file passed as the first argument
+                .on(Socket.EVENT_DISCONNECT) {
+                    Log.d("SocketIO", "Disconnected from $host")
+                    socket.emit("disconnected") } // emit disconnect message
+        socket.connect()
     }
 
 }

@@ -51,7 +51,7 @@
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
                         android:text="A3"
@@ -65,6 +65,7 @@
                         android:layout_weight="1"
                         android:visibility="visible"
                         app:srcCompat="@drawable/ic_exclamation" />
+
                 </LinearLayout>
 
                 <TextView
