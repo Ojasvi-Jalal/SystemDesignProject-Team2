@@ -2,6 +2,7 @@
 # It simulates the Android App to test out the socketIO code
 
 import socketio
+import sys
 
 sio = socketio.Client()
 
@@ -26,7 +27,15 @@ def add_item(res):
     print(res)
 
 def main():
-    sio.connect('http://0.0.0.0:8000')
+    if len(sys.argv) == 1:
+        url = "0.0.0.0:8000"
+    else:
+        url = sys.argv[1]
+
+    full_url = 'http://{}'.format(url)
+    print("Connecting to {}".format(full_url))
+    
+    sio.connect(full_url)
     sio.emit("move_to", {})
     sio.emit("move_to", {"pos": 10})
     sio.emit("move_to", {"pos": -3})
