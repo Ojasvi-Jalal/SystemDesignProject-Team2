@@ -13,7 +13,7 @@ class PickerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picker)
 
-        val button = findViewById<Button>(R.id.button)
+        val button = findViewById<Button>(R.id.store)
         button. setOnClickListener {
 
             val categories: MutableList<String> = mutableListOf()

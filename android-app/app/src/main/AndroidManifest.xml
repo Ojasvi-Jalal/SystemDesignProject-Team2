@@ -26,7 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PickerActivity"></activity>
+        <activity android:name=".PickerActivity" />
+        <activity android:name=".Main"></activity>
     </application>
 
 </manifest>

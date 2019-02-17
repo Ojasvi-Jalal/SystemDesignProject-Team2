@@ -33,7 +33,8 @@ class LauncherActivity : AppCompatActivity() {
         else {
             val continueButton = findViewById<Button>(R.id.continueButton)
             continueButton.setOnClickListener {
-                scanBarcode()
+                startActivity(Intent(this, Main::class.java))
+                //scanBarcode()
             }
         }
 

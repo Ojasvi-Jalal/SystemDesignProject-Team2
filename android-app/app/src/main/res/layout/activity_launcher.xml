@@ -28,10 +28,10 @@
             android:textColor="@color/primaryRed"
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/welcome_text"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="@+id/welcome_text"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -59,8 +59,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
-            app:layout_constraintTop_toTopOf="@+id/textView5"
+            app:layout_constraintStart_toEndOf="@+id/welcome_text"
+            app:layout_constraintTop_toTopOf="@+id/welcome_text"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -82,12 +82,13 @@
     <Button
         android:id="@+id/continueButton"
         style="@android:style/Widget.Material.Button.Colored"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_button"
         android:backgroundTint="@color/primaryRed"
         android:drawablePadding="10dp"
         android:text="SCAN SHELF"
@@ -95,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.060000002" />
+        app:layout_constraintVertical_bias="0.13" />
 
     <TextView
         android:id="@+id/textView2"
