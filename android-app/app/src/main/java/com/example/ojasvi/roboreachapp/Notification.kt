@@ -1,3 +1,3 @@
 package com.example.ojasvi.roboreachapp
 
-data class Notification(var shelf: Shelf)
+data class Notification(var shelfSection: ShelfSection)

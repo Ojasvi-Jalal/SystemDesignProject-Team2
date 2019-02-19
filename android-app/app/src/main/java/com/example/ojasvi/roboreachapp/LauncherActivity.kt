@@ -20,7 +20,7 @@ class LauncherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_launcher)
         supportActionBar?.hide()
 
-        // checks if the initial configuration gone through (a single shelf set up)
+        // checks if the initial configuration gone through (a single shelfSection set up)
 
         val preferences = applicationContext.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val editor = preferences.edit()
@@ -28,11 +28,12 @@ class LauncherActivity : AppCompatActivity() {
 
         if(configured) {
             editor.apply()
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, Main::class.java))
         }
         else {
             val continueButton = findViewById<Button>(R.id.continueButton)
             continueButton.setOnClickListener {
+                // TODO: replace line below for production
                 startActivity(Intent(this, Main::class.java))
                 //scanBarcode()
             }
@@ -61,16 +62,18 @@ class LauncherActivity : AppCompatActivity() {
             else {
                 Log.d("LauncherActivity", "Scanned: ${result.contents}")
                 identifier = result.contents
-                if(true) { // check if actual shelf id
+                if(true) { // check if actual shelfSection id
                     editor.putBoolean("configured", true)
                     editor.putInt("number_of_shelves", 1)
                     editor.putString("shelf_1", identifier)
+                    editor.putString("shelf_1_title", "Unknown")
+                    editor.putString("last_used", "shelf_1")
                     editor.apply()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, Main::class.java))
                     finish()
                 }
                 else {
-                    Toast.makeText(this, "This is not a valid shelf ID!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "This is not a valid shelfSection ID!", Toast.LENGTH_LONG).show()
                 }
             }
         }

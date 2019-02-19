@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import java.time.format.DateTimeFormatter
 
 class NotificationAdapter(var notifications: List<Notification>): RecyclerView.Adapter<NotificationAdapter.ViewHolder>()  {
 
     override fun getItemCount(): Int = notifications.size
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
-        viewHolder.messageText.text = String.format("${notifications[i].shelf.item?.title} in shelf section ${notifications[i].shelf.name} is about to expire.")
+        viewHolder.messageText.text = String.format("${notifications[i].shelfSection.item?.title} in shelf section ${notifications[i].shelfSection.name} is about to expire")
     }
 
 

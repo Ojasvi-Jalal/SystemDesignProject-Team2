@@ -24,8 +24,6 @@ import com.bumptech.glide.module.AppGlideModule;
 import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
-import io.socket.emitter.Emitter
-import org.json.JSONArray
 import org.json.JSONObject
 
 @GlideModule
@@ -45,7 +43,7 @@ class ShelfActivity : AppCompatActivity() {
 
         requestQueue = Volley.newRequestQueue(this)
 
-        supportActionBar?.title = "Shelf"
+        supportActionBar?.title = "ShelfSection"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         getShelfData()
@@ -71,8 +69,8 @@ class ShelfActivity : AppCompatActivity() {
 
     private fun getShelfData() {
 
-        val shelf: Shelf = intent.getSerializableExtra("shelf") as Shelf
-        val item = shelf.item
+        val shelfSection: ShelfSection = intent.getSerializableExtra("shelfSection") as ShelfSection
+        val item = shelfSection.item
 
         val shelfName: TextView = findViewById(R.id.name)
         val itemTitle: TextView = findViewById(R.id.title)
@@ -80,7 +78,7 @@ class ShelfActivity : AppCompatActivity() {
         val barcode: EditText = findViewById(R.id.barcode)
         val warning: ImageView = findViewById(R.id.warn)
 
-        shelfName.text = shelf.name
+        shelfName.text = shelfSection.name
         when (item) {
             null -> {
                 itemTitle.text = "Empty"
@@ -125,7 +123,7 @@ class ShelfActivity : AppCompatActivity() {
                     progress.dismiss()
                 }
             }, 10000) // fake 10sec delay
-            httpRequest("move_to?pos=${shelf.name}")
+            httpRequest("move_to?pos=${shelfSection.name}")
         }
 
         storeButton.setOnClickListener {
@@ -137,7 +135,7 @@ class ShelfActivity : AppCompatActivity() {
                     progress.dismiss()
                 }
             }, 10000) // fake 10sec delay
-            httpRequest("move_to?pos=${shelf.name}")
+            httpRequest("move_to?pos=${shelfSection.name}")
         }
 
 
