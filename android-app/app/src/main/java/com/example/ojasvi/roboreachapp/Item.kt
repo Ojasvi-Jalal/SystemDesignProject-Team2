@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.time.LocalDate
 
 data class Item(var title: String = "Unknown",
-                var expiration: LocalDate = LocalDate.now().plusDays(7), // default expiration in a month
+                var expiration: LocalDate = LocalDate.now().plusDays(7), // default expiration in a week
                 var barcode: String = ""): Serializable {
 
 

@@ -51,7 +51,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:ems="10"
-            android:text="Small item"
+            android:hint="Small item"
             android:textColor="#808080"
             android:textSize="14sp" />
 
@@ -83,6 +83,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:digits="0123456789"
             android:ems="10"
             android:hint="123456789000"
             android:inputType="number"
@@ -118,6 +119,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:digits="0123456789-"
             android:ems="10"
             android:hint="YYYY-MM-DD"
             android:inputType="date"

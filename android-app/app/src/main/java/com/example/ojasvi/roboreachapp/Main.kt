@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.*
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 import java.time.LocalDate
 import org.jetbrains.anko.indeterminateProgressDialog
 import java.time.format.DateTimeFormatter
@@ -59,34 +61,45 @@ class Main : AppCompatActivity() {
                 val name = alertDialog.findViewById<EditText>(R.id.name)?.text.toString()
                 val barcode = alertDialog.findViewById<EditText>(R.id.barcode)?.text.toString()
                 val expiry = alertDialog.findViewById<EditText>(R.id.expiry)?.text.toString()
-                // TODO: add checks for incorrect data and date formats
-                val newItem: Item = Item(name, LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE), barcode)
-                alertDialog.dismiss()
-                val progressDialog = indeterminateProgressDialog("Storing item...")
-                progressDialog.show()
-                progressDialog.setCancelable(false)
-                sendItem(newItem, progressDialog)
+                if(name == "")
+                    longSnackbar(it, "Name should not be blank!")
+                else if(!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
+                    longSnackbar(it, "Incorrect expiry date format!")
+                else {
+                    // TODO: add checks for incorrect data and date formats
+                    val newItem: Item = Item(name, LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE), barcode)
+                    alertDialog.dismiss()
+                    val progressDialog = indeterminateProgressDialog("Storing item...")
+                    progressDialog.show()
+                    progressDialog.setCancelable(false)
+                    sendItem(newItem, progressDialog)
+                }
             }
-            val lookupButton = alertDialog.findViewById<Button>(R.id.quickLookupButton)
-            lookupButton?.setOnClickListener {
-                // TODO: fill this hashmap with more values
-                val lookupDatabase = LinkedHashMap<String, MutableList<String>>()
-                lookupDatabase["Food"] = mutableListOf()
-                lookupDatabase["Food"]?.add("Orange")
-                lookupDatabase["Food"]?.add("Kiwi")
-                lookupDatabase["Food"]?.add("Pear")
-                lookupDatabase["Drinks"] = mutableListOf()
-                lookupDatabase["Drinks"]?.add("Coke")
-                lookupDatabase["Drinks"]?.add("Juice")
-                lookupDatabase["Drinks"]?.add("Water")
-                val pickerDialog = AlertDialog.Builder(this)
-                        .setView(R.layout.activity_picker)
-                        .show()
-                val categoriesView = pickerDialog.findViewById<RecyclerView>(R.id.categories)
-                val itemsView = pickerDialog.findViewById<RecyclerView>(R.id.items)
-                categoriesView?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-                categoriesView?.adapter = CategoryAdapter(lookupDatabase, itemsView)
-            }
+            setUpLookupButton(alertDialog)
+        }
+    }
+
+    private fun setUpLookupButton(alertDialog: AlertDialog) {
+        val lookupButton = alertDialog.findViewById<Button>(R.id.quickLookupButton)
+        lookupButton?.setOnClickListener {
+            // TODO: fill this hashmap with more values
+            alertDialog.dismiss()
+            val lookupDatabase = LinkedHashMap<String, MutableList<String>>()
+            lookupDatabase["Food"] = mutableListOf()
+            lookupDatabase["Food"]?.add("Orange")
+            lookupDatabase["Food"]?.add("Kiwi")
+            lookupDatabase["Food"]?.add("Pear")
+            lookupDatabase["Drinks"] = mutableListOf()
+            lookupDatabase["Drinks"]?.add("Coke")
+            lookupDatabase["Drinks"]?.add("Juice")
+            lookupDatabase["Drinks"]?.add("Water")
+            val pickerDialog = AlertDialog.Builder(this)
+                    .setView(R.layout.activity_picker)
+                    .show()
+            val categoriesView = pickerDialog.findViewById<RecyclerView>(R.id.categories)
+            val itemsView = pickerDialog.findViewById<RecyclerView>(R.id.items)
+            categoriesView?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+            categoriesView?.adapter = CategoryAdapter(lookupDatabase, itemsView)
         }
     }
 
@@ -99,13 +112,13 @@ class Main : AppCompatActivity() {
             val recycler = dialog.findViewById<RecyclerView>(R.id.inventory_recycler)
             recycler?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
             if(current != null)
-                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.item != null })
+                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.item != null }, dialog)
         }
     }
 
     private fun sendItem(item: Item, progressDialog: ProgressDialog) {
         // TODO: send to RPI here
-        progressDialog.dismiss()
+        //progressDialog.dismiss()
     }
 
     // Updates the spinner with the shelves list
