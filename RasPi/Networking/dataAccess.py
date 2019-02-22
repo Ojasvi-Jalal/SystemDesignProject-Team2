@@ -15,7 +15,7 @@ class Write(object):
 			if read.find_items(item.barcode) is None:
 				items['items'].append(entry)
 			else:
-				print "Item barcode already in JSON"
+				print ("Item barcode already in JSON")
 
 		with open('items.json', 'w') as json_file:
 			json.dump(items, json_file, indent = 4 , sort_keys=True)

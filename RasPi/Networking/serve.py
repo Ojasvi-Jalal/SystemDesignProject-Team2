@@ -1,12 +1,26 @@
+# python3 serve.py --mock-serial
+
 import sys
+# Server
 from flask import Flask, request
+# Serial to Arduino
 from serial_io import *
+# Debugging stuff
 import argparse
+# Configuration
 from config import * 
+# Server
 from flask_socketio import SocketIO, send, emit
+# Json
+from dataAccess import Write, Read
+from Item import Item
+from Segment import Segment
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+# JSon
+read = Read()
+write = Write()
 
 MOCK_DATA = [
     {"name": "Jam",
@@ -18,10 +32,9 @@ MOCK_DATA = [
     }
 ]
 
-# Mock interactions with the database
-# These will be replaced with actual database stuff once that's been completed
 def db_get_all():
-    return MOCK_DATA
+   for key in range(ROBOT_MIN_POS, ROBOT_MAX_POS):
+   	print (read.read_shelf(key))
 
 def db_add(pos, name, expiry, barcode):
     MOCK_DATA.append({
