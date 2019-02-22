@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.*
+import io.socket.client.IO
+import io.socket.client.Socket
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import java.time.LocalDate
@@ -20,6 +23,8 @@ class Main : AppCompatActivity() {
     private var preferences: SharedPreferences? = null
     private var current: Shelf? = null
     private var numberOfShelves: Int = 0
+    private lateinit var sio: Socket
+    private var host: String = ""
     private var shelves: MutableList<Shelf> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +38,9 @@ class Main : AppCompatActivity() {
 
         // Gets the last used shelve data
         current = shelves.find { it.id == preferences!!.getString("last_used", "shelf_1") }
+        host = preferences!!.getString("current", "http://192.168.105.131:8000")
+
+        setUpSocket()
 
         updateShelves()
 
@@ -45,7 +53,60 @@ class Main : AppCompatActivity() {
         setUpStoreButton()
         setUpInventoryButton()
 
+    }
 
+    private fun setUpSocket() {
+        sio = IO.socket(host)
+        sio.on("connected") {
+            Log.d("SIO", "Connected to $host")
+            snackbar(findViewById(R.id.layout), "Connected")
+        }
+        sio.on("disconnected") {
+            Log.d("SIO", "Disconnected from $host")
+            snackbar(findViewById(R.id.layout), "Disconnected")
+        }
+        sio.on("get_data") { parameters -> // assumes first parameters is a list of dictionaries
+            Log.d("SIO", "Received data: ${parameters[0]}")
+            val progressDialog = indeterminateProgressDialog("Storing item...")
+            progressDialog.show()
+            progressDialog.setCancelable(false)
+            updateData(parameters[0] as List<HashMap<String, Any>>)
+            generateNotifications() // updates notifications on main
+            progressDialog.dismiss()
+        }
+        // TODO: Set up receiving events here
+    }
+
+    private fun retrieveItem(shelfID: String) {
+        Log.d("SIO", "Retrieving item in position $shelfID")
+        sio.emit("move_to", hashMapOf("pos" to shelfID))
+    }
+
+    private fun addItem(item: Item) {
+        // Find a free shelf section:
+        val freeSection: ShelfSection? = current?.sections?.filter { it.value.item == null }?.values?.toList()?.get(0)
+        freeSection?.item = item
+        // Send details to RPi
+        val arguments = arrayListOf(freeSection?.name, item.title, item.barcode)
+        sio.emit("add_item", arguments)
+    }
+
+    private fun updateData(database: List<Map<String, Any?>>) {
+        for(section in database) {
+            val sectionName = section["shelfID"] as String
+            val itemName = section["itemName"] as String?
+            val expiryDate = LocalDate.parse(section["expiryDate"] as String?)
+            val barcode = section["barcode"] as String?
+            val newSection: ShelfSection
+            if(itemName == null) { // no item in section
+                newSection = ShelfSection(null, sectionName)
+            }
+            else { // item present
+                val item = Item(itemName, expiryDate, barcode!!)
+                newSection = ShelfSection(item, sectionName)
+            }
+            current?.sections?.put(sectionName, newSection)
+        }
     }
 
     private fun setUpStoreButton() {
@@ -112,13 +173,14 @@ class Main : AppCompatActivity() {
             val recycler = dialog.findViewById<RecyclerView>(R.id.inventory_recycler)
             recycler?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
             if(current != null)
-                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.item != null }, dialog)
+                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.value.item != null }.values.toList(), dialog)
         }
     }
 
     private fun sendItem(item: Item, progressDialog: ProgressDialog) {
         // TODO: send to RPI here
-        //progressDialog.dismiss()
+        addItem(item)
+        progressDialog.dismiss()
     }
 
     // Updates the spinner with the shelves list
@@ -143,9 +205,9 @@ class Main : AppCompatActivity() {
 
     private fun generateNotifications() {
         val listOfNotifications = mutableListOf<Notification>()
-        for(shelfSection in current!!.sections) {
-            if(shelfSection.item != null && shelfSection.item!!.expiresSoon())
-                listOfNotifications.add(Notification(shelfSection))
+        for(key in current!!.sections.keys) {
+            if(current!!.sections[key]?.item != null && current!!.sections[key]?.item!!.expiresSoon())
+                listOfNotifications.add(Notification(current!!.sections[key]!!))
         }
         val recyclerView = findViewById<RecyclerView>(R.id.notifications)
         val adapter = NotificationAdapter(listOfNotifications)
@@ -157,25 +219,25 @@ class Main : AppCompatActivity() {
 
     private fun initializeCurrentShelf() {
         // Should get shelfSection data from hardware/local database
-        current?.sections?.add(ShelfSection(null, "1"))
-        current?.sections?.add(ShelfSection(null, "2"))
-        current?.sections?.add(ShelfSection(null, "3"))
-        current?.sections?.add(ShelfSection(null, "4"))
-        current?.sections?.add(ShelfSection(null, "5"))
-        current?.sections?.add(ShelfSection(null, "6"))
-        current?.sections?.add(ShelfSection(null, "7"))
-        current?.sections?.add(ShelfSection(null, "8"))
+        current?.sections?.put("1", ShelfSection(null, "1"))
+        current?.sections?.put("2", ShelfSection(null, "2"))
+        current?.sections?.put("3", ShelfSection(null, "3"))
+        current?.sections?.put("4", ShelfSection(null, "4"))
+        current?.sections?.put("5", ShelfSection(null, "5"))
+        current?.sections?.put("6", ShelfSection(null, "6"))
+        current?.sections?.put("7", ShelfSection(null, "7"))
+        current?.sections?.put("8", ShelfSection(null, "8"))
         generateFakeItems()
     }
 
     private fun generateFakeItems() {
         // Creates fake Item and Notification objects
         val jam = Item("Jam", LocalDate.now().plusDays(16), "564648646464")
-        current?.sections?.find{ it.name == "7" }?.item = jam
+        current?.sections?.get("7")?.item = jam
         val bread = Item("Bread", LocalDate.now().plusDays(4), "548674646464")
-        current?.sections?.find{ it.name == "8" }?.item = bread
+        current?.sections?.get("8")?.item = bread
         val biscuits = Item("Biscuits", LocalDate.now().plusDays(8), "34696453453")
-        current?.sections?.find{ it.name == "1" }?.item = biscuits
+        current?.sections?.get("1")?.item = biscuits
     }
 
 }
