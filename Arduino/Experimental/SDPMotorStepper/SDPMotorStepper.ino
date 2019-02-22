@@ -23,7 +23,7 @@ void loop(){
     int inp = Serial.parseInt();
 
     if(inp <= 0){
-      Serial.println("IM A BUG");
+      Serial.println("inp: " + inp);
         goOrigin();
     }else{
         goAngle(inp, 0);
