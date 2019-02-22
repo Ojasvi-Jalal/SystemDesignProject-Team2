@@ -1,0 +1,20 @@
+{
+    "items": [
+        {
+            "barcode": 13, 
+            "name": "Banana"
+        }, 
+        {
+            "barcode": 11, 
+            "name": "Hat"
+        }, 
+        {
+            "barcode": 14, 
+            "name": "TEST"
+        }, 
+        {
+            "barcode": 12, 
+            "name": "Bread"
+        }
+    ]
+}
