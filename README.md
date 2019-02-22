@@ -25,10 +25,49 @@ then the server is started and ready to start receiving requests.
 
 ## SocketIO API
 
+First an example - you can find the full code in RasPi/Networking/mock_android.py
 
+`sio` is the python socketio interface. For each command the return result is returned on a channel of the same name.
+
+```python
+    # INVALID returns error as no position is given
+    sio.emit("move_to", {})
+
+    # INVALID returns error as position of 10 is out of range
+    sio.emit("move_to", {"pos": 10})
+
+    # INVALID returns error as postion is out of range
+    sio.emit("move_to", {"pos": -3})
+
+    # Move robot to specific position
+    sio.emit("move_to", {"pos": 5})
+
+    # Retrieve all of the data in the database
+    sio.emit("get_data")
+
+    # INVALID no position specified
+    sio.emit("add_item", {"name": "No Pos!"})
+
+    # Add's a pineapple to the database
+    sio.emit("add_item", {"pos": 12, "name": "Pineapple", "barcode": "394830242"})
+
+    # Gets all of the data in the database
+    sio.emit("get_data")
+
+    # INVALID no posision id provided
+    sio.emit("remove_item",{})
+
+    # Remove item with position 2 from the database
+    sio.emit("remove_item",{"pos": 2})
+
+    # INVALID as position out of range
+    sio.emit("remove_item",{"pos": 20})
+
+    # Retrieve all of the data from the database
+    sio.emit("get_data")
+```
 
 ### move_to
-
 
 Move the robot to a shelf position. The event name is 'move_to' and takes one integer parameter called "pos" (the shelf position)
 

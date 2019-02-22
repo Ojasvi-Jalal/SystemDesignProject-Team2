@@ -89,13 +89,11 @@ def remove_item(json):
 
 if __name__ == '__main__':
     global sio
-    global at_final_position
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock-serial", action='store_true', help="Don't create or communicate over serial. Instead all communications are printed to standard out ")
     args = parser.parse_args()
 
     sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
-    at_final_position = False
 
     app.run(debug=True, port=8000, host='0.0.0.0')
