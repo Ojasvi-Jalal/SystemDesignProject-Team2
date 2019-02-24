@@ -13,9 +13,11 @@ import android.widget.*
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.doAsync
 import java.time.LocalDate
 import org.jetbrains.anko.indeterminateProgressDialog
+import org.json.JSONArray
+import org.json.JSONObject
 import java.time.format.DateTimeFormatter
 
 class Main : AppCompatActivity() {
@@ -44,42 +46,87 @@ class Main : AppCompatActivity() {
 
         updateShelves()
 
-        // DEBUG CODE - REMOVE LATER!
         initializeCurrentShelf()
-        /////////////////////////
 
         generateNotifications()
 
         setUpStoreButton()
         setUpInventoryButton()
 
+        doAsync { sio.emit("get_data") }
+
     }
 
     private fun setUpSocket() {
+
+        //host = "http://129.215.2.230:8000" // TODO: change for prod
         sio = IO.socket(host)
-        sio.on("connected") {
+
+        sio.on(Socket.EVENT_CONNECT) {
             Log.d("SIO", "Connected to $host")
-            snackbar(findViewById(R.id.layout), "Connected")
+            longSnackbar(findViewById(R.id.layout), "Connected")
         }
-        sio.on("disconnected") {
+
+        sio.on(Socket.EVENT_DISCONNECT) {
             Log.d("SIO", "Disconnected from $host")
-            snackbar(findViewById(R.id.layout), "Disconnected")
+            longSnackbar(findViewById(R.id.layout), "Disconnected")
         }
+
         sio.on("get_data") { parameters -> // assumes first parameters is a list of dictionaries
             Log.d("SIO", "Received data: ${parameters[0]}")
-            val progressDialog = indeterminateProgressDialog("Storing item...")
-            progressDialog.show()
-            progressDialog.setCancelable(false)
-            updateData(parameters[0] as List<HashMap<String, Any>>)
-            generateNotifications() // updates notifications on main
-            progressDialog.dismiss()
+            updateData(parameters[0] as JSONArray)
+            runOnUiThread { generateNotifications() } // updates notifications on main
         }
-        // TODO: Set up receiving events here
+
+        sio.on("move_to") { parameters ->
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            if(success != null && !success) { // failure
+                val error: String = response.getString("message")
+                Log.d("SIO", "move_to ERROR: $error")
+            } else { // success
+                Log.d("SIO", "move_to SUCCESS")
+            }
+        }
+
+        sio.on("add_item") { parameters ->
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            if(success != null && !success) {
+                val error: String = response.getString("message")
+                Log.d("SIO", "add_item ERROR: $error")
+            } else { // success
+                Log.d("SIO", "add_item SUCCESS")
+            }
+            sio.emit("get_data")
+        }
+
+        sio.on("remove_item") { parameters ->
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            if(success != null && !success) {
+                val error: String = response.getString("message")
+                Log.d("SIO", "remove_item ERROR: $error")
+            } else { // success
+                Log.d("SIO", "remove_item SUCCESS")
+            }
+        }
+
+
+        Log.d("SIO", "Attempting to connect to $host")
+        sio.connect()
     }
 
-    private fun retrieveItem(shelfID: String) {
-        Log.d("SIO", "Retrieving item in position $shelfID")
-        sio.emit("move_to", hashMapOf("pos" to shelfID))
+    private fun removeItem(pos: String) {
+        Log.d("SIO", "Removing item in position $pos")
+        val arg = JSONObject().put("pos", pos.toIntOrNull())
+        sio.emit("remove_item", arg)
+    }
+
+    private fun moveTo(pos: String) {
+        Log.d("SIO", "Retrieving item in position $pos")
+        val arg = JSONObject().put("pos", pos.toIntOrNull())
+        sio.emit("move_to", arg)
     }
 
     private fun addItem(item: Item) {
@@ -87,25 +134,33 @@ class Main : AppCompatActivity() {
         val freeSection: ShelfSection? = current?.sections?.filter { it.value.item == null }?.values?.toList()?.get(0)
         freeSection?.item = item
         // Send details to RPi
-        val arguments = arrayListOf(freeSection?.name, item.title, item.barcode)
-        sio.emit("add_item", arguments)
+        val arg = JSONObject()
+        arg.put("pos", freeSection?.name?.toIntOrNull())
+        arg.put("name", item.title)
+        if(item.barcode != null)
+            arg.put("barcode", item.barcode)
+        if(item.expiration != null)
+            arg.put("expiry", item.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+        Log.d("SIO", "add_item triggered: $arg")
+        sio.emit("add_item", arg)
     }
 
-    private fun updateData(database: List<Map<String, Any?>>) {
-        for(section in database) {
-            val sectionName = section["shelfID"] as String
-            val itemName = section["itemName"] as String?
-            val expiryDate = LocalDate.parse(section["expiryDate"] as String?)
-            val barcode = section["barcode"] as String?
+    private fun updateData(database: JSONArray) {
+        for(i in 0 until database.length()) {
+            val section = database.getJSONObject(i)
+            val sectionID = section.getInt("pos")
+            val itemName = if(section.has("name")) section.getString("name") else null
+            val expiryDate = if(section.has("expiry")) LocalDate.parse(section.getString("expiry")) else null
+            val barcode = if(section.has("barcode")) section.getString("barcode") else null
             val newSection: ShelfSection
             if(itemName == null) { // no item in section
-                newSection = ShelfSection(null, sectionName)
+                newSection = ShelfSection(null, sectionID.toString())
             }
             else { // item present
-                val item = Item(itemName, expiryDate, barcode!!)
-                newSection = ShelfSection(item, sectionName)
+                val item = Item(itemName, expiryDate, barcode)
+                newSection = ShelfSection(item, sectionID.toString())
             }
-            current?.sections?.put(sectionName, newSection)
+            current?.sections?.put(sectionID.toString(), newSection)
         }
     }
 
@@ -127,8 +182,8 @@ class Main : AppCompatActivity() {
                 else if(!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
                     longSnackbar(it, "Incorrect expiry date format!")
                 else {
-                    // TODO: add checks for incorrect data and date formats
-                    val newItem: Item = Item(name, LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE), barcode)
+                    val newItem: Item =
+                            Item(name, if(expiry!="") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if(barcode != null) barcode else null)
                     alertDialog.dismiss()
                     val progressDialog = indeterminateProgressDialog("Storing item...")
                     progressDialog.show()
@@ -167,6 +222,7 @@ class Main : AppCompatActivity() {
     private fun setUpInventoryButton() {
         val inventoryButton: Button = findViewById(R.id.inventory)
         inventoryButton.setOnClickListener {
+            //sio.emit("get_data")
             val dialog = AlertDialog.Builder(this)
                     .setView(R.layout.inventory)
                     .show()
@@ -219,25 +275,8 @@ class Main : AppCompatActivity() {
 
     private fun initializeCurrentShelf() {
         // Should get shelfSection data from hardware/local database
-        current?.sections?.put("1", ShelfSection(null, "1"))
-        current?.sections?.put("2", ShelfSection(null, "2"))
-        current?.sections?.put("3", ShelfSection(null, "3"))
-        current?.sections?.put("4", ShelfSection(null, "4"))
-        current?.sections?.put("5", ShelfSection(null, "5"))
-        current?.sections?.put("6", ShelfSection(null, "6"))
-        current?.sections?.put("7", ShelfSection(null, "7"))
-        current?.sections?.put("8", ShelfSection(null, "8"))
-        generateFakeItems()
-    }
-
-    private fun generateFakeItems() {
-        // Creates fake Item and Notification objects
-        val jam = Item("Jam", LocalDate.now().plusDays(16), "564648646464")
-        current?.sections?.get("7")?.item = jam
-        val bread = Item("Bread", LocalDate.now().plusDays(4), "548674646464")
-        current?.sections?.get("8")?.item = bread
-        val biscuits = Item("Biscuits", LocalDate.now().plusDays(8), "34696453453")
-        current?.sections?.get("1")?.item = biscuits
+        for(i in 1..8)
+            current?.sections?.put("$i", ShelfSection(null, "$i"))
     }
 
 }
