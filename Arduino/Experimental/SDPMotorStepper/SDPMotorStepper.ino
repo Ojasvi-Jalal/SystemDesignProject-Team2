@@ -22,14 +22,15 @@ void loop(){
 
     int inp = Serial.parseInt();
 
-    if(inp <= 0){
-      Serial.println("inp: " + inp);
+    if(inp == 0){
+      Serial.println("inp: " + String(inp));
         goOrigin();
-    }else{
+    }else if(inp > 0){
         goAngle(inp, 0);
+        delay(1000);
         Serial.println("Reached: " + (String) angles[0]);
-        //delay(5000);
-        //goOrigin();
+        delay(5000);
+        // goOrigin();
     }
 }
 
@@ -50,6 +51,16 @@ void goAngle(int delta, int motor){
 
     }while(angles[motor] < delta);
     motorAllStop();
+    delay(1000);
+    Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
+    if(Wire.available()){
+        int incoming[ROTARY_NUM] = {0};
+        for(int x = 0; x < ROTARY_NUM; x++){
+            incoming[x] = (int8_t) Wire.read();
+        }
+        angles[motor] = angles[motor] + incoming[motor];
+    }
+    Serial.println((String) angles[motor]);
 }
 
 void goOrigin(){
