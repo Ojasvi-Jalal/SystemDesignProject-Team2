@@ -15,6 +15,7 @@ class Write(object):
 			if read.find_items(item.barcode) is None:
 				items['items'].append(entry)
 			else:
+				# FIXME use return type
 				print ("Item barcode already in JSON")
 
 		with open('items.json', 'w') as json_file:
@@ -53,10 +54,11 @@ class Read(object):
 		pass
 
 	def read_items(self):
+		# Prints out items
 		with open('items.json', 'r') as json_file:
 			items = json.load(json_file)
 			for item in items['items']:
-				print item['name']
+				print(item['name'])
 
 	def find_item(self, barcode):		
 		with open('items.json', 'r') as json_file:

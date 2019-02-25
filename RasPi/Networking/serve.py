@@ -1,5 +1,6 @@
 # python3 serve.py --mock-serial
 
+import logging
 import sys
 # Server
 from flask import Flask, request
@@ -22,41 +23,31 @@ socketio = SocketIO(app)
 read = Read()
 write = Write()
 
-MOCK_DATA = [
-    {"name": "Jam",
-    "pos": 2,
-    "expiry": "2019-10-03"
-    },
-    {"name": "Grape",
-    "pos": 1,
-    }
-]
-
 def db_get_all():
-   for key in range(ROBOT_MIN_POS, ROBOT_MAX_POS):
-   	print (read.read_shelf(key))
+    logging.info("Get all items from database")
+    segments = []
+    for key in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
+   	    segments.append(read.read_shelf(key))
 
-def db_add(pos, name, expiry, barcode):
-    MOCK_DATA.append({
-        "name": name,
-        "pos": pos,
-        "expiry": expiry,
-        "barcode": barcode
-    })
+    return list(map(lambda x: x.to_json(), segments))
 
-def db_remove(pos: int):
-    to_remove = None
-    for idx, item in enumerate(MOCK_DATA):
-        if item.get("pos") == pos:
-            to_remove = idx
-            break
-
-    if to_remove is None:
+def db_add(pos: int, name, expiry, barcode):
+    logging.info("Adding item at position {} with name={}, expriry={}, barcode={}".format(pos, name, expiry, barcode))
+    if pos in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
+        write.update_shelf(pos, Item(barcode, name))
+        return True
+    else:
         return False
 
-    del MOCK_DATA[idx]
-    return True
+def db_remove(pos: int):
+    logging.info("Removing item at pos {}".format(pos))
+    if pos in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
+        write.clear_shelf(pos)
+        return True
 
+    logging.error("Failed to remove item at pos {}: pos not in range".format(pos))
+    return False
+    
 # Move the shelf to a position. Example
 # move_to, {"pos": 8}
 # This endpoint probabily won't be needed in the future but useful for testing
@@ -76,7 +67,7 @@ def handle_message(message):
 
 @socketio.on("get_data")
 def get_data():
-    emit("get_data", MOCK_DATA)
+    emit("get_data", db_get_all())
 
 @socketio.on("add_item")
 def add_item(item):
@@ -103,10 +94,20 @@ def remove_item(json):
 if __name__ == '__main__':
     global sio
 
+    # Setup logging
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=logging.DEBUG,
+        datefmt='%Y-%m-%d %H:%M:%S', filename='serve.log')
+
+    logging.getLogger().addHandler(logging.StreamHandler())
+    logging.getLogger().setLevel(logging.DEBUG)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock-serial", action='store_true', help="Don't create or communicate over serial. Instead all communications are printed to standard out ")
     args = parser.parse_args()
 
     sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
+
 
     app.run(debug=True, port=8000, host='0.0.0.0')
