@@ -56,9 +56,9 @@ void loop(){
 int goAngle(int delta, int motor){
     if(motor == HORIZONTAL_MOTOR){
         if(delta > 0)   return moveF(HORIZONTAL_MOTOR, delta);
-        else            return moveB(VERTICAL_MOTOR, -delta);
+        else            return moveB(HORIZONTAL_MOTOR, -delta);
     }if(motor == VERTICAL_MOTOR){
-        if(delta > 0)   return moveB(HORIZONTAL_MOTOR, delta);
+        if(delta > 0)   return moveB(VERTICAL_MOTOR, delta);
         else            return moveF(VERTICAL_MOTOR, -delta);
     }
     return -1;
@@ -67,15 +67,15 @@ int goAngle(int delta, int motor){
 int moveF(int motor, int d){
     int s = 0;
     if(d < 0){
-        Serial.printf("Trying to move negative forwards, don't do this!");
+        Serial.println("Trying to move negative forwards, don't do this!");
         return -1;
     }
     do{
         s += read(motor);
         if((d-s) < MIN_SPEED){
-            motorForward(motor, MIN_SPEED)
+            motorForward(motor, MIN_SPEED);
         }else if((d-s) < 100){
-            motorForward(motor, (d-s))
+            motorForward(motor, (d-s));
         }else{
             motorForward(motor, 100);
         }
@@ -89,21 +89,21 @@ int moveF(int motor, int d){
 int moveB(int motor, int d){
     int s = 0;
     if(d < 0){
-        Serial.printf("Trying to move negative backwards, don't do this!");
+        Serial.println("Trying to move negative backwards, don't do this!");
         return -1;
     }
     do{
         s += read(motor);
         if((d+s) < MIN_SPEED){
-            motorBackward(motor, MIN_SPEED)
+            motorBackward(motor, MIN_SPEED);
         }else if((d+s) < 100){
-            motorBackward(motor, (d+s))
+            motorBackward(motor, (d+s));
         }else{
             motorBackward(motor, 100);
         }
     }while(d > -s);
     motorAllStop();
-    delay(100);
+    delay(1000);
     s += read(motor);
     return s;
 }
@@ -134,7 +134,7 @@ int read(int motor){
         return incoming[motor];
     }
     else{
-        Serial.printf("Couldn't read motor sensors");
+        Serial.println("Couldn't read motor sensors");
         return 0;
     }
 }
