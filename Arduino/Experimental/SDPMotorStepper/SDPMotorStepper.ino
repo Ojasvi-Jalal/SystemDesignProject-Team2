@@ -29,33 +29,11 @@ void loop(){
     if(inp == -1){
       Serial.println("inp: " + inp);
         goOrigin();
-<<<<<<< HEAD
-    }else if(inp > 0){
-        goAngle(inp, 0, 70);
-        delay(1000);
-        goAngle(100, 0, 100);
-        Serial.println("Reached: " + (String) angles[0]);
-        int diff = angles[0] - inp;
-        Serial.println("Difference" + (String) diff);
-        delay(1000);
-        while(abs(diff) >7){
-          if(diff > 5){
-            goAngleBack(angles[0]-diff, 0, 80);
-          }
-          else if(diff < -7){
-            goAngle(angles[0]-diff, 0, 80);
-          }
-          diff = angles[0] - inp;
-          delay(1000);
-          Serial.println("New difference: " + (String) diff);
-        }
-=======
     }if(inp > 0){
         int dist = goAngle(inp, 0);
         Serial.println("Reached: " + (String) dist);
         //delay(5000);
         //goOrigin();
->>>>>>> c2e3b62e3f295081807a9f2278db763848089783
     }
 }
 
