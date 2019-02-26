@@ -113,3 +113,20 @@ void goOrigin(){
     }
     state = 0;
 }
+
+int moveHF(int d){
+    int s = 0;
+    if(d < 0){
+        Serial.printf("Trying to move negative forwards, don't do this!");
+        return -1;
+    }
+    do{
+        if((d-s) < 30){
+            motorForward(0, 30)
+        }else if((d-s) < 100){
+            motorForward(0, (d-s))
+        }else{
+            motorForward(0, 100);
+        }
+    }
+}
