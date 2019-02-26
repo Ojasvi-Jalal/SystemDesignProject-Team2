@@ -1,6 +1,7 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -26,16 +27,29 @@ void loop(){
       Serial.println("inp: " + String(inp));
         goOrigin();
     }else if(inp > 0){
-        goAngle(inp, 0);
+        goAngle(inp, 0, 40);
         delay(1000);
+        goAngle(100, 0, 100);
         Serial.println("Reached: " + (String) angles[0]);
-        delay(5000);
-        // goOrigin();
+        int diff = angles[0] - inp;
+        Serial.println("Difference" + (String) diff);
+        delay(1000);
+        while(abs(diff) >7){
+          if(diff > 5){
+            goAngleBack(angles[0]-diff, 0, 80);
+          }
+          else if(diff < -7){
+            goAngle(angles[0]-diff, 0, 80);
+          }
+          diff = angles[0] - inp;
+          delay(1000);
+          Serial.println("New difference: " + (String) diff);
+        }
     }
 }
 
-void goAngle(int delta, int motor){
-    motorForward(motor, 100);
+void goAngleBack(int delta, int motor, int speed){
+    motorBackward(motor, speed);
     do{
         // Request motor deltas
         Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
@@ -47,7 +61,36 @@ void goAngle(int delta, int motor){
             angles[motor] = angles[motor] + incoming[motor];
         }
         Serial.println((String) angles[motor]);
-        delay(20);
+        delay(5);
+
+    }while(angles[motor] > delta);
+    motorAllStop();
+    delay(1000);
+    Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
+    if(Wire.available()){
+        int incoming[ROTARY_NUM] = {0};
+        for(int x = 0; x < ROTARY_NUM; x++){
+            incoming[x] = (int8_t) Wire.read();
+        }
+        angles[motor] = angles[motor] + incoming[motor];
+    }
+    Serial.println((String) angles[motor]);
+}
+
+void goAngle(int delta, int motor, int speed){
+    motorForward(motor, speed);
+    do{
+        // Request motor deltas
+        Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
+        if(Wire.available()){
+            int incoming[ROTARY_NUM] = {0};
+            for(int x = 0; x < ROTARY_NUM; x++){
+                incoming[x] = (int8_t) Wire.read();
+            }
+            angles[motor] = angles[motor] + incoming[motor];
+        }
+        Serial.println((String) angles[motor]);
+        delay(5);
 
     }while(angles[motor] < delta);
     motorAllStop();
@@ -64,8 +107,11 @@ void goAngle(int delta, int motor){
 }
 
 void goOrigin(){
-    motorBackward(0, 500);
+  Serial.println("Going to origin");
+    motorBackward(0, 80);
+    Serial.println("After backward");
     while(digitalRead(3) == 1){
+      //Serial.println("Delaying");
         delay(10);
     }
     Serial.println("Arrived at origin");
