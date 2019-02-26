@@ -150,10 +150,10 @@ class Main : AppCompatActivity() {
             val section = database.getJSONObject(i)
             val sectionID = section.getInt("pos")
             val itemName = if(section.has("name")) section.getString("name") else null
-            val expiryDate = if(section.has("expiry")) LocalDate.parse(section.getString("expiry")) else null
+            val expiryDate = if(section.has("expiry") && section["expiry"].toString()!="null") LocalDate.parse(section.getString("expiry")) else null
             val barcode = if(section.has("barcode")) section.getString("barcode") else null
             val newSection: ShelfSection
-            if(itemName == null) { // no item in section
+            if(itemName == null || itemName == "null") { // no item in section
                 newSection = ShelfSection(null, sectionID.toString())
             }
             else { // item present
