@@ -23,14 +23,15 @@ void setup(){
 void loop(){
     while (Serial.available() == 0);
 
+    Serial.
     int inp = Serial.parseInt();
 
-    if(inp <= 0){
+    if(inp == -1){
       Serial.println("inp: " + inp);
         goOrigin();
-    }else{
-        goAngle(inp, 0);
-        Serial.println("Reached: " + (String) angles[0]);
+    }if(inp > 0){
+        int dist = goAngle(inp, 0);
+        Serial.println("Reached: " + (String) dist);
         //delay(5000);
         //goOrigin();
     }
@@ -44,6 +45,7 @@ int goAngle(int delta, int motor){
         if(delta > 0)   return moveB(HORIZONTAL_MOTOR, delta);
         else            return moveF(VERTICAL_MOTOR, -delta);
     }
+    return -1;
 }
 
 int moveF(int motor, int d){
