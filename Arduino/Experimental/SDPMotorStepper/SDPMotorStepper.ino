@@ -41,10 +41,10 @@ void loop(){
         case 'G':
         case 'g':
             if(delta > 0){
-                motorForward(GRAB_MOTOR, 60);
+                motorBackward(GRAB_MOTOR, 60);
                 delay(600);
             }else{
-                motorBackward(GRAB_MOTOR, 60);
+                motorForward(GRAB_MOTOR, 60);
                 while(digitalRead(5) == 1){
                     delay(10);
                 }
