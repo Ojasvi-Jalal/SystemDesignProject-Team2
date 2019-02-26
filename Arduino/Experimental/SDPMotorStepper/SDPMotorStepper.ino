@@ -1,7 +1,6 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 #include <stdio.h>
-#include "Shelf.h"
 
 using namespace std;
 
@@ -30,6 +29,16 @@ void loop(){
     int delta = stoi(order.substr(1,order.find(';')-1));
 
     switch (ord) {
+        case 'R':
+        case 'r':
+            // Retrieve item from section
+            retrieveItem(delta);
+            break;
+        case 'S':
+        case 's':
+            // Store item to section
+            storeItem(delta);
+            break;
         case 'V':
         case 'v':
             goAngle(delta, VERTICAL_MOTOR);
@@ -41,13 +50,41 @@ void loop(){
         case 'G':
         case 'g':
             if(delta > 0){
-                extendArm();
+                motorBackward(GRAB_MOTOR, 60);
+                delay(600);
             }else{
-
+                motorForward(GRAB_MOTOR, 60);
+                while(digitalRead(5) == 1){
+                    delay(10);
+                }
             }
             motorAllStop();
             break;
     }
+}
+
+int retrieveItem(int shelf) {
+  goToShelf(shelf);
+  extendArm();
+  liftArm();
+  retractArm();
+  goOrigin();
+}
+
+void liftArm() {
+  goAngle(2000, VERTICAL_MOTOR);
+}
+
+void lowerArm() {
+  goAngle(2000, VERTICAL_MOTOR); // lower arm
+}
+
+int storeItem(delta) {
+  goToShelf(shelf);
+  extendArm();
+  lowerArm();
+  retractArm();
+  goOrigin();
 }
 
 int goAngle(int delta, int motor){
