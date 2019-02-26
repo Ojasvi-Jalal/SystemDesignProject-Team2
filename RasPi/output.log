@@ -1,0 +1,7 @@
+2019-02-25 13:27:57 WARNING   * Debugger is active!
+2019-02-25 13:27:57 INFO      * Debugger PIN: 415-117-199
+2019-02-25 13:27:57 INFO     127.0.0.1 - - [25/Feb/2019 13:27:57] "GET /socket.io/?transport=polling&EIO=3&sid=dd43fa0a2ef64d07b61a32ffb48dad05&t=1551101271.7338514 HTTP/1.1" 400 -
+2019-02-25 13:27:58 INFO     127.0.0.1 - - [25/Feb/2019 13:27:58] "GET /socket.io/?transport=polling&EIO=3&t=1551101278.6344557 HTTP/1.1" 200 -
+2019-02-25 13:27:58 INFO     127.0.0.1 - - [25/Feb/2019 13:27:58] "POST /socket.io/?transport=polling&EIO=3&sid=760ba50ebff84012acaec4ad5b1015cc HTTP/1.1" 200 -
+2019-02-25 13:27:58 INFO     127.0.0.1 - - [25/Feb/2019 13:27:58] "GET /socket.io/?transport=polling&EIO=3&sid=760ba50ebff84012acaec4ad5b1015cc&t=1551101278.6941133 HTTP/1.1" 200 -
+2019-02-25 13:28:02 INFO      * Detected change in '/afs/inf.ed.ac.uk/user/s16/s1633754/SystemDesignProject-Team2/RasPi/Networking/serve.py', reloading

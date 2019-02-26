@@ -1,0 +1,58 @@
+{
+    "shelf": [
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 0
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 1
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 2
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 3
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 4
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 5
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 6
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 7
+        },
+        {
+            "barcode": null,
+            "expiryDate": null,
+            "itemName": null,
+            "shelfID": 8
+        }
+    ]
+}
