@@ -1,6 +1,7 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 #include <stdio.h>
+#include <string.h>
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void loop(){
 
     String order = Serial.readStringUntil(';');
     char ord = order[0];
-    int delta = stoi(order.substr(1,order.find(';')-1));
+    int delta = (order.substring(1,order.indexOf(';')-1)).toInt();
 
     switch (ord) {
         case 'V':
