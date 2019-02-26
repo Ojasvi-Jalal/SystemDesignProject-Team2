@@ -9,7 +9,7 @@ void SDPsetup() {
   pinMode(2,INPUT);
   pinMode(3,INPUT_PULLUP);
   pinMode(4,INPUT);
-  pinMode(5,OUTPUT);
+  pinMode(5,INPUT_PULLUP);
   pinMode(6,OUTPUT);
   pinMode(7,INPUT);
   pinMode(8,OUTPUT);

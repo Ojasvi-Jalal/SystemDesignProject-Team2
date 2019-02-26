@@ -9,6 +9,7 @@ using namespace std;
 #define MIN_SPEED 70
 #define HORIZONTAL_MOTOR 0
 #define VERTICAL_MOTOR 1
+#define GRAB_MOTOR 2
 
 // angle is the motor's angle.
 int angles[ROTARY_NUM] = {0};
@@ -23,17 +24,32 @@ void setup(){
 void loop(){
     while (Serial.available() == 0);
 
-    Serial.
-    int inp = Serial.parseInt();
+    String order = Serial.readStringUntil(';');
+    char ord = order[0];
+    int delta = stoi(order.substr(1,order.find(';')-1));
 
-    if(inp == -1){
-      Serial.println("inp: " + inp);
-        goOrigin();
-    }if(inp > 0){
-        int dist = goAngle(inp, 0);
-        Serial.println("Reached: " + (String) dist);
-        //delay(5000);
-        //goOrigin();
+    switch (ord) {
+        case 'V':
+        case 'v':
+            goAngle(delta, VERTICAL_MOTOR);
+            break;
+        case 'H':
+        case 'h':
+            goAngle(delta, HORIZONTAL_MOTOR);
+            break;
+        case 'G':
+        case 'g':
+            if(delta > 0){
+                motorForward(GRAB_MOTOR, 60);
+                delay(600);
+            }else{
+                motorBackward(GRAB_MOTOR, 60);
+                while(digitalRead(5) == 1){
+                    delay(10);
+                }
+            }
+            motorAllStop();
+            break;
     }
 }
 
