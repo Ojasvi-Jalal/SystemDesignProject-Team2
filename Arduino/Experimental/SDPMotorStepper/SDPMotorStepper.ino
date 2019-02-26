@@ -1,6 +1,7 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 #include <stdio.h>
+#include "Shelf.h"
 
 using namespace std;
 
@@ -40,13 +41,9 @@ void loop(){
         case 'G':
         case 'g':
             if(delta > 0){
-                motorBackward(GRAB_MOTOR, 60);
-                delay(600);
+                extendArm();
             }else{
-                motorForward(GRAB_MOTOR, 60);
-                while(digitalRead(5) == 1){
-                    delay(10);
-                }
+
             }
             motorAllStop();
             break;
@@ -117,13 +114,38 @@ void goOrigin(){
     motorStop(0);
     //If the platform is up, move it down
     angles[0] = 0;
-    Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
-    int incoming[ROTARY_NUM] = {0};
-      for(int x = 0; x < ROTARY_NUM; x++){
-        incoming[x] = (int8_t) Wire.read();
-      }
+    read(0);
 }
 
+void goToShelf(int shelf){
+    int hor = *(Shelf::cords(shelf));
+    switch hor{
+        case 1:
+        moveF(HORIZONTAL_MOTOR, 131);
+        break;
+        case 2:
+        moveF(HORIZONTAL_MOTOR, 318);
+        break;
+        case 3:
+        moveF(HORIZONTAL_MOTOR, 528);
+        break;
+        case 4:
+        moveF(HORIZONTAL_MOTOR, 709);
+        break;
+    }
+}
+void extendArm(){
+    motorBackward(GRAB_MOTOR, 60);
+    delay(600);
+    motorAllStop();
+}
+void retractArm(){
+    motorForward(GRAB_MOTOR, 60);
+    while(digitalRead(5) == 1){
+        delay(10);
+    }
+    motorAllStop();
+}
 int read(int motor){
     Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
     if(Wire.available()){
