@@ -27,7 +27,7 @@ void loop(){
       Serial.println("inp: " + String(inp));
         goOrigin();
     }else if(inp > 0){
-        goAngle(inp, 0, 40);
+        goAngle(inp, 0, 70);
         delay(1000);
         goAngle(100, 0, 100);
         Serial.println("Reached: " + (String) angles[0]);
