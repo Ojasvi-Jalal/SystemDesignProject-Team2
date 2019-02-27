@@ -79,7 +79,7 @@ void lowerArm() {
   goAngle(2000, VERTICAL_MOTOR); // lower arm
 }
 
-int storeItem(delta) {
+int storeItem(int shelf) {
   goToShelf(shelf);
   extendArm();
   lowerArm();
