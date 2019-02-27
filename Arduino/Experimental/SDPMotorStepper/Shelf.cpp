@@ -12,12 +12,12 @@ Right now the shelf is the following:
 // Change this if shelf changes
 #define Columns 4
 
-int[] cords(int pos){
+int* cords(int pos){
     // Returns an array of two integers
-    int[2] arr = {0,0};
+    int arr [2]= {0,0};
 
     // 0 is irregular, so let's fix that first.
-    if(a == 0) return arr;
+    if(pos == 0) return arr;
 
     arr[0] = ((pos-1) % Columns) + 1;
     arr[1] = (pos-1) / Columns;

@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <stdio.h>
 #include <string.h>
+#include "Shelf.h"
 
 using namespace std;
 
@@ -76,11 +77,11 @@ int retrieveItem(int shelf) {
 }
 
 void liftArm() {
-  goAngle(2000, VERTICAL_MOTOR);
+  goAngle(1500, VERTICAL_MOTOR);
 }
 
 void lowerArm() {
-  goAngle(2000, VERTICAL_MOTOR); // lower arm
+  goAngle(-1500, VERTICAL_MOTOR); // lower arm
 }
 
 int storeItem(int shelf) {
@@ -161,8 +162,8 @@ void goOrigin(){
 }
 
 void goToShelf(int shelf){
-    int hor = *(Shelf::cords(shelf));
-    switch hor{
+  Serial.println("Going to shelf");
+    switch (shelf){
         case 1:
         moveF(HORIZONTAL_MOTOR, 131);
         break;
