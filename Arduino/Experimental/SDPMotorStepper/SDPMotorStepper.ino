@@ -7,7 +7,7 @@ using namespace std;
 
 #define ROTARY_SLAVE_ADDRESS 5
 #define ROTARY_NUM 6
-#define MIN_SPEED 70
+int MIN_SPEED = 75;
 #define HORIZONTAL_MOTOR 0
 #define VERTICAL_MOTOR 1
 #define GRAB_MOTOR 2
@@ -32,11 +32,14 @@ void loop(){
     switch (ord) {
         case 'V':
         case 'v':
+            MIN_SPEED = 80;
             goAngle(delta, VERTICAL_MOTOR);
             break;
         case 'H':
         case 'h':
-            goAngle(delta, HORIZONTAL_MOTOR);
+            MIN_SPEED = 75;
+            if(delta == 0) goOrigin();
+            else goAngle(delta, HORIZONTAL_MOTOR);
             break;
         case 'G':
         case 'g':
@@ -84,6 +87,7 @@ int moveF(int motor, int d){
     motorAllStop();
     delay(100);
     s += read(motor);
+    Serial.println("Arrived to: "+(String) s);
     return s;
 
 }
@@ -106,6 +110,7 @@ int moveB(int motor, int d){
     motorAllStop();
     delay(1000);
     s += read(motor);
+    Serial.println("Arrived to: "+(String) s);
     return s;
 }
 
