@@ -15,12 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="538eaea7-e9b0-4789-b0d4-16ad0a157d2f" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/ShelfSection.kt" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt" />
-      <change beforePath="$PROJECT_DIR$/local.properties" afterPath="$PROJECT_DIR$/local.properties" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -84,9 +81,31 @@
       <file leaf-file-name="Main.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="155" column="52" lean-forward="false" selection-start-line="155" selection-start-column="52" selection-end-line="155" selection-end-column="52" />
+            <state relative-caret-position="143">
+              <caret line="134" column="110" lean-forward="false" selection-start-line="134" selection-start-column="110" selection-end-line="134" selection-end-column="110" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Item.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Item.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InventoryAdapter.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="30" column="44" lean-forward="false" selection-start-line="30" selection-start-column="44" selection-end-line="30" selection-end-column="44" />
+              <folding>
+                <element signature="e#41#390#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -106,6 +125,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>barcode</find>
+      <find>re</find>
+      <find>move</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -2418,7 +2439,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/inventory_card_expanded.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/inventory.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/store.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/inventory_card.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/ShelfActivity.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/ShelfSection.kt" />
@@ -2427,6 +2447,7 @@
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Item.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt" />
       </list>
     </option>
@@ -2456,63 +2477,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="roboreachapp" type="cbb59c9e:AndroidPsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="drawable" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="mipmap" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
-              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -2551,7 +2515,35 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView">
+        <subPane>
+          <expand>
+            <path>
+              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+            </path>
+            <path>
+              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="roboreachapp" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android-app" type="1abcf292:AndroidViewProjectNode" />
+              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2837,7 +2829,14 @@
       <option name="project" value="LOCAL" />
       <updated>1551044560134</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added missing file to git">
+      <created>1551198414317</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1551198414317</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2851,6 +2850,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="28" width="1280" height="962" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32844934" sideWeight="0.4943182" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286432" sideWeight="0.49786323" order="6" side_tool="false" content_ui="tabs" />
@@ -2858,16 +2858,16 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2857143" sideWeight="0.28084415" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32478634" sideWeight="0.36201298" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32964823" sideWeight="0.49786323" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32763818" sideWeight="0.48824787" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2857143" sideWeight="0.71915585" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2869353" sideWeight="0.71915585" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18912338" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32478634" sideWeight="0.5511364" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19237013" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32478634" sideWeight="0.637987" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32959402" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.4957265" order="3" side_tool="false" content_ui="tabs" />
@@ -2928,7 +2928,8 @@
     <MESSAGE value="Lots of design issues solved, added recyclerviews" />
     <MESSAGE value="Small tweaks, refactoring" />
     <MESSAGE value="Fixed API" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed API" />
+    <MESSAGE value="Added missing file to git" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added missing file to git" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -2999,13 +3000,6 @@
     </entry>
     <entry file="file://$USER_HOME$/Android/Sdk/sources/android-27/android/util/Patterns.java" />
     <entry file="file://$USER_HOME$/AndroidStudio/DeviceExplorer/Pixel_API_27 [emulator-5554]/data/data/com.example.ojasvi.roboreachapp/shared_prefs/preferences.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Notification.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="39" lean-forward="false" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_shelf.xml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="1476">
@@ -3170,13 +3164,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="30" column="42" lean-forward="false" selection-start-line="30" selection-start-column="42" selection-end-line="30" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
@@ -3214,17 +3201,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Notification.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="39" lean-forward="false" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/InventoryAdapter.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="30" column="44" lean-forward="false" selection-start-line="30" selection-start-column="44" selection-end-line="30" selection-end-column="44" />
+          <folding>
+            <element signature="e#41#390#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Item.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="155" column="52" lean-forward="false" selection-start-line="155" selection-start-column="52" selection-end-line="155" selection-end-column="52" />
+        <state relative-caret-position="143">
+          <caret line="134" column="110" lean-forward="false" selection-start-line="134" selection-start-column="110" selection-end-line="134" selection-end-column="110" />
           <folding />
         </state>
       </provider>

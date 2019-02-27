@@ -72,7 +72,8 @@ class Main : AppCompatActivity() {
             longSnackbar(findViewById(R.id.layout), "Disconnected")
         }
 
-        sio.on("get_data") { parameters -> // assumes first parameters is a list of dictionaries
+        sio.on("get_data") { parameters ->
+            // assumes first parameters is a list of dictionaries
             Log.d("SIO", "Received data: ${parameters[0]}")
             updateData(parameters[0] as JSONArray)
             runOnUiThread { generateNotifications() } // updates notifications on main
@@ -81,7 +82,7 @@ class Main : AppCompatActivity() {
         sio.on("move_to") { parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
-            if(success != null && !success) { // failure
+            if (success != null && !success) { // failure
                 val error: String = response.getString("message")
                 Log.d("SIO", "move_to ERROR: $error")
             } else { // success
@@ -92,7 +93,7 @@ class Main : AppCompatActivity() {
         sio.on("add_item") { parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
-            if(success != null && !success) {
+            if (success != null && !success) {
                 val error: String = response.getString("message")
                 Log.d("SIO", "add_item ERROR: $error")
             } else { // success
@@ -104,7 +105,7 @@ class Main : AppCompatActivity() {
         sio.on("remove_item") { parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
-            if(success != null && !success) {
+            if (success != null && !success) {
                 val error: String = response.getString("message")
                 Log.d("SIO", "remove_item ERROR: $error")
             } else { // success
@@ -123,40 +124,39 @@ class Main : AppCompatActivity() {
         sio.emit("remove_item", arg)
     }
 
-    private fun moveTo(pos: String) {
+    public fun moveTo(pos: String) {
         Log.d("SIO", "Retrieving item in position $pos")
         val arg = JSONObject().put("pos", pos.toIntOrNull())
-        sio.emit("move_to", arg)
+        sio.emit("retrieve_item", arg)
     }
 
     private fun addItem(item: Item) {
         // Find a free shelf section:
-        val freeSection: ShelfSection? = current?.sections?.filter { it.value.item == null }?.values?.toList()?.get(0)
+        val freeSection: ShelfSection? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()?.get(0)
         freeSection?.item = item
         // Send details to RPi
         val arg = JSONObject()
         arg.put("pos", freeSection?.name?.toIntOrNull())
         arg.put("name", item.title)
-        if(item.barcode != null)
+        if (item.barcode != null)
             arg.put("barcode", item.barcode)
-        if(item.expiration != null)
+        if (item.expiration != null)
             arg.put("expiry", item.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
         Log.d("SIO", "add_item triggered: $arg")
         sio.emit("add_item", arg)
     }
 
     private fun updateData(database: JSONArray) {
-        for(i in 0 until database.length()) {
+        for (i in 0 until database.length()) {
             val section = database.getJSONObject(i)
             val sectionID = section.getInt("pos")
-            val itemName = if(section.has("name")) section.getString("name") else null
-            val expiryDate = if(section.has("expiry") && section["expiry"].toString()!="null") LocalDate.parse(section.getString("expiry")) else null
-            val barcode = if(section.has("barcode")) section.getString("barcode") else null
+            val itemName = if (section.has("name")) section.getString("name") else null
+            val expiryDate = if (section.has("expiry") && section["expiry"].toString() != "null") LocalDate.parse(section.getString("expiry")) else null
+            val barcode = if (section.has("barcode")) section.getString("barcode") else null
             val newSection: ShelfSection
-            if(itemName == null || itemName == "null") { // no item in section
+            if (itemName == null || itemName == "null") { // no item in section
                 newSection = ShelfSection(null, sectionID.toString())
-            }
-            else { // item present
+            } else { // item present
                 val item = Item(itemName, expiryDate, barcode)
                 newSection = ShelfSection(item, sectionID.toString())
             }
@@ -177,13 +177,13 @@ class Main : AppCompatActivity() {
                 val name = alertDialog.findViewById<EditText>(R.id.name)?.text.toString()
                 val barcode = alertDialog.findViewById<EditText>(R.id.barcode)?.text.toString()
                 val expiry = alertDialog.findViewById<EditText>(R.id.expiry)?.text.toString()
-                if(name == "")
+                if (name == "")
                     longSnackbar(it, "Name should not be blank!")
-                else if(!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
+                else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
                     longSnackbar(it, "Incorrect expiry date format!")
                 else {
                     val newItem: Item =
-                            Item(name, if(expiry!="") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if(barcode != null) barcode else null)
+                            Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
                     alertDialog.dismiss()
                     val progressDialog = indeterminateProgressDialog("Storing item...")
                     progressDialog.show()
@@ -228,8 +228,8 @@ class Main : AppCompatActivity() {
                     .show()
             val recycler = dialog.findViewById<RecyclerView>(R.id.inventory_recycler)
             recycler?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-            if(current != null)
-                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.value.item != null }.values.toList(), dialog)
+            if (current != null)
+                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.value.item != null }.values.toList(), dialog, this)
         }
     }
 
@@ -252,7 +252,7 @@ class Main : AppCompatActivity() {
     // Gets the list of added shelves
     private fun getShelves() {
         numberOfShelves = preferences!!.getInt("number_of_shelves", 1)
-        for(i in 1..numberOfShelves) {
+        for (i in 1..numberOfShelves) {
             val identifier = preferences!!.getString("shelf_${i}", "")
             val title = preferences!!.getString("shelf_${i}_title", "Kitchen")
             shelves.add(Shelf("shelf_${i}", identifier, title))
@@ -261,8 +261,8 @@ class Main : AppCompatActivity() {
 
     private fun generateNotifications() {
         val listOfNotifications = mutableListOf<Notification>()
-        for(key in current!!.sections.keys) {
-            if(current!!.sections[key]?.item != null && current!!.sections[key]?.item!!.expiresSoon())
+        for (key in current!!.sections.keys) {
+            if (current!!.sections[key]?.item != null && current!!.sections[key]?.item!!.expiresSoon())
                 listOfNotifications.add(Notification(current!!.sections[key]!!))
         }
         val recyclerView = findViewById<RecyclerView>(R.id.notifications)
@@ -275,8 +275,9 @@ class Main : AppCompatActivity() {
 
     private fun initializeCurrentShelf() {
         // Should get shelfSection data from hardware/local database
-        for(i in 1..8)
+        for (i in 1..8)
             current?.sections?.put("$i", ShelfSection(null, "$i"))
     }
 
 }
+

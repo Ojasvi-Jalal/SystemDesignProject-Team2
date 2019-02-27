@@ -10,7 +10,7 @@ import org.jetbrains.anko.indeterminateProgressDialog
 import com.alespero.expandablecardview.ExpandableCardView
 import java.time.format.DateTimeFormatter
 
-class InventoryAdapter(private val sections: List<ShelfSection>, private val dialog: android.support.v7.app.AlertDialog): RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
+class InventoryAdapter(private val sections: List<ShelfSection>, private val dialog: android.support.v7.app.AlertDialog, private val main: Main): RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -28,7 +28,7 @@ class InventoryAdapter(private val sections: List<ShelfSection>, private val dia
             dialog.dismiss()
             val progressDialog = holder.itemView.context.indeterminateProgressDialog("Retrieving item...")
             progressDialog.show()
-            // TODO: trigger retrieve here
+            main.moveTo(position.toString())
         }
     }
 
