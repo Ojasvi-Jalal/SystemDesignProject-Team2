@@ -30,6 +30,16 @@ void loop(){
     int delta = (order.substring(1,order.indexOf(';')-1)).toInt();
 
     switch (ord) {
+        case 'R':
+        case 'r':
+            // Retrieve item from section
+            retrieveItem(delta);
+            break;
+        case 'S':
+        case 's':
+            // Store item to section
+            storeItem(delta);
+            break;
         case 'V':
         case 'v':
             MIN_SPEED = 80;
@@ -55,6 +65,30 @@ void loop(){
             motorAllStop();
             break;
     }
+}
+
+int retrieveItem(int shelf) {
+  goToShelf(shelf);
+  extendArm();
+  liftArm();
+  retractArm();
+  goOrigin();
+}
+
+void liftArm() {
+  goAngle(2000, VERTICAL_MOTOR);
+}
+
+void lowerArm() {
+  goAngle(2000, VERTICAL_MOTOR); // lower arm
+}
+
+int storeItem(int shelf) {
+  goToShelf(shelf);
+  extendArm();
+  lowerArm();
+  retractArm();
+  goOrigin();
 }
 
 int goAngle(int delta, int motor){
@@ -123,13 +157,38 @@ void goOrigin(){
     motorStop(0);
     //If the platform is up, move it down
     angles[0] = 0;
-    Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
-    int incoming[ROTARY_NUM] = {0};
-      for(int x = 0; x < ROTARY_NUM; x++){
-        incoming[x] = (int8_t) Wire.read();
-      }
+    read(0);
 }
 
+void goToShelf(int shelf){
+    int hor = *(Shelf::cords(shelf));
+    switch hor{
+        case 1:
+        moveF(HORIZONTAL_MOTOR, 131);
+        break;
+        case 2:
+        moveF(HORIZONTAL_MOTOR, 318);
+        break;
+        case 3:
+        moveF(HORIZONTAL_MOTOR, 528);
+        break;
+        case 4:
+        moveF(HORIZONTAL_MOTOR, 709);
+        break;
+    }
+}
+void extendArm(){
+    motorBackward(GRAB_MOTOR, 60);
+    delay(600);
+    motorAllStop();
+}
+void retractArm(){
+    motorForward(GRAB_MOTOR, 60);
+    while(digitalRead(5) == 1){
+        delay(10);
+    }
+    motorAllStop();
+}
 int read(int motor){
     Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
     if(Wire.available()){
