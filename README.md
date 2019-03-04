@@ -140,6 +140,48 @@ Retrieves all data from the database.
 }, ...]
 ```
 
+### store_item
+The gripper will place the object it's currently holding into the specified shelf compartment.
+
+#### Message format
+```
+{
+	pos: Integer
+}
+```
+
+### Response format
+(No response format)
+TODO: See if we can get serial to send data when store complete. Then we can notify android app when store complete
+
+
+
+### retrieve_item
+The gripper will move to the specified shelf compartment and retrieve the item.
+
+#### Message format
+```
+{
+	pos: Integer
+}
+```
+
+### Response format
+(No response format)
+TODO: See if we can get serial to send data when store complete. Then we can notify android app when retrieve complete
+
+### retrieve_item
+TODO: Find out what this does
+
+#### Message format
+```
+{
+	pos: Integer
+}
+```
+
+### Response format
+(No response format)
 
 
 #### Resolution steps

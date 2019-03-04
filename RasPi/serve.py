@@ -97,6 +97,25 @@ def remove_item(json):
     emit("remove_item", {"success": True})
 
 
+@socketio.on("store_item")
+def store_item(json):
+    pos = json.get("pos")
+    sio.write_char("s")
+    sio.write_char(pos.__str__())
+
+@socketio.on("retrieve_item")
+def retrieve_item(json):
+    pos = json.get("pos")
+    sio.write_char("r")
+    sio.write_char(pos.__str__())
+
+@socketio.on("horizontal_move")
+def horizontal_move(json):
+    pos = json.get("pos")
+    sio.write_char("h")
+    sio.write_char(pos.__str__())
+
+
 if __name__ == '__main__':
     global sio
 

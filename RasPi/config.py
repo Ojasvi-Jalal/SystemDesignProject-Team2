@@ -1,4 +1,4 @@
 ROBOT_MIN_POS = 0
-ROBOT_MAX_POS = 8
+ROBOT_MAX_POS = 3
 RF_DEVICE = "/dev/ttyACM0"
 SHELF_JSON_FILE = "shelf.json"
