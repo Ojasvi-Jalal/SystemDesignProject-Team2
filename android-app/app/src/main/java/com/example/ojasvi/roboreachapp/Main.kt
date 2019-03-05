@@ -13,6 +13,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.socket.client.IO
@@ -69,7 +74,7 @@ class Main : AppCompatActivity() {
 
     private fun setUpSocket() {
 
-        host = "http://129.215.2.239:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
+        host = "http://172.20.145.3:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
         sio = IO.socket(host)
 
         sio.on(Socket.EVENT_CONNECT) {
@@ -182,22 +187,33 @@ class Main : AppCompatActivity() {
     }
 
     private fun setUpStoreButton() {
+
         val storeButton: Button = findViewById(R.id.store)
         storeButton.setOnClickListener {
+
             val alertDialog = AlertDialog.Builder(this)
                     .setView(R.layout.store)
                     .show()
+
+            val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
+            val barcodeField: EditText? = alertDialog.findViewById<EditText>(R.id.barcode)
+            val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
+
             setUpScanButton(alertDialog)
+
             val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
             exitButton?.setOnClickListener { alertDialog.dismiss() }
+
             val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
             confirmButton?.setOnClickListener {
-                val name = alertDialog.findViewById<EditText>(R.id.name)?.text.toString()
-                val barcode = alertDialog.findViewById<EditText>(R.id.barcode)?.text.toString()
-                val expiry = alertDialog.findViewById<EditText>(R.id.expiry)?.text.toString()
+                val name = nameField?.text.toString()
+                val barcode = barcodeField?.text.toString()
+                val expiry = expiryField?.text.toString()
                 if (name == "")
+                // TODO: fix below
                     longSnackbar(it, "Name should not be blank!")
                 else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
+                // TODO: fix below
                     longSnackbar(it, "Incorrect expiry date format!")
                 else {
                     val newItem: Item =
@@ -209,8 +225,55 @@ class Main : AppCompatActivity() {
                     sendItem(newItem, progressDialog)
                 }
             }
+
             setUpLookupButton(alertDialog)
+
         }
+    }
+
+    private fun setUpStoreDialog(scannedName: String, scannedBarcode: String) {
+
+        val alertDialog = AlertDialog.Builder(this)
+                .setView(R.layout.store)
+                .show()
+
+        val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
+        val barcodeField: EditText? = alertDialog.findViewById<EditText>(R.id.barcode)
+        val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
+        if(scannedName != "" && scannedBarcode != "") {
+            nameField?.setText(scannedName)
+            barcodeField?.setText(scannedBarcode)
+        }
+
+        setUpScanButton(alertDialog)
+
+        val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
+        exitButton?.setOnClickListener { alertDialog.dismiss() }
+
+        val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
+        confirmButton?.setOnClickListener {
+            val name = nameField?.text.toString()
+            val barcode = barcodeField?.text.toString()
+            val expiry = expiryField?.text.toString()
+            if (name == "")
+                // TODO: fix below
+                //longSnackbar(alertDialog, "Name should not be blank!")
+            else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
+                // TODO: fix below
+                //longSnackbar(alertDialog, "Incorrect expiry date format!")
+            else {
+                val newItem: Item =
+                        Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
+                alertDialog.dismiss()
+                val progressDialog = indeterminateProgressDialog("Storing item...")
+                progressDialog.show()
+                progressDialog.setCancelable(false)
+                sendItem(newItem, progressDialog)
+            }
+        }
+
+        setUpLookupButton(alertDialog)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -219,18 +282,37 @@ class Main : AppCompatActivity() {
             if(result.contents == null)
                 Toast.makeText(this, "Null contents", Toast.LENGTH_SHORT).show()
             else {
-                AlertDialog.Builder(this)
-                        .setTitle("Scan result")
-                        .setMessage(result.contents)
-                        .show()
+                getItemData(result.contents)
             }
         }
         else
             super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun setUpScanButton(view: AlertDialog) {
-        val scanButton = view.findViewById<ImageButton>(R.id.scanButton)
+    private fun getItemData(barcode: String) {
+        val requestQueue = Volley.newRequestQueue(this)
+        // Request a string response from the provided URL.
+        val stringRequest = StringRequest(Request.Method.GET, "https://world.openfoodfacts.org/api/v0/product/$barcode.json",
+                Response.Listener<String> { response ->
+                    val responseJSON: JSONObject = JSONObject(response)
+                    val productName: String
+                    if(responseJSON.getString("status_verbose") == "product found")
+                        productName = responseJSON.getJSONObject("product").getString("product_name")
+                    else
+                        productName = "Product not found"
+                    setUpStoreDialog(productName, barcode)
+                },
+                Response.ErrorListener {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage("Request $barcode failed:\n${if (it.networkResponse == null) "No response" else "Error: $it.networkResponse"}")
+                            .show()
+                })
+        requestQueue.add(stringRequest)
+    }
+
+    private fun setUpScanButton(dialog: AlertDialog) {
+        val scanButton = dialog.findViewById<ImageButton>(R.id.scanButton)
         scanButton?.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setOrientationLocked(true)
