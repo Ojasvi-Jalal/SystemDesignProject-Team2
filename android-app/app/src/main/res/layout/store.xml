@@ -157,6 +157,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
         android:text="Quick lookup"
+        android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/gridLayout"
         app:layout_constraintHorizontal_bias="1.0"
@@ -166,17 +167,36 @@
 
     <ImageButton
         android:id="@+id/voiceButton"
-        android:layout_width="40dp"
+        android:layout_width="50dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@android:color/white"
         android:elevation="2dp"
         android:src="@drawable/ic_microphone"
+        android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/quickLookupButton"
         app:layout_constraintEnd_toStartOf="@+id/quickLookupButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/gridLayout"
+        app:layout_constraintTop_toTopOf="@+id/quickLookupButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageButton
+        android:id="@+id/scanButton"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@android:color/white"
+        android:elevation="2dp"
+        android:src="@drawable/ic_barcode"
+        android:tint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/quickLookupButton"
+        app:layout_constraintEnd_toStartOf="@+id/quickLookupButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/voiceButton"
         app:layout_constraintTop_toTopOf="@+id/quickLookupButton"
         app:layout_constraintVertical_bias="0.0" />
 

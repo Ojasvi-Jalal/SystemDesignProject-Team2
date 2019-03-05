@@ -2,16 +2,24 @@ package com.example.ojasvi.roboreachapp
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.*
+import com.google.zxing.integration.android.IntentIntegrator
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.android.synthetic.main.item.view.*
+import kotlinx.android.synthetic.main.main.view.*
+import org.jetbrains.anko.contentView
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import java.time.LocalDate
@@ -53,23 +61,32 @@ class Main : AppCompatActivity() {
         setUpStoreButton()
         setUpInventoryButton()
 
+        generateFakeItems()
+
         doAsync { sio.emit("get_data") }
 
     }
 
     private fun setUpSocket() {
 
-        //host = "http://129.215.2.230:8000" // TODO: change for prod
+        host = "http://129.215.2.239:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
         sio = IO.socket(host)
 
         sio.on(Socket.EVENT_CONNECT) {
             Log.d("SIO", "Connected to $host")
-            longSnackbar(findViewById(R.id.layout), "Connected")
+            val snack = Snackbar.make(contentView!!, "Connected", Snackbar.LENGTH_LONG)
+            snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text).setTextColor(Color.parseColor("#006400"))
+            snack.view.setBackgroundColor(Color.GREEN)
+            snack.show()
+            //longSnackbar(findViewById(R.id.layout), "Connected")
         }
 
         sio.on(Socket.EVENT_DISCONNECT) {
             Log.d("SIO", "Disconnected from $host")
-            longSnackbar(findViewById(R.id.layout), "Disconnected")
+            val snack = Snackbar.make(contentView!!, "Disconnected", Snackbar.LENGTH_LONG)
+            snack.view.setBackgroundColor(Color.YELLOW)
+            snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text).setTextColor(Color.parseColor("#999900"))
+            snack.show()
         }
 
         sio.on("get_data") { parameters ->
@@ -124,7 +141,7 @@ class Main : AppCompatActivity() {
         sio.emit("remove_item", arg)
     }
 
-    public fun moveTo(pos: String) {
+    fun moveTo(pos: String) {
         Log.d("SIO", "Retrieving item in position $pos")
         val arg = JSONObject().put("pos", pos.toIntOrNull())
         sio.emit("retrieve_item", arg)
@@ -170,6 +187,7 @@ class Main : AppCompatActivity() {
             val alertDialog = AlertDialog.Builder(this)
                     .setView(R.layout.store)
                     .show()
+            setUpScanButton(alertDialog)
             val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
             exitButton?.setOnClickListener { alertDialog.dismiss() }
             val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
@@ -194,6 +212,34 @@ class Main : AppCompatActivity() {
             setUpLookupButton(alertDialog)
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if(result != null) {
+            if(result.contents == null)
+                Toast.makeText(this, "Null contents", Toast.LENGTH_SHORT).show()
+            else {
+                AlertDialog.Builder(this)
+                        .setTitle("Scan result")
+                        .setMessage(result.contents)
+                        .show()
+            }
+        }
+        else
+            super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun setUpScanButton(view: AlertDialog) {
+        val scanButton = view.findViewById<ImageButton>(R.id.scanButton)
+        scanButton?.setOnClickListener {
+            val integrator = IntentIntegrator(this)
+            integrator.setOrientationLocked(true)
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13, IntentIntegrator.EAN_8, IntentIntegrator.UPC_A, IntentIntegrator.UPC_E)
+            integrator.setBeepEnabled(true)
+            integrator.initiateScan()
+        }
+    }
+
 
     private fun setUpLookupButton(alertDialog: AlertDialog) {
         val lookupButton = alertDialog.findViewById<Button>(R.id.quickLookupButton)
@@ -270,6 +316,14 @@ class Main : AppCompatActivity() {
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
+    }
+
+    private fun generateFakeItems() {
+        // Creates fake Item and Notification objects
+        val jam = Item("Jam", LocalDate.now().plusDays(16), "564648646464")
+        current!!.sections["1"]?.item = jam
+        val bread = Item("Bread", LocalDate.now().plusDays(4), "548674646464")
+        current!!.sections["2"]?.item = bread
     }
 
 
