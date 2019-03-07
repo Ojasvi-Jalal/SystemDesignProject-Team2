@@ -81,7 +81,18 @@ def add_item(item):
         emit("add_item", {"success": False, "message": "No pos on item"})
         return 
 
+    # Check if the shelf compartment is free
+    items = read.read_shelf(item["pos"])
+    if item["name"] is not None:
+        emit("add_item", {"success": False, "message": "Position {} already contains the item {}".format(item["pos"], item["name"])})
+        return 
+        
     db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
+
+    # Now get the robot to store the item at the specified position
+    sio.write_char("s")
+    sio.write_char(pos.__str__())
+
     emit("add_item", {"success": True})
 
 @socketio.on("remove_item")

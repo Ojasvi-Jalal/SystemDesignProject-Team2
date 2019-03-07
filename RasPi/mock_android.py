@@ -36,6 +36,7 @@ def main():
     print("Connecting to {}".format(full_url))
     
     sio.connect(full_url)
+    sio.add_item({"pos": 2, "name": "Grape"})
 
     # # INVALID returns error as no position is given
     # print(">Failed move to:")
@@ -89,10 +90,6 @@ def main():
     # print(">get_data")
     # sio.emit("get_data")
 
-    print(">Store 1")
-    sio.emit("retrieve_item", {"pos": 2})
-    # sio.emit("store_item", {"pos": 2})
-    # sio.emit("retrieve_item", {"pos": 5})
 
     sio.wait()
 
