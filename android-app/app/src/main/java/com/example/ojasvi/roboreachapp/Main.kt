@@ -190,60 +190,18 @@ class Main : AppCompatActivity() {
 
         val storeButton: Button = findViewById(R.id.store)
         storeButton.setOnClickListener {
-
-            val alertDialog = AlertDialog.Builder(this)
-                    .setView(R.layout.store)
-                    .show()
-
-            val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
-            val barcodeField: EditText? = alertDialog.findViewById<EditText>(R.id.barcode)
-            val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
-
-            setUpScanButton(alertDialog)
-
-            val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
-            exitButton?.setOnClickListener { alertDialog.dismiss() }
-
-            val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
-            confirmButton?.setOnClickListener {
-                val name = nameField?.text.toString()
-                val barcode = barcodeField?.text.toString()
-                val expiry = expiryField?.text.toString()
-                if (name == "")
-                // TODO: fix below
-                    longSnackbar(it, "Name should not be blank!")
-                else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
-                // TODO: fix below
-                    longSnackbar(it, "Incorrect expiry date format!")
-                else {
-                    val newItem: Item =
-                            Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
-                    alertDialog.dismiss()
-                    val progressDialog = indeterminateProgressDialog("Storing item...")
-                    progressDialog.show()
-                    progressDialog.setCancelable(false)
-                    sendItem(newItem, progressDialog)
-                }
-            }
-
-            setUpLookupButton(alertDialog)
-
+            setUpStoreDialog()
         }
     }
 
-    private fun setUpStoreDialog(scannedName: String, scannedBarcode: String) {
+    private fun setUpStoreDialog() {
 
         val alertDialog = AlertDialog.Builder(this)
                 .setView(R.layout.store)
                 .show()
 
-        val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
-        val barcodeField: EditText? = alertDialog.findViewById<EditText>(R.id.barcode)
-        val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
-        if(scannedName != "" && scannedBarcode != "") {
-            nameField?.setText(scannedName)
-            barcodeField?.setText(scannedBarcode)
-        }
+        val nameField: EditText? = findViewById<EditText>(R.id.name)
+        val expiryField: EditText? = findViewById<EditText>(R.id.expiry)
 
         setUpScanButton(alertDialog)
 
@@ -253,7 +211,7 @@ class Main : AppCompatActivity() {
         val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
         confirmButton?.setOnClickListener {
             val name = nameField?.text.toString()
-            val barcode = barcodeField?.text.toString()
+            val barcode = null
             val expiry = expiryField?.text.toString()
             if (name == "")
                 // TODO: fix below
@@ -300,7 +258,8 @@ class Main : AppCompatActivity() {
                         productName = responseJSON.getJSONObject("product").getString("product_name")
                     else
                         productName = "Product not found"
-                    setUpStoreDialog(productName, barcode)
+                    val nameField: EditText? = findViewById<EditText>(R.id.name)
+                    nameField?.setText(productName)
                 },
                 Response.ErrorListener {
                     AlertDialog.Builder(this)
