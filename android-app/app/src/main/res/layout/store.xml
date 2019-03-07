@@ -38,13 +38,13 @@
             android:gravity="center_vertical"
             android:text="Item name:"
             android:textAlignment="textStart"
-            android:textSize="14sp"
+            android:textSize="18sp"
             tools:ignore="RtlCompat"
             tools:layout_editor_absoluteX="36dp"
             tools:layout_editor_absoluteY="117dp" />
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/itemName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
@@ -71,7 +71,7 @@
             android:gravity="center_vertical"
             android:text="Expires:"
             android:textAlignment="textStart"
-            android:textSize="14sp"
+            android:textSize="18sp"
             tools:ignore="RtlCompat"
             tools:layout_editor_absoluteX="36dp"
             tools:layout_editor_absoluteY="117dp" />
@@ -178,7 +178,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/primaryRed"
-        android:text="Store"
+        android:text="Store item"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/gridLayout"

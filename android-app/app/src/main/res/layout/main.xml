@@ -49,7 +49,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
-        android:text="Store"
+        android:text="Store item"
         android:textColor="@color/primaryRed"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

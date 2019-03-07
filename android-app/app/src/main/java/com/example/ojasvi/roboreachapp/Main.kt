@@ -167,7 +167,6 @@ class Main : AppCompatActivity() {
             if (item.barcode != null)
                 arg.put("barcode", item.barcode)
             if (item.expiration != null)
-                arg.put("expiry", item.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
             Log.d("SIO", "add_item triggered: $arg")
             sio.emit("add_item", arg)
         } else {
@@ -206,7 +205,7 @@ class Main : AppCompatActivity() {
                     .setView(R.layout.store)
                     .show()
 
-            val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
+            val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
             val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
 
             setUpScanButton(alertDialog)
@@ -223,7 +222,7 @@ class Main : AppCompatActivity() {
                 if (name == "") {
                     // TODO: fix below
                     longSnackbar(it, "Item name should not be blank!")
-                } else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"))) { // 2xxx-xx-xx format
+                } else if (expiry != "" && !expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"))) { // 2xxx-xx-xx format
                     // TODO: fix below
                     longSnackbar(it, "Incorrect expiry date format!")
                 }
@@ -236,7 +235,6 @@ class Main : AppCompatActivity() {
                     progressDialog.show()
                     progressDialog.setCancelable(false)
                     sendItem(newItem, progressDialog)
-                    //}
                 }
 
 
