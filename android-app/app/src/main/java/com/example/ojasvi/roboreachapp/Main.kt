@@ -210,6 +210,7 @@ class Main : AppCompatActivity() {
             val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
 
             setUpScanButton(alertDialog)
+            setUpLookupButton(alertDialog)
 
             val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
             exitButton!!.setOnClickListener { alertDialog.dismiss() }
@@ -238,7 +239,6 @@ class Main : AppCompatActivity() {
                     //}
                 }
 
-                setUpLookupButton(alertDialog)
 
             }
         }

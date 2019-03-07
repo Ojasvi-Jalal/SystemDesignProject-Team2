@@ -17,12 +17,9 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="538eaea7-e9b0-4789-b0d4-16ad0a157d2f" name="Default" comment="Fixed having two dialogs on scanning">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
+    <list default="true" id="538eaea7-e9b0-4789-b0d4-16ad0a157d2f" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/store.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/store.xml" />
-      <change beforePath="$PROJECT_DIR$/local.properties" afterPath="$PROJECT_DIR$/local.properties" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -86,8 +83,8 @@
       <file leaf-file-name="Main.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="276" column="127" lean-forward="false" selection-start-line="276" selection-start-column="127" selection-end-line="276" selection-end-column="127" />
+            <state relative-caret-position="118">
+              <caret line="212" column="42" lean-forward="false" selection-start-line="212" selection-start-column="42" selection-end-line="212" selection-end-column="42" />
               <folding>
                 <element signature="e#41#1288#0" expanded="true" />
               </folding>
@@ -2909,7 +2906,14 @@
       <option name="project" value="LOCAL" />
       <updated>1551959526269</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Small tweaks on design, fixed the bug where the app crashes on trying to store to a full shelf">
+      <created>1551970318707</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1551970318707</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2923,6 +2927,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="28" width="1280" height="962" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32844934" sideWeight="0.4943182" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286432" sideWeight="0.49786323" order="6" side_tool="false" content_ui="tabs" />
@@ -2940,7 +2945,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22889611" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24053724" sideWeight="0.60795456" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24053724" sideWeight="0.60795456" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32959402" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10470779" sideWeight="0.22122571" order="3" side_tool="true" content_ui="tabs" />
@@ -3006,7 +3011,8 @@
     <MESSAGE value="Updates" />
     <MESSAGE value="Fixed AlertDialog not showing up" />
     <MESSAGE value="Fixed having two dialogs on scanning" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed having two dialogs on scanning" />
+    <MESSAGE value="Small tweaks on design, fixed the bug where the app crashes on trying to store to a full shelf" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small tweaks on design, fixed the bug where the app crashes on trying to store to a full shelf" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -3309,8 +3315,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/ojasvi/roboreachapp/Main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="276" column="127" lean-forward="false" selection-start-line="276" selection-start-column="127" selection-end-line="276" selection-end-column="127" />
+        <state relative-caret-position="118">
+          <caret line="212" column="42" lean-forward="false" selection-start-line="212" selection-start-column="42" selection-end-line="212" selection-end-column="42" />
           <folding>
             <element signature="e#41#1288#0" expanded="true" />
           </folding>
