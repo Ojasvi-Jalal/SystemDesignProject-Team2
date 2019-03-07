@@ -2,6 +2,7 @@ package com.example.ojasvi.roboreachapp
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -41,6 +42,7 @@ class Main : AppCompatActivity() {
     private lateinit var sio: Socket
     private var host: String = ""
     private var shelves: MutableList<Shelf> = mutableListOf()
+    private lateinit var alertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +76,7 @@ class Main : AppCompatActivity() {
 
     private fun setUpSocket() {
 
-        host = "http://172.20.145.3:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
+        host = "http://129.215.2.49:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
         sio = IO.socket(host)
 
         sio.on(Socket.EVENT_CONNECT) {
@@ -154,18 +156,28 @@ class Main : AppCompatActivity() {
 
     private fun addItem(item: Item) {
         // Find a free shelf section:
-        val freeSection: ShelfSection? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()?.get(0)
-        freeSection?.item = item
-        // Send details to RPi
-        val arg = JSONObject()
-        arg.put("pos", freeSection?.name?.toIntOrNull())
-        arg.put("name", item.title)
-        if (item.barcode != null)
-            arg.put("barcode", item.barcode)
-        if (item.expiration != null)
-            arg.put("expiry", item.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-        Log.d("SIO", "add_item triggered: $arg")
-        sio.emit("add_item", arg)
+        val freeSections: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()
+        if (freeSections != null && freeSections.isNotEmpty()) {
+            val freeSection = freeSections?.get(0)
+            freeSection?.item = item
+            // Send details to RPi
+            val arg = JSONObject()
+            arg.put("pos", freeSection?.name?.toIntOrNull())
+            arg.put("name", item.title)
+            if (item.barcode != null)
+                arg.put("barcode", item.barcode)
+            if (item.expiration != null)
+                arg.put("expiry", item.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            Log.d("SIO", "add_item triggered: $arg")
+            sio.emit("add_item", arg)
+        } else {
+            AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("All shelf sections are full!")
+                    .setIcon(R.drawable.ic_error)
+                    .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                    .show()
+        }
     }
 
     private fun updateData(database: JSONArray) {
@@ -190,60 +202,57 @@ class Main : AppCompatActivity() {
 
         val storeButton: Button = findViewById(R.id.store)
         storeButton.setOnClickListener {
-            setUpStoreDialog()
-        }
-    }
+            alertDialog = AlertDialog.Builder(this)
+                    .setView(R.layout.store)
+                    .show()
 
-    private fun setUpStoreDialog() {
+            val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
+            val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
 
-        val alertDialog = AlertDialog.Builder(this)
-                .setView(R.layout.store)
-                .show()
+            setUpScanButton(alertDialog)
 
-        val nameField: EditText? = findViewById<EditText>(R.id.name)
-        val expiryField: EditText? = findViewById<EditText>(R.id.expiry)
+            val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
+            exitButton!!.setOnClickListener { alertDialog.dismiss() }
 
-        setUpScanButton(alertDialog)
+            val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
+            confirmButton!!.setOnClickListener {
+                val name = nameField?.text.toString()
+                val barcode = null
+                val expiry = expiryField?.text.toString()
+                if (name == "") {
+                    // TODO: fix below
+                    longSnackbar(it, "Item name should not be blank!")
+                } else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"))) { // 2xxx-xx-xx format
+                    // TODO: fix below
+                    longSnackbar(it, "Incorrect expiry date format!")
+                }
+                else {
+                    Log.d("STORE ITEM", "Started item store")
+                    val newItem: Item =
+                            Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
+                    alertDialog.dismiss()
+                    val progressDialog = indeterminateProgressDialog("Storing item...")
+                    progressDialog.show()
+                    progressDialog.setCancelable(false)
+                    sendItem(newItem, progressDialog)
+                    //}
+                }
 
-        val exitButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
-        exitButton?.setOnClickListener { alertDialog.dismiss() }
+                setUpLookupButton(alertDialog)
 
-        val confirmButton = alertDialog.findViewById<Button>(R.id.storeButton)
-        confirmButton?.setOnClickListener {
-            val name = nameField?.text.toString()
-            val barcode = null
-            val expiry = expiryField?.text.toString()
-            if (name == "")
-                // TODO: fix below
-                //longSnackbar(alertDialog, "Name should not be blank!")
-            else if (!expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))")))  // 2xxx-xx-xx format
-                // TODO: fix below
-                //longSnackbar(alertDialog, "Incorrect expiry date format!")
-            else {
-                val newItem: Item =
-                        Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
-                alertDialog.dismiss()
-                val progressDialog = indeterminateProgressDialog("Storing item...")
-                progressDialog.show()
-                progressDialog.setCancelable(false)
-                sendItem(newItem, progressDialog)
             }
         }
-
-        setUpLookupButton(alertDialog)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if(result != null) {
-            if(result.contents == null)
+        if (result != null) {
+            if (result.contents == null)
                 Toast.makeText(this, "Null contents", Toast.LENGTH_SHORT).show()
             else {
                 getItemData(result.contents)
             }
-        }
-        else
+        } else
             super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -254,12 +263,21 @@ class Main : AppCompatActivity() {
                 Response.Listener<String> { response ->
                     val responseJSON: JSONObject = JSONObject(response)
                     val productName: String
-                    if(responseJSON.getString("status_verbose") == "product found")
+                    if (responseJSON.getString("status_verbose") == "product found") {
                         productName = responseJSON.getJSONObject("product").getString("product_name")
-                    else
-                        productName = "Product not found"
-                    val nameField: EditText? = findViewById<EditText>(R.id.name)
-                    nameField?.setText(productName)
+                        val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
+                        nameField?.setText(productName)
+                    }
+                    else {
+                        alertDialog.dismiss()
+                        AlertDialog.Builder(this)
+                                .setTitle("Error")
+                                .setMessage("Product not found in database!")
+                                .setIcon(R.drawable.ic_error)
+                                .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                                .show()
+                    }
+
                 },
                 Response.ErrorListener {
                     AlertDialog.Builder(this)
@@ -271,7 +289,7 @@ class Main : AppCompatActivity() {
     }
 
     private fun setUpScanButton(dialog: AlertDialog) {
-        val scanButton = dialog.findViewById<ImageButton>(R.id.scanButton)
+        val scanButton = dialog.findViewById<Button>(R.id.scanButton)
         scanButton?.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setOrientationLocked(true)
@@ -375,4 +393,5 @@ class Main : AppCompatActivity() {
     }
 
 }
+
 

@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Name:"
+            android:text="Item name:"
             android:textAlignment="textStart"
             android:textSize="14sp"
             tools:ignore="RtlCompat"
@@ -145,17 +145,22 @@
         app:layout_constraintTop_toTopOf="@+id/quickLookupButton"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageButton
+    <Button
         android:id="@+id/scanButton"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@android:color/white"
+        android:drawableLeft="@drawable/ic_barcode"
+        android:drawableTint="@android:color/darker_gray"
         android:elevation="2dp"
+        android:paddingLeft="8dp"
         android:src="@drawable/ic_barcode"
+        android:text="Scan"
+        android:textColor="@android:color/darker_gray"
         android:tint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/quickLookupButton"
         app:layout_constraintEnd_toStartOf="@+id/quickLookupButton"
