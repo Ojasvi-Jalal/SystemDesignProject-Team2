@@ -43,6 +43,7 @@ class Main : AppCompatActivity() {
     private var host: String = ""
     private var shelves: MutableList<Shelf> = mutableListOf()
     private lateinit var alertDialog: AlertDialog
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +69,7 @@ class Main : AppCompatActivity() {
         setUpStoreButton()
         setUpInventoryButton()
 
-        generateFakeItems()
+        //generateFakeItems()
 
         doAsync { sio.emit("get_data") }
 
@@ -76,7 +77,7 @@ class Main : AppCompatActivity() {
 
     private fun setUpSocket() {
 
-        host = "http://129.215.2.49:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
+        host = "http://129.215.2.236:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
         sio = IO.socket(host)
 
         sio.on(Socket.EVENT_CONNECT) {
@@ -85,7 +86,12 @@ class Main : AppCompatActivity() {
             snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text).setTextColor(Color.parseColor("#006400"))
             snack.view.setBackgroundColor(Color.GREEN)
             snack.show()
-            //longSnackbar(findViewById(R.id.layout), "Connected")
+            runOnUiThread {
+                val storeButton: Button = findViewById(R.id.store)
+                val inventoryButton: Button = findViewById(R.id.inventory)
+                storeButton.isEnabled = true
+                inventoryButton.isEnabled = true
+            }
         }
 
         sio.on(Socket.EVENT_DISCONNECT) {
@@ -94,6 +100,12 @@ class Main : AppCompatActivity() {
             snack.view.setBackgroundColor(Color.YELLOW)
             snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text).setTextColor(Color.parseColor("#999900"))
             snack.show()
+            runOnUiThread {
+                val storeButton: Button = findViewById(R.id.store)
+                val inventoryButton: Button = findViewById(R.id.inventory)
+                storeButton.isEnabled = false
+                inventoryButton.isEnabled = false
+            }
         }
 
         sio.on("get_data") { parameters ->
@@ -103,12 +115,56 @@ class Main : AppCompatActivity() {
             runOnUiThread { generateNotifications() } // updates notifications on main
         }
 
+        sio.on("retrieve_result") { parameters ->
+            runOnUiThread{ progressDialog.dismiss() } // enable interaction again
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            if (success != null && !success) { // failure
+                val error: String = response.getString("message")
+                Log.d("SIO", "retrieve_result ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
+            }
+        }
+
+        sio.on("store_result") { parameters ->
+            runOnUiThread{ progressDialog.dismiss() } // enable interaction again
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            if (success != null && !success) { // failure
+                val error: String = response.getString("message")
+                Log.d("SIO", "store_result ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
+            }
+        }
+
         sio.on("move_to") { parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
             if (success != null && !success) { // failure
                 val error: String = response.getString("message")
                 Log.d("SIO", "move_to ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
             } else { // success
                 Log.d("SIO", "move_to SUCCESS")
             }
@@ -120,6 +176,14 @@ class Main : AppCompatActivity() {
             if (success != null && !success) {
                 val error: String = response.getString("message")
                 Log.d("SIO", "add_item ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
             } else { // success
                 Log.d("SIO", "add_item SUCCESS")
             }
@@ -132,6 +196,14 @@ class Main : AppCompatActivity() {
             if (success != null && !success) {
                 val error: String = response.getString("message")
                 Log.d("SIO", "remove_item ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
             } else { // success
                 Log.d("SIO", "remove_item SUCCESS")
             }
@@ -148,44 +220,20 @@ class Main : AppCompatActivity() {
         sio.emit("remove_item", arg)
     }
 
-    fun moveTo(pos: String) {
+    fun retrieveItem(pos: String) {
         Log.d("SIO", "Retrieving item in position $pos")
         val arg = JSONObject().put("pos", pos.toIntOrNull())
         sio.emit("retrieve_item", arg)
     }
 
-    private fun addItem(item: Item) {
-        // Find a free shelf section:
-        val freeSections: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()
-        if (freeSections != null && freeSections.isNotEmpty()) {
-            val freeSection = freeSections?.get(0)
-            freeSection?.item = item
-            // Send details to RPi
-            val arg = JSONObject()
-            arg.put("pos", freeSection?.name?.toIntOrNull())
-            arg.put("name", item.title)
-            if (item.barcode != null)
-                arg.put("barcode", item.barcode)
-            if (item.expiration != null)
-            Log.d("SIO", "add_item triggered: $arg")
-            sio.emit("add_item", arg)
-        } else {
-            AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage("All shelf sections are full!")
-                    .setIcon(R.drawable.ic_error)
-                    .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
-                    .show()
-        }
-    }
-
     private fun updateData(database: JSONArray) {
+        current?.sections?.clear()
         for (i in 0 until database.length()) {
             val section = database.getJSONObject(i)
             val sectionID = section.getInt("pos")
             val itemName = if (section.has("name")) section.getString("name") else null
             val expiryDate = if (section.has("expiry") && section["expiry"].toString() != "null") LocalDate.parse(section.getString("expiry")) else null
-            val barcode = if (section.has("barcode")) section.getString("barcode") else null
+            val barcode = if (section.has("barcode") && section.getString("barcode") != "null") section.getString("barcode") else null
             val newSection: ShelfSection
             if (itemName == null || itemName == "null") { // no item in section
                 newSection = ShelfSection(null, sectionID.toString())
@@ -220,10 +268,8 @@ class Main : AppCompatActivity() {
                 val barcode = null
                 val expiry = expiryField?.text.toString()
                 if (name == "") {
-                    // TODO: fix below
                     longSnackbar(it, "Item name should not be blank!")
                 } else if (expiry != "" && !expiry.matches(Regex("([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"))) { // 2xxx-xx-xx format
-                    // TODO: fix below
                     longSnackbar(it, "Incorrect expiry date format!")
                 }
                 else {
@@ -231,12 +277,11 @@ class Main : AppCompatActivity() {
                     val newItem: Item =
                             Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
                     alertDialog.dismiss()
-                    val progressDialog = indeterminateProgressDialog("Storing item...")
+                    progressDialog = indeterminateProgressDialog("Storing item...")
                     progressDialog.show()
                     progressDialog.setCancelable(false)
                     sendItem(newItem, progressDialog)
                 }
-
 
             }
         }
@@ -246,7 +291,7 @@ class Main : AppCompatActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null)
-                Toast.makeText(this, "Null contents", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Scan aborted", Toast.LENGTH_SHORT).show()
             else {
                 getItemData(result.contents)
             }
@@ -325,7 +370,6 @@ class Main : AppCompatActivity() {
     private fun setUpInventoryButton() {
         val inventoryButton: Button = findViewById(R.id.inventory)
         inventoryButton.setOnClickListener {
-            //sio.emit("get_data")
             val dialog = AlertDialog.Builder(this)
                     .setView(R.layout.inventory)
                     .show()
@@ -337,9 +381,31 @@ class Main : AppCompatActivity() {
     }
 
     private fun sendItem(item: Item, progressDialog: ProgressDialog) {
-        // TODO: send to RPI here
-        addItem(item)
-        progressDialog.dismiss()
+        // Find a free shelf section:
+        var freeSections: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()
+        // TODO: check if below is required
+        // Takes out shelf 0 (origin?)
+        freeSections = freeSections?.filter { it.name != "0" }
+        if (freeSections != null && freeSections.isNotEmpty()) {
+            val freeSection = freeSections?.get(0)
+            freeSection?.item = item
+            // Send details to RPi
+            val arg = JSONObject()
+            arg.put("pos", freeSection?.name?.toIntOrNull())
+            arg.put("name", item.title)
+            if (item.barcode != null)
+                arg.put("barcode", item.barcode)
+            if (item.expiration != null)
+                Log.d("SIO", "add_item triggered: $arg")
+            sio.emit("add_item", arg)
+        } else {
+            AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("All shelf sections are full!")
+                    .setIcon(R.drawable.ic_error)
+                    .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                    .show()
+        }
     }
 
     // Updates the spinner with the shelves list
@@ -375,13 +441,13 @@ class Main : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun generateFakeItems() {
-        // Creates fake Item and Notification objects
-        val jam = Item("Jam", LocalDate.now().plusDays(16), "564648646464")
-        current!!.sections["1"]?.item = jam
-        val bread = Item("Bread", LocalDate.now().plusDays(4), "548674646464")
-        current!!.sections["2"]?.item = bread
-    }
+//    private fun generateFakeItems() {
+//        // Creates fake Item and Notification objects
+//        val jam = Item("Jam", LocalDate.now().plusDays(16), "564648646464")
+//        current!!.sections["1"]?.item = jam
+//        val bread = Item("Bread", LocalDate.now().plusDays(4), "548674646464")
+//        current!!.sections["2"]?.item = bread
+//    }
 
 
     private fun initializeCurrentShelf() {

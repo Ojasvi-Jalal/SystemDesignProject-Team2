@@ -34,8 +34,8 @@ class LauncherActivity : AppCompatActivity() {
             val continueButton = findViewById<Button>(R.id.continueButton)
             continueButton.setOnClickListener {
                 // TODO: replace line below for production
-                startActivity(Intent(this, Main::class.java))
-                //scanBarcode()
+                //startActivity(Intent(this, Main::class.java))
+                scanBarcode()
             }
         }
 
@@ -66,7 +66,7 @@ class LauncherActivity : AppCompatActivity() {
                     editor.putBoolean("configured", true)
                     editor.putInt("number_of_shelves", 1)
                     editor.putString("shelf_1", identifier)
-                    editor.putString("shelf_1_title", "Unknown")
+                    editor.putString("shelf_1_title", "Storage")
                     editor.putString("last_used", "shelf_1")
                     editor.apply()
                     startActivity(Intent(this, Main::class.java))
