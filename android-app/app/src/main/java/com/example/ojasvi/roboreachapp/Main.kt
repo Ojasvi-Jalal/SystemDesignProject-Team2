@@ -77,7 +77,7 @@ class Main : AppCompatActivity() {
 
     private fun setUpSocket() {
 
-        host = "http://129.215.2.236:8000" // TODO: change/remove for prod to use 192.168.105.131 (gabumon)
+        //host = "http://129.215.2.236:8000" // TODO: remove for prod to use 192.168.105.131 (gabumon)
         sio = IO.socket(host)
 
         sio.on(Socket.EVENT_CONNECT) {
