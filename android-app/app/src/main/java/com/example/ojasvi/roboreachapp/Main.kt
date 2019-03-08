@@ -43,7 +43,7 @@ class Main : AppCompatActivity() {
     private var host: String = ""
     private var shelves: MutableList<Shelf> = mutableListOf()
     private lateinit var alertDialog: AlertDialog
-    private lateinit var progressDialog: ProgressDialog
+    lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -279,7 +279,7 @@ class Main : AppCompatActivity() {
                     alertDialog.dismiss()
                     progressDialog = indeterminateProgressDialog("Storing item...")
                     progressDialog.show()
-                    progressDialog.setCancelable(false)
+                    //progressDialog.setCancelable(false)
                     sendItem(newItem, progressDialog)
                 }
 
