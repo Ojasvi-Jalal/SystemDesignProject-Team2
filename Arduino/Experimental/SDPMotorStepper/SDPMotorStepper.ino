@@ -12,6 +12,7 @@ int MIN_SPEED = 75;
 #define HORIZONTAL_MOTOR 0
 #define VERTICAL_MOTOR 1
 #define GRAB_MOTOR 2
+#define MOTOR_TIMEOUT 5
 
 // angle is the motor's angle.
 int angles[ROTARY_NUM] = {0};
@@ -68,16 +69,25 @@ void loop(){
     }
 }
 
-int retrieveItem(int shelf) {
-  goToShelf(shelf);
-  extendArm();
-  liftArm();
-  retractArm();
-  goOrigin();
+void retrieveItem(int shelf) {
+  try{
+    goToShelf(shelf);
+    extendArm();
+    liftArm();
+    retractArm();
+    goOrigin();
+  }catch (String exeption){
+    Serial.println("Exeption during item retrieval: " + exeption);
+  }
+  motorAllStop();
 }
 
 void liftArm() {
-  goAngle(1500, VERTICAL_MOTOR);
+  try{
+    goAngle(1500, VERTICAL_MOTOR);
+  }catch(String exeption){
+    throw "Arm lift exeption " + exeption;
+  }
 }
 
 void lowerArm() {
@@ -105,11 +115,18 @@ int goAngle(int delta, int motor){
 
 int moveF(int motor, int d){
     int s = 0;
+    int last_s = 0;
+    int timeout = 0;
     if(d < 0){
         Serial.println("Trying to move negative forwards, don't do this!");
         return -1;
     }
     do{
+        timeout = 0;
+        last_s = s;
+        if(last_s == s) timeout++;
+        else timeout = 0;
+        if (timeout > MOTOR_TIMEOUT) throw "Motor Timeout Exeption!";
         s += read(motor);
         if((d-s) < MIN_SPEED){
             motorForward(motor, MIN_SPEED);
@@ -117,7 +134,7 @@ int moveF(int motor, int d){
             motorForward(motor, (d-s));
         }else{
             motorForward(motor, 100);
-        }
+        }delay(10);
     }while(d > s);
     motorAllStop();
     delay(100);
@@ -162,8 +179,9 @@ void goOrigin(){
 }
 
 void goToShelf(int shelf){
-  Serial.println("Going to shelf");
-    switch (shelf){
+    try{
+      Serial.println("Going to shelf");
+      switch (shelf){
         case 1:
         moveF(HORIZONTAL_MOTOR, 131);
         break;
@@ -176,6 +194,9 @@ void goToShelf(int shelf){
         case 4:
         moveF(HORIZONTAL_MOTOR, 709);
         break;
+      }
+    }catch(String exeption){
+      throw exeption;
     }
 }
 void extendArm(){
