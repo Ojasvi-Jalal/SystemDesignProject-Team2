@@ -12,7 +12,7 @@
   void setPWMpin(int portNum, int power); // sets the output pin of port portNum to power%.
   int readAnalogSensorData(int portNum); //reads the analog value of the input pin on port portNum.
   int readTouchSensorData(int portNum); //reads the analog value of the output pin on port portNum.
-   
+  int readDigitalSensorData(int portNum);
 #endif
 
 
