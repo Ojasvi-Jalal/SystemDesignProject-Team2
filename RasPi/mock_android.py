@@ -36,7 +36,8 @@ def main():
     print("Connecting to {}".format(full_url))
     
     sio.connect(full_url)
-    sio.add_item({"pos": 2, "name": "Grape"})
+    sio.emit("add_item", {"pos": 3, "name": "Grape"})
+    sio.emit("add_item", {"pos": 3, "name": "Pineapple"})
 
     # # INVALID returns error as no position is given
     # print(">Failed move to:")

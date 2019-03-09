@@ -82,16 +82,17 @@ def add_item(item):
         return 
 
     # Check if the shelf compartment is free
-    items = read.read_shelf(item["pos"])
-    if item["name"] is not None:
-        emit("add_item", {"success": False, "message": "Position {} already contains the item {}".format(item["pos"], item["name"])})
-        return 
-        
+    with lock:
+        shelf_item = read.read_shelf(item["pos"])
+        if shelf_item.itemName is not None:
+            emit("add_item", {"success": False, "message": "Position {} already contains the item {}".format(item["pos"], shelf_item.itemName)})
+            return 
+            
     db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
 
     # Now get the robot to store the item at the specified position
     sio.write_char("s")
-    sio.write_char(pos.__str__())
+    sio.write_char(item["pos"].__str__())
 
     emit("add_item", {"success": True})
 
