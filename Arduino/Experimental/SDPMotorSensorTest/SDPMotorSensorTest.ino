@@ -25,4 +25,5 @@ void loop(){
       }
       Serial.println((String) readDigitalSensorData(3));
   }
+  delay(100);
 }

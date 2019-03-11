@@ -13,10 +13,16 @@ int angles[6] = {};
 int irSensor = 1;
 char job = 'o';
 int shelf = 0;
+<<<<<<< HEAD
 int items[5] = {};
 int stats[5] = {};
 int counter = 0;
 QueueArray<String> orders;
+=======
+int items[4] = {}
+int angleShelf = {226, 413, 616, 790};
+int verticality[2] = {-2500, -5000};
+>>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
 
 int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
@@ -32,6 +38,7 @@ void setup(){
 
 void loop(){
     Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
+
     if(Wire.available()){
         //Serial.print("Incoming value: ");
         for(int x = 0; x < ROTARY_NUM; x++){
@@ -56,7 +63,7 @@ void loop(){
 
    //Serial.print("DOING JOB");
     doJob();
-    
+
 
     //if(!orders.isEmpty()) Serial.print(orders.peek());
     Serial.println();
@@ -82,6 +89,7 @@ void doJob(){
     Serial.print("Job: " + (String) job);
     switch(job){
         case 'n':
+<<<<<<< HEAD
         scan();
         break;
         case 't':
@@ -90,14 +98,24 @@ void doJob(){
         case 'e':
         endTest();
         break;
+=======
+            scan();
+            break;
+>>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
         case 'o':
-        origin();
-        break;
+            origin();
+            break;
         case 'u':
-        up();
-        break;
+            up();
+            break;
+        case 'r':
+            retrieveItem();
+            break;
+        case 's':
+            storeItem();
+            break;
         default:
-        getJob();
+            getJob();
     }
 }
 
@@ -106,10 +124,10 @@ void scan(){
     int h = angles[0];
     int d = -5500;
     if(v > d){
-        if((v-d) < VERTICAL_MIN){
+        if(-(v-d) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
         }else if((v-d) < 100){
-            motorBackward(1, (v-d));
+            motorBackward(1, -(v-d));
         }else{
             motorBackward(1, 100);
         }
@@ -127,19 +145,103 @@ void scan(){
 
 void origin(){
     //Serial.print("ORIGINATING");
+    //Read from buttons
     int x = digitalRead(3);
     int y = digitalRead(5);
     if(x == 1) motorBackward(0, HORIZTAL_ORG);
     else motorStop(0);
     if(y == 1) motorForward(1, VERTICAL_ORG);
     else motorStop(1);
+<<<<<<< HEAD
     if(x == 0 && y == 0){ 
       job = '0'; 
       delay(200); 
+=======
+    if(x == 0 && y == 0){
+      job = '0';
+      delay(100);
+>>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
       Serial.print("o");
     }
     angles[0] = 0;
     angles[1] = 0;
+}
+
+void goToShelf(int vertical){
+    int v = angles[1];
+    int h = angles[0];
+
+    int horizontal = angleShelf[shelf];
+
+    //Horizontal slowing down
+    if(h < horizontal){
+        if((h-horizontal) < HORIZONTAL_MIN){
+            motorBackward(0, HORIZONTAL_MIN);
+        }else if((v-d) < 100){
+            motorBackward(0, (v-d));
+        }else{
+            motorBackward(0, 100);
+        }
+    }
+    else motorStop(0);
+
+    //Vertical slowing down
+    if(v > vertical){
+        if(-(v-vertical) < VERTICAL_MIN){
+            motorBackward(1, VERTICAL_MIN);
+        }else if((v-vertical) < 100){
+            motorBackward(1, -(v-d));
+        }else{
+            motorBackward(1, 100);
+        }
+    }
+    else motorStop(0);
+}
+
+void retrieveItem(){
+    int v = angles[1];
+    int h = angles[0];
+    //Angles to get to
+    int toH = angleShelf[shelf];
+    int toV = verticality[0];
+    if(shelf>3){
+        toV = verticality[1];
+    }
+    if(v <= toV && h >= toH){
+        while(angles[1] <= toV+500){
+            angles[x] += (int8_t) Wire.read();
+            motorForward(1, 100);
+        }
+        motorStop(1);
+        //Once it has arrived to the vertical goal (right underneath the object), take out the fork
+        extendArm();
+
+        while(angles[1] >= toV -500){
+            angles[x] += (int8_t) Wire.read();
+            motorBackward(1, 100);
+        }
+        retractArm();
+        origin();
+    }
+
+    //If the angle is bigger than the one we want to get to, go up
+
+    //Go horizontal
+
+
+}
+
+void storeItem(){
+
+}
+
+int getVangle(){
+    if (shelf>3){
+        return -4173;
+    }
+    else{
+        return 0;
+    }
 }
 
 void detect(){
@@ -167,6 +269,7 @@ void up(){
     }
 }
 
+<<<<<<< HEAD
 void test(){
     if(counter < 20){
       orders.push("e");
@@ -180,4 +283,36 @@ void endTest(){
     for(int i = 0; i < 4; i++) Serial.print( (String) stats[i] + ", ");
     for(int i = 0; i < 4; i++) stats[i] = 0;
     job = "0";
+=======
+void extendArm(){
+    motorBackward(GRAB_MOTOR, 60);
+    delay(600);
+    motorAllStop();
+}
+void retractArm(){
+    motorForward(GRAB_MOTOR, 60);
+    while(digitalRead(5) == 1){
+        delay(10);
+    }
+    motorAllStop();
+}
+
+void goVertical(int angle){
+    //vertical position of the robot
+    int v = angles[1];
+
+    if(v > angle){
+        if(-(v-angle) >= VERTICAL_MIN){
+            motorBackward(1, VERTICAL_MIN);
+        }else if((v-angle) < 100){
+            motorBackward(1, -(v-angle));
+        }else{
+            motorBackward(1, 100);
+        }
+    }
+}
+
+void goHorizontal(int angle){
+
+>>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
 }
