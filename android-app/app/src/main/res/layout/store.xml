@@ -33,6 +33,7 @@
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:padding="5dp"
                 android:tint="@android:color/darker_gray"
                 app:layout_gravity="center_vertical"
@@ -42,13 +43,14 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
                 android:text="Item name:"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
                 tools:ignore="RtlCompat"
                 tools:layout_editor_absoluteX="36dp"
                 tools:layout_editor_absoluteY="117dp" />
+
         </LinearLayout>
 
         <EditText
@@ -76,6 +78,7 @@
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:padding="5dp"
                 android:tint="@android:color/darker_gray"
                 app:layout_gravity="center_vertical"
@@ -85,8 +88,9 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:text="Expires (Optional):"
+                android:text="Expires (optional):"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
                 tools:ignore="RtlCompat"
@@ -176,15 +180,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/primaryRed"
         android:text="Store item"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/layout"
-        app:layout_constraintStart_toStartOf="@+id/layout"
+        app:layout_constraintEnd_toEndOf="@+id/quickLookupButton"
+        app:layout_constraintStart_toStartOf="@+id/scanButton"
         app:layout_constraintTop_toBottomOf="@+id/quickLookupButton" />
 
 </android.support.constraint.ConstraintLayout>

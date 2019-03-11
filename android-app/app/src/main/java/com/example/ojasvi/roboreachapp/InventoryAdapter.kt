@@ -19,9 +19,7 @@ class InventoryAdapter(private val sections: List<ShelfSection>, private val dia
             holder.card.setIcon(R.drawable.ic_error)
         else
             holder.card.setIcon(R.drawable.ic_fine)
-        val barcodeText = holder.itemView.findViewById<TextView>(R.id.barcode)
         val expiresText = holder.itemView.findViewById<TextView>(R.id.expires)
-        barcodeText.text = if(sections[position].item != null && sections[position].item?.barcode != null) sections[position].item?.barcode else "-"
         expiresText.text = if(sections[position].item != null && sections[position].item?.expiration != null) sections[position].item?.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE) else "-"
         val retrieveButton = holder.itemView.findViewById<Button>(R.id.retrieve)
         retrieveButton.setOnClickListener {

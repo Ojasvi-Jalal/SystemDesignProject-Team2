@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
+import com.redmadrobot.inputmask.MaskedTextChangedListener
 import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.item.view.*
@@ -68,6 +69,7 @@ class Main : AppCompatActivity() {
 
         setUpStoreButton()
         setUpInventoryButton()
+        setUpScanButton()
 
         //generateFakeItems()
 
@@ -170,6 +172,25 @@ class Main : AppCompatActivity() {
             }
         }
 
+        sio.on("scan") {parameters ->
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            if (success != null && !success) {
+                val error: String = response.getString("message")
+                Log.d("SIO", "scan ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
+            } else { // success
+                Log.d("SIO", "scan SUCCESS")
+            }
+        }
+
         sio.on("add_item") { parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
@@ -245,6 +266,14 @@ class Main : AppCompatActivity() {
         }
     }
 
+    private fun setUpScanButton() {
+        val scanButton: Button = findViewById(R.id.scan_button)
+        scanButton.setOnClickListener {
+            sio.emit("scan")
+            Log.d("SIO", "Scan event sent")
+        }
+    }
+
     private fun setUpStoreButton() {
 
         val storeButton: Button = findViewById(R.id.store)
@@ -255,6 +284,12 @@ class Main : AppCompatActivity() {
 
             val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
             val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
+
+            if(expiryField != null) {
+                val listener = MaskedTextChangedListener("[0000]-[00]-[00]", expiryField)
+                expiryField.addTextChangedListener(listener)
+                expiryField.onFocusChangeListener = listener
+            }
 
             setUpScanButton(alertDialog)
             setUpLookupButton(alertDialog)
