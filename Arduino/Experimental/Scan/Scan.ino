@@ -13,16 +13,12 @@ int angles[6] = {};
 int irSensor = 1;
 char job = 'o';
 int shelf = 0;
-<<<<<<< HEAD
-int items[5] = {};
-int stats[5] = {};
-int counter = 0;
-QueueArray<String> orders;
-=======
 int items[4] = {}
+int stats[4] = {};
+int counter = 0;
 int angleShelf = {226, 413, 616, 790};
 int verticality[2] = {-2500, -5000};
->>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
+QueueArray<String> orders;
 
 int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
@@ -32,7 +28,7 @@ int HORIZTAL_ORG = 80;
 void setup(){
     SDPsetup();
     orders.setPrinter (Serial);
-    
+
     //Serial.println("Started");
 }
 
@@ -89,7 +85,6 @@ void doJob(){
     Serial.print("Job: " + (String) job);
     switch(job){
         case 'n':
-<<<<<<< HEAD
         scan();
         break;
         case 't':
@@ -98,10 +93,6 @@ void doJob(){
         case 'e':
         endTest();
         break;
-=======
-            scan();
-            break;
->>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
         case 'o':
             origin();
             break;
@@ -152,15 +143,9 @@ void origin(){
     else motorStop(0);
     if(y == 1) motorForward(1, VERTICAL_ORG);
     else motorStop(1);
-<<<<<<< HEAD
-    if(x == 0 && y == 0){ 
-      job = '0'; 
-      delay(200); 
-=======
     if(x == 0 && y == 0){
       job = '0';
-      delay(100);
->>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
+      delay(200);
       Serial.print("o");
     }
     angles[0] = 0;
@@ -269,7 +254,6 @@ void up(){
     }
 }
 
-<<<<<<< HEAD
 void test(){
     if(counter < 20){
       orders.push("e");
@@ -283,7 +267,8 @@ void endTest(){
     for(int i = 0; i < 4; i++) Serial.print( (String) stats[i] + ", ");
     for(int i = 0; i < 4; i++) stats[i] = 0;
     job = "0";
-=======
+}
+
 void extendArm(){
     motorBackward(GRAB_MOTOR, 60);
     delay(600);
@@ -314,5 +299,4 @@ void goVertical(int angle){
 
 void goHorizontal(int angle){
 
->>>>>>> 8199aa6fe51a3625af5f699838deb85eaf01c127
 }
