@@ -63,6 +63,9 @@ class SerialIO:
         while response != "\r\n" and 1000 * (time.time() - time_started) < timeout_ms:
             time.sleep(WAIT_FOR_RESPONSE_MS / 1000)
             response = self.read_next()
+            logging.info("Waiting:: response={} start = {}s timeout = {}ms => start + timeout = {}".format(response, time_started, timeout_ms, time_started + (timeout_ms / 1000)))
+
+        logging.info("Done at response={} start = {}s timeout = {}ms => start + timeout = {}".format(response, time_started, timeout_ms, time_started + (timeout_ms / 1000)))
 
         if not response == "\r\n":
             return response.replace("\r\n", "")
