@@ -18,7 +18,7 @@ int items[4] = {};
 int stats[4] = {};
 int counter = 0;
 int angleShelf[4] = {226, 413, 616, 790};
-int verticality[2] = {-2500, -4900};
+int verticality[2] = {-2500, -5000};
 QueueArray<String> orders;
 
 int VERTICAL_MIN = 100;
@@ -83,7 +83,7 @@ void getJob(){
 }
 
 void doJob(){
-    Serial.print("Job: " + (String) job);
+    //Serial.print("Job: " + (String) job);
     switch(job){
         case 'n':
         scan();
@@ -162,11 +162,11 @@ void goToShelf(int vertical){
     //Horizontal slowing down
     if(h < horizontal){
         if((h-horizontal) < HORIZTAL_MIN){
-            motorBackward(0, HORIZTAL_MIN);
+            motorForward(0, HORIZTAL_MIN);
         }else if((h-horizontal) < 100){
-            motorBackward(0, (h-horizontal));
+            motorForward(0, (h-horizontal));
         }else{
-            motorBackward(0, 100);
+            motorForward(0, 100);
         }
     }
     else motorStop(0);
@@ -194,6 +194,8 @@ void retrieveItem(){
         toV = verticality[1];
     }
     if(v <= toV && h >= toH){
+      Serial.println("Got to the right place");
+      Serial.println((String) v);
         /*while(angles[1] <= toV+500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
@@ -206,7 +208,7 @@ void retrieveItem(){
         extendArm();
 
         //Go up to take the item
-        while(angles[1] >= toV -500){
+        while(angles[1] >= toV -300){
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
                 //Serial.print((String) angles[x] + ", ");
@@ -234,7 +236,7 @@ void storeItem(){
     if(shelf>3){
         toV = verticality[1];
     }
-    if(v <= toV-300 && h >= toH){
+    if(v <= toV+300 && h >= toH){
         /*while(angles[1] <= toV-500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
@@ -316,15 +318,13 @@ void endTest(){
 }
 
 void extendArm(){
-    motorBackward(GRAB_MOTOR, 60);
-    delay(600);
+    motorBackward(GRAB_MOTOR, 80);
+    delay(1000);
     motorAllStop();
 }
 void retractArm(){
-    motorForward(GRAB_MOTOR, 60);
-    while(digitalRead(5) == 1){
-        delay(10);
-    }
+    motorForward(GRAB_MOTOR, 80);
+    delay(1000);
     motorAllStop();
 }
 
