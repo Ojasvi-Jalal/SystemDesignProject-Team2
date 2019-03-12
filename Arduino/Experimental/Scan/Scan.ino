@@ -315,10 +315,10 @@ int getVangle(){
 
 void detect(){
     int pos = angles[0];
-    if(pos > 190 && pos < 270) setItem(0);
-    if(pos > 390 && pos < 450) setItem(1);
-    if(pos > 570 && pos < 640) setItem(2);
-    if(pos > 780 && pos < 850) setItem(3);
+    if(pos > 214 && pos < 285) setItem(0);
+    if(pos > 416 && pos < 479) setItem(1);
+    if(pos > 609 && pos < 679) setItem(2);
+    if(pos > 816 && pos < 884) setItem(3);
 }
 
 void setItem(int i){
@@ -339,12 +339,13 @@ void up(){
 }
 
 void test(){
-    if(counter < 3){
+    if(counter < 20){
       orders.concat("n");
       counter++;
     }
     else{
       job = "0";
+      counter = 0;
       orders.concat("e");
     }
 
