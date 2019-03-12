@@ -19,7 +19,7 @@ int stats[4] = {};
 int counter = 0;
 int angleShelf[4] = {226, 413, 616, 790};
 int verticality[2] = {-2500, -5000};
-QueueArray<String> orders;
+String orders;
 
 int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
@@ -28,7 +28,6 @@ int HORIZTAL_ORG = 80;
 
 void setup(){
     SDPsetup();
-    orders.setPrinter (Serial);
 
     //Serial.println("Started");
 }
@@ -52,10 +51,12 @@ void loop(){
         //Serial.print("GETTING ORDER!");
         String order = Serial.readString();
         //Serial.print(order);
-        orders.push(order);
+        orders.concat(order);
         //Serial.print("GOT ORDER!");
     }
 
+    //Serial.print(orders);
+    
     delay(30);
 
    //Serial.print("DOING JOB");
@@ -63,27 +64,28 @@ void loop(){
 
 
     //if(!orders.isEmpty()) Serial.print(orders.peek());
-    Serial.println();
+    //Serial.println();
 }
 
 void getJob(){
     //Serial.print("GETTING JOB ");
-    String order = "0";
-    if(!orders.isEmpty()){
+    char order = '0';
+    if(!orders.equals("")){
         //Serial.print("B U G");
-        order = orders.pop();
+        order = orders.charAt(0);
+        orders.remove(0,1);
     }
     //Serial.print((String) orders.count());
-    job = order.charAt(0);
-    if(order.length() > 1 && isDigit(order.charAt(1))){
-        String temp = "" + order.charAt(1);
+    job = order;
+    while(!orders.equals("") && isDigit(orders.charAt(0))){
+        String temp = "" + orders.charAt(1);
         shelf = temp.toInt();
     }
     //Serial.print(" END OF GETTING JOB ");
 }
 
 void doJob(){
-    Serial.print("Job: " + (String) job);
+    //Serial.print("Job: " + (String) job);
     switch(job){
         case 'n':
         scan();
@@ -129,7 +131,7 @@ void scan(){
         if(irSensor == 0) detect();
     }else{
       for(int i = 0; i < 4; i++) items[i] = 0;
-        Serial.print("e");
+        Serial.println("e");
         motorStop(0);
         job = 'o';
     }
@@ -147,7 +149,7 @@ void origin(){
     if(x == 0 && y == 0){
       job = '0';
       delay(200);
-      Serial.print("o");
+      Serial.println("o");
     }
     angles[0] = 0;
     angles[1] = 0;
@@ -248,7 +250,7 @@ void setItem(int i){
     if (items[i] == 0){
          items[i] = 1;
          stats[i]++;
-         Serial.print(i);
+         Serial.println(i);
     }
 }
 
@@ -262,16 +264,19 @@ void up(){
 }
 
 void test(){
-    if(counter < 20){
-      orders.push("e");
+    if(counter < 3){
+      orders.concat("n");
       counter++;
-      Serial.print(orders.count());
     }
-    else job = "0";
+    else{
+      job = "0";
+      orders.concat("e");
+    }
+    
 }
 
 void endTest(){
-    for(int i = 0; i < 4; i++) Serial.print( (String) stats[i] + ", ");
+    for(int i = 0; i < 4; i++) Serial.println( (String) stats[i] + ", ");
     for(int i = 0; i < 4; i++) stats[i] = 0;
     job = "0";
 }
