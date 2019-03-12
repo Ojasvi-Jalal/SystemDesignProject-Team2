@@ -15,7 +15,7 @@ QueueArray<String> orders;
 char job = 'o';
 int shelf = 0;
 int items[4] = {}
-int angleShelf = {226, 413, 616, 790};
+int angleShelf [4] = {226, 413, 616, 790};
 int verticality[2] = {-2500, -5000};
 
 int VERTICAL_MIN = 100;
@@ -149,10 +149,10 @@ void goToShelf(int vertical){
 
     //Horizontal slowing down
     if(h < horizontal){
-        if((h-horizontal) < HORIZONTAL_MIN){
-            motorBackward(0, HORIZONTAL_MIN);
-        }else if((v-d) < 100){
-            motorBackward(0, (v-d));
+        if((h-horizontal) < HORIZTAL_MIN){
+            motorBackward(0, HORIZTAL_MIN);
+        }else if((h-horizontal) < 100){
+            motorBackward(0, (h-horizontal));
         }else{
             motorBackward(0, 100);
         }
