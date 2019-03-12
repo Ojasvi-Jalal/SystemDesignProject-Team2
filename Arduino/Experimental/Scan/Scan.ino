@@ -17,8 +17,8 @@ int shelf = 0;
 int items[4] = {};
 int stats[4] = {};
 int counter = 0;
-int angleShelf[4] = {226, 413, 616, 790};
-int verticality[2] = {-2500, -5000};
+int angleShelf[4] = {210, 413, 616, 790};
+int verticality[2] = {-1500, -4500};
 String orders;
 
 int VERTICAL_MIN = 100;
@@ -55,13 +55,8 @@ void loop(){
         //Serial.print("GOT ORDER!");
     }
 
-<<<<<<< HEAD
-    Serial.println(orders);
-    
-=======
-    //Serial.print(orders);
+    //Serial.println(orders);
 
->>>>>>> fb9ddc7097deef36dcc6a7d0a926841b097df867
     delay(30);
 
    //Serial.print("DOING JOB");
@@ -83,9 +78,12 @@ void getJob(){
     //Serial.print((String) orders.count());
     job = order;
     while(!orders.equals("") && isDigit(orders.charAt(0))){
-        String temp = "" + orders.charAt(1);
-        orders.remove(0,1);
+        String temp = "";
+        temp.concat(orders.charAt(0));
+        Serial.println(orders.charAt(0));
+        Serial.println(temp + "ubbh");
         shelf = temp.toInt();
+        orders.remove(0,1);
     }
     //Serial.print(" END OF GETTING JOB ");
 }
@@ -165,7 +163,7 @@ void goToShelf(int vertical){
     int v = angles[1];
     int h = angles[0];
 
-    int horizontal = angleShelf[shelf];
+    int horizontal = angleShelf[shelf%4];
 
     //Horizontal slowing down
     if(h < horizontal){
@@ -196,15 +194,20 @@ void retrieveItem(){
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
-    int toH = angleShelf[shelf];
+    //Serial.println((String) shelf + "getting to");
+    int toH = angleShelf[shelf%4];
+    //Serial.println("toH: " + (String) toH);
     int toV = verticality[0];
+    //Serial.println((String) shelf);
     if(shelf>3){
         toV = verticality[1];
     }
-    if(v <= toV && h >= toH){
-      Serial.println("Got to the right place");
+    if(v <= toV+300 && h >= toH){
+      /*Serial.println("Got to the right place");
       Serial.println((String) v);
       Serial.println((String) toV);
+      Serial.println((String) h);
+      Serial.println((String) toH);
         /*while(angles[1] <= toV+500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
@@ -215,14 +218,20 @@ void retrieveItem(){
         motorStop(1);
         //Once it has arrived to the vertical goal (right underneath the object), take out the fork
         extendArm();
+        delay(100);
 
         //Go up to take the item
-        while(angles[1] >= toV -300){
+        Serial.println((String)angles[1]);
+        Serial.println((String)(toV-300));
+        while(angles[1] >= (toV -300)){
+          //Serial.println("Went in");
+          Serial.println((String)angles[1]);
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
                 //Serial.print((String) angles[x] + ", ");
             }
             motorBackward(1, 100);
+            delay(10);
         }
         motorStop(1);
         //Retract the arm
@@ -240,12 +249,12 @@ void storeItem(){
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
-    int toH = angleShelf[shelf];
+    int toH = angleShelf[shelf%4];
     int toV = verticality[0];
     if(shelf>3){
         toV = verticality[1];
     }
-    if(v <= toV+300 && h >= toH){
+    if(v <= toV-300 && h >= toH){
         /*while(angles[1] <= toV-500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
@@ -264,6 +273,7 @@ void storeItem(){
                 //Serial.print((String) angles[x] + ", ");
             }
             motorBackward(1, 100);
+            delay(10);
         }
         motorStop(1);
         //Retract the arm
@@ -331,12 +341,12 @@ void endTest(){
 
 void extendArm(){
     motorBackward(GRAB_MOTOR, 80);
-    delay(1000);
+    delay(900);
     motorAllStop();
 }
 void retractArm(){
     motorForward(GRAB_MOTOR, 80);
-    delay(1000);
+    delay(900);
     motorAllStop();
 }
 
