@@ -1,6 +1,8 @@
 import serial
 import struct
 import logging
+import time
+from config import *
 
 class SerialIO:
 
@@ -10,7 +12,7 @@ class SerialIO:
         if not mock_io:
             self.serial_in = serial.Serial(
                 port=input_device,
-                baudrate = 9600,
+                baudrate = BAUD_RATE,
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
                 bytesize=serial.EIGHTBITS,
@@ -19,7 +21,7 @@ class SerialIO:
 
             self.serial_out = serial.Serial(
                 port=output_device,
-                baudrate = 9600,
+                baudrate = BAUD_RATE,
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
                 bytesize=serial.EIGHTBITS,
@@ -45,10 +47,51 @@ class SerialIO:
         return True
 
     def read_next(self) -> str:
+        if self.mock_io:
+            return None
         return self.serial_in.readline()
 
     def data_available(self) -> bool:
+        if self.mock_io:
+            return False
         return self.serial_in.in_waiting
+
+    def wait_for_response(self, timeout_ms = 10000):
+        response = "\r\n"
+        time_started = time.time() 
+
+        while response != "\r\n" and 1000 * (time.time() - time_started) < timeout_ms:
+            time.sleep(WAIT_FOR_RESPONSE_MS / 1000)
+            response = self.read_next()
+
+        if not response == "\r\n":
+            return response.replace("\r\n", "")
+        
+        logging.info("Failed to recieve any data: timeout")
+        return None
+
+
+    def read_lines_until(self, text, timeout_per_message=10000, max_attempts=10):
+        lines = []
+        time_started = time.time()
+        attempts = 0
+        while True:
+            res = self.wait_for_response(timeout_per_message)
+            if res == text:
+                lines.append(text)
+                return lines
+            elif res is None:
+                # Timeout occured
+                logging.info("timeout occured at attempts = {}/{}".format(attempts, max_attempts))
+                if attempts >= max_attempts:
+                    logging.info("read_lines_until timeout due to max_attempts reached of {}".format(max_attempts))
+                    return lines     # We can tell that it timed out due to the last element != text
+                attempts += 1
+            elif attempts != "":
+                # Ignore empty new lines sent
+                attempts = 0
+                lines.append(res)
+
 
 # Code for testing
 # Can enter character commands to send to arduino

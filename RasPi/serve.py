@@ -17,6 +17,9 @@ from dataAccess import Write, Read, init_database
 from Item import Item
 from Segment import Segment
 from threading import Lock
+import time
+import os
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -53,12 +56,27 @@ def db_remove(pos: int):
 
         logging.error("Failed to remove item at pos {}: pos not in range".format(pos))
         return False
+
+def send_item_retrieved(success, error_message = False):
+    emit("retrieve_result", {"success": success, "error": error_message})
     
+def send_item_stored(success, error_message = False):
+    emit("store_result", {"success": success, "error": error_message})
+
+def update_db_after_scan(existing_indexes):
+    for i in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
+        if read.read_shelf(i).itemName is not None:
+            # Check that detector found item in this position
+            if i not in existing_indexes:
+                logging.info("Found item that exists in database but not detected in shelf: pos = {}. Removing from db...".format(i))
+                db_remove(i)
+
+
 # Move the shelf to a position. Example
 # move_to, {"pos": 8}
 # This endpoint probabily won't be needed in the future but useful for testing
 @socketio.on('move_to')
-def handle_message(message):
+def move_to(message):
     pos = message.get("pos")
     if pos is None:
         emit("move_to", {"success": False, "message": "No pos provided"})
@@ -115,11 +133,20 @@ def store_item(json):
     sio.write_char("s")
     sio.write_char(pos.__str__())
 
+    res = wait_for_response()
+    if res is None:
+        send_item_stored(False, "Timeout")
+
 @socketio.on("retrieve_item")
 def retrieve_item(json):
     pos = json.get("pos")
     sio.write_char("r")
     sio.write_char(pos.__str__())
+
+    res = wait_for_response()
+    if res is None:
+        send_item_retrieved(False, "Timeout")
+
 
 @socketio.on("horizontal_move")
 def horizontal_move(json):
@@ -127,6 +154,28 @@ def horizontal_move(json):
     sio.write_char("h")
     sio.write_char(pos.__str__())
 
+
+@socketio.on("scan")
+def scan():
+    sio.write_char("n")
+    # Read positions of each shelf position
+
+    while True:
+        print(sio.wait_for_response())
+        pass
+
+    scan_result = sio.read_lines_until("o", max_attempts=10, timeout_per_message=10000)
+    print(scan_result)
+    logging.info("Scan result = {}".format(",".join(scan_result)))
+
+
+@socketio.on("origin")
+def origin():
+    sio.write_char("o")
+
+def main_run_once():
+    pos = 5
+    #  scan()
 
 if __name__ == '__main__':
     global sio
@@ -139,11 +188,12 @@ if __name__ == '__main__':
 
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().setLevel(logging.DEBUG)
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock-serial", action='store_true', help="Don't create or communicate over serial. Instead all communications are printed to standard out ")
     args = parser.parse_args()
-
 
     # Setup database
     init_database()
@@ -151,5 +201,10 @@ if __name__ == '__main__':
     # Setup serial
     sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
 
+    if os.environ.get('WERKZEUG_RUN_MAIN') is None:
+        main_run_once()
+        pass
+
     # Start server on port 8000
     app.run(debug=True, port=8000, host='0.0.0.0')
+
