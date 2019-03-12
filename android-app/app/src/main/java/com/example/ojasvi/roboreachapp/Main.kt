@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -30,12 +31,14 @@ import kotlinx.android.synthetic.main.item.view.*
 import kotlinx.android.synthetic.main.main.view.*
 import kotlinx.android.synthetic.main.store.*
 import org.jetbrains.anko.contentView
+import org.jetbrains.anko.design.indefiniteSnackbar
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import java.time.LocalDate
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.Thread.sleep
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -98,6 +101,7 @@ class Main : AppCompatActivity() {
                 storeButton.isEnabled = true
                 inventoryButton.isEnabled = true
             }
+            sio.emit("get_data")
         }
 
         sio.on(Socket.EVENT_DISCONNECT) {
@@ -273,6 +277,12 @@ class Main : AppCompatActivity() {
     private fun setUpScanButton() {
         val scanButton: Button = findViewById(R.id.scan_button)
         scanButton.setOnClickListener {
+            progressDialog = indeterminateProgressDialog("Syncing state...")
+            progressDialog.setCancelable(false)
+            progressDialog.show()
+            var handler = Handler().postDelayed(Runnable {
+                progressDialog.dismiss()
+            }, 32000)
             sio.emit("scan")
             Log.d("SIO", "Scan event sent")
         }
@@ -363,7 +373,7 @@ class Main : AppCompatActivity() {
                     val productName: String
                     if (responseJSON.getString("status_verbose") == "product found") {
                         productName = responseJSON.getJSONObject("product").getString("product_name")
-                        val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.name)
+                        val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
                         nameField?.setText(productName)
                     }
                     else {
