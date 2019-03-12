@@ -1,5 +1,6 @@
 package com.example.ojasvi.roboreachapp
 
+import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -12,6 +13,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import com.android.volley.Request
@@ -26,6 +28,7 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.android.synthetic.main.item.view.*
 import kotlinx.android.synthetic.main.main.view.*
+import kotlinx.android.synthetic.main.store.*
 import org.jetbrains.anko.contentView
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
@@ -34,6 +37,7 @@ import org.jetbrains.anko.indeterminateProgressDialog
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class Main : AppCompatActivity() {
 
@@ -286,9 +290,25 @@ class Main : AppCompatActivity() {
             val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
 
             if(expiryField != null) {
-                val listener = MaskedTextChangedListener("[0000]-[00]-[00]", expiryField)
-                expiryField.addTextChangedListener(listener)
-                expiryField.onFocusChangeListener = listener
+//                val listener = MaskedTextChangedListener("[0000]-[00]-[00]", expiryField)
+//                expiryField.addTextChangedListener(listener)
+//                expiryField.onFocusChangeListener = listener
+                expiryField.inputType = InputType.TYPE_NULL
+                expiryField.focusable = View.NOT_FOCUSABLE
+                expiryField.keyListener = null
+                expiryField.setOnClickListener {
+                        val calendar = Calendar.getInstance()
+                        val day = calendar.get(Calendar.DAY_OF_MONTH)
+                        val month = calendar.get(Calendar.MONTH)
+                        val year = calendar.get(Calendar.YEAR)
+                        //  val picker = DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog, DatePickerDialog.OnDateSetListener { view, yearSelected, monthSelected, daySelected ->
+                    val picker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, yearSelected, monthSelected, daySelected ->
+                            val mm = monthSelected + 1
+                            val dd: String = if (daySelected<10) "0$daySelected" else daySelected.toString()
+                            expiryField.setText("$yearSelected-${if (mm<10) "0$mm" else "$mm"}-$dd")
+                        }, year, month, day)
+                        picker.show()
+                }
             }
 
             setUpScanButton(alertDialog)
