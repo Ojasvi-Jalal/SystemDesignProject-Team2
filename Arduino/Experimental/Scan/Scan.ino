@@ -7,24 +7,29 @@ using namespace std;
 
 #define ROTARY_SLAVE_ADDRESS 5
 #define ROTARY_NUM 6
+#define GRAB_MOTOR 2
 
 // angle is the motor's angle.
 int angles[6] = {};
 int irSensor = 1;
-QueueArray<String> orders;
 char job = 'o';
 int shelf = 0;
-int items[4] = {}
-int angleShelf [4] = {226, 413, 616, 790};
+int items[4] = {};
+int stats[4] = {};
+int counter = 0;
+int angleShelf[4] = {226, 413, 616, 790};
 int verticality[2] = {-2500, -5000};
+QueueArray<String> orders;
 
 int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
-int HORIZTAL_MIN = 70;
+int HORIZTAL_MIN = 80;
 int HORIZTAL_ORG = 80;
 
 void setup(){
     SDPsetup();
+    orders.setPrinter (Serial);
+
     //Serial.println("Started");
 }
 
@@ -35,7 +40,7 @@ void loop(){
         //Serial.print("Incoming value: ");
         for(int x = 0; x < ROTARY_NUM; x++){
             angles[x] += (int8_t) Wire.read();
-            Serial.print((String) angles[x] + ", ");
+            //Serial.print((String) angles[x] + ", ");
         }
     }
     //Serial.print(((String) readDigitalSensorData(3)) + ", ");
@@ -46,6 +51,7 @@ void loop(){
     if(Serial.available() != 0){
         //Serial.print("GETTING ORDER!");
         String order = Serial.readString();
+        //Serial.print(order);
         orders.push(order);
         //Serial.print("GOT ORDER!");
     }
@@ -77,11 +83,17 @@ void getJob(){
 }
 
 void doJob(){
-  //Serial.print("Job: " + (String) job);
+    Serial.print("Job: " + (String) job);
     switch(job){
         case 'n':
-            scan();
-            break;
+        scan();
+        break;
+        case 't':
+        test();
+        break;
+        case 'e':
+        endTest();
+        break;
         case 'o':
             origin();
             break;
@@ -116,7 +128,7 @@ void scan(){
         motorForward(0, HORIZTAL_MIN);
         if(irSensor == 0) detect();
     }else{
-        items = {0,0,0,0}
+      for(int i = 0; i < 4; i++) items[i] = 0;
         Serial.print("e");
         motorStop(0);
         job = 'o';
@@ -134,7 +146,7 @@ void origin(){
     else motorStop(1);
     if(x == 0 && y == 0){
       job = '0';
-      delay(100);
+      delay(200);
       Serial.print("o");
     }
     angles[0] = 0;
@@ -164,7 +176,7 @@ void goToShelf(int vertical){
         if(-(v-vertical) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
         }else if((v-vertical) < 100){
-            motorBackward(1, -(v-d));
+            motorBackward(1, -(v-vertical));
         }else{
             motorBackward(1, 100);
         }
@@ -183,7 +195,10 @@ void retrieveItem(){
     }
     if(v <= toV && h >= toH){
         while(angles[1] <= toV+500){
-            angles[x] += (int8_t) Wire.read();
+            for(int x = 0; x < ROTARY_NUM; x++){
+                angles[x] += (int8_t) Wire.read();
+                //Serial.print((String) angles[x] + ", ");
+            }
             motorForward(1, 100);
         }
         motorStop(1);
@@ -191,7 +206,10 @@ void retrieveItem(){
         extendArm();
 
         while(angles[1] >= toV -500){
-            angles[x] += (int8_t) Wire.read();
+            for(int x = 0; x < ROTARY_NUM; x++){
+                angles[x] += (int8_t) Wire.read();
+                //Serial.print((String) angles[x] + ", ");
+            }
             motorBackward(1, 100);
         }
         retractArm();
@@ -221,12 +239,16 @@ int getVangle(){
 void detect(){
     int pos = angles[0];
     if(pos > 190 && pos < 270) setItem(0);
+    if(pos > 390 && pos < 450) setItem(1);
+    if(pos > 570 && pos < 640) setItem(2);
+    if(pos > 780 && pos < 850) setItem(3);
 }
 
 void setItem(int i){
     if (items[i] == 0){
          items[i] = 1;
-         Serial.print(toChar(i));
+         stats[i]++;
+         Serial.print(i);
     }
 }
 
@@ -237,6 +259,21 @@ void up(){
         motorStop(1);
         job = '0';
     }
+}
+
+void test(){
+    if(counter < 20){
+      orders.push("e");
+      counter++;
+      Serial.print(orders.count());
+    }
+    else job = "0";
+}
+
+void endTest(){
+    for(int i = 0; i < 4; i++) Serial.print( (String) stats[i] + ", ");
+    for(int i = 0; i < 4; i++) stats[i] = 0;
+    job = "0";
 }
 
 void extendArm(){
