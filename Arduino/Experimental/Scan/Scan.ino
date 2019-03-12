@@ -7,16 +7,17 @@ using namespace std;
 
 #define ROTARY_SLAVE_ADDRESS 5
 #define ROTARY_NUM 6
+#define GRAB_MOTOR 2
 
 // angle is the motor's angle.
 int angles[6] = {};
 int irSensor = 1;
 char job = 'o';
 int shelf = 0;
-int items[4] = {}
+int items[4] = {};
 int stats[4] = {};
 int counter = 0;
-int angleShelf = {226, 413, 616, 790};
+int angleShelf[4] = {226, 413, 616, 790};
 int verticality[2] = {-2500, -5000};
 QueueArray<String> orders;
 
@@ -160,10 +161,10 @@ void goToShelf(int vertical){
 
     //Horizontal slowing down
     if(h < horizontal){
-        if((h-horizontal) < HORIZONTAL_MIN){
-            motorBackward(0, HORIZONTAL_MIN);
-        }else if((v-d) < 100){
-            motorBackward(0, (v-d));
+        if((h-horizontal) < HORIZTAL_MIN){
+            motorBackward(0, HORIZTAL_MIN);
+        }else if((h-horizontal) < 100){
+            motorBackward(0, (h-horizontal));
         }else{
             motorBackward(0, 100);
         }
@@ -175,7 +176,7 @@ void goToShelf(int vertical){
         if(-(v-vertical) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
         }else if((v-vertical) < 100){
-            motorBackward(1, -(v-d));
+            motorBackward(1, -(v-vertical));
         }else{
             motorBackward(1, 100);
         }
@@ -194,7 +195,10 @@ void retrieveItem(){
     }
     if(v <= toV && h >= toH){
         while(angles[1] <= toV+500){
-            angles[x] += (int8_t) Wire.read();
+            for(int x = 0; x < ROTARY_NUM; x++){
+                angles[x] += (int8_t) Wire.read();
+                //Serial.print((String) angles[x] + ", ");
+            }
             motorForward(1, 100);
         }
         motorStop(1);
@@ -202,7 +206,10 @@ void retrieveItem(){
         extendArm();
 
         while(angles[1] >= toV -500){
-            angles[x] += (int8_t) Wire.read();
+            for(int x = 0; x < ROTARY_NUM; x++){
+                angles[x] += (int8_t) Wire.read();
+                //Serial.print((String) angles[x] + ", ");
+            }
             motorBackward(1, 100);
         }
         retractArm();
