@@ -18,7 +18,7 @@ int items[4] = {};
 int stats[4] = {};
 int counter = 0;
 int angleShelf[4] = {226, 413, 616, 790};
-int verticality[2] = {-2500, -5000};
+int verticality[2] = {-2500, -4900};
 QueueArray<String> orders;
 
 int VERTICAL_MIN = 100;
@@ -194,17 +194,18 @@ void retrieveItem(){
         toV = verticality[1];
     }
     if(v <= toV && h >= toH){
-        while(angles[1] <= toV+500){
+        /*while(angles[1] <= toV+500){
+            //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
-                //Serial.print((String) angles[x] + ", ");
             }
             motorForward(1, 100);
-        }
+        }*/
         motorStop(1);
         //Once it has arrived to the vertical goal (right underneath the object), take out the fork
         extendArm();
 
+        //Go up to take the item
         while(angles[1] >= toV -500){
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
@@ -212,24 +213,62 @@ void retrieveItem(){
             }
             motorBackward(1, 100);
         }
+        motorStop(1);
+        //Retract the arm
         retractArm();
-        origin();
+        delay(100);
+        //Go to the origin
+        job = 'o';
     }
-
-    //If the angle is bigger than the one we want to get to, go up
-
-    //Go horizontal
-
-
+    else{
+        goToShelf(toV + 300);
+    }
 }
 
 void storeItem(){
+    int v = angles[1];
+    int h = angles[0];
+    //Angles to get to
+    int toH = angleShelf[shelf];
+    int toV = verticality[0];
+    if(shelf>3){
+        toV = verticality[1];
+    }
+    if(v <= toV-300 && h >= toH){
+        /*while(angles[1] <= toV-500){
+            //Get the angles at the moment
+            for(int x = 0; x < ROTARY_NUM; x++){
+                angles[x] += (int8_t) Wire.read();
+            }
+            motorForward(1, 100);
+        }*/
+        motorStop(1);
+        //Once it has arrived to the vertical goal, take out the fork
+        extendArm();
 
+        //Go up to take the item
+        while(angles[1] >= toV -300){
+            for(int x = 0; x < ROTARY_NUM; x++){
+                angles[x] += (int8_t) Wire.read();
+                //Serial.print((String) angles[x] + ", ");
+            }
+            motorBackward(1, 100);
+        }
+        motorStop(1);
+        //Retract the arm
+        retractArm();
+        delay(100);
+        //Go to the origin
+        job = 'o';
+    }
+    else{
+        goToShelf(toV+300);
+    }
 }
 
 int getVangle(){
     if (shelf>3){
-        return -4173;
+        return -4900;
     }
     else{
         return 0;
