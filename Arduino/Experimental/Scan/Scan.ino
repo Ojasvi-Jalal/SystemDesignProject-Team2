@@ -56,7 +56,7 @@ void loop(){
     }
 
     //Serial.print(orders);
-    
+
     delay(30);
 
    //Serial.print("DOING JOB");
@@ -79,6 +79,7 @@ void getJob(){
     job = order;
     while(!orders.equals("") && isDigit(orders.charAt(0))){
         String temp = "" + orders.charAt(1);
+        orders.remove(0,1);
         shelf = temp.toInt();
     }
     //Serial.print(" END OF GETTING JOB ");
@@ -313,7 +314,7 @@ void test(){
       job = "0";
       orders.concat("e");
     }
-    
+
 }
 
 void endTest(){
