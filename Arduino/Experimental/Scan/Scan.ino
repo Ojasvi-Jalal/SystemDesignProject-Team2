@@ -18,7 +18,7 @@ int items[4] = {};
 int stats[4] = {};
 int counter = 0;
 int angleShelf[4] = {210, 390, 616, 790};
-int verticality[2] = {-1500, -4500};
+int verticality[2] = {-1500, -4300};
 String orders;
 int reset = 0;
 
@@ -43,7 +43,7 @@ void loop(){
             //Serial.print((String) angles[x] + ", ");
         }
     }
-    Serial.print(((String) readDigitalSensorData(2)) + ", ");
+    //Serial.print(((String) readDigitalSensorData(2)) + ", ");
     irSensor = readDigitalSensorData(3);
     if (readDigitalSensorData(2) == 0){
         reset++;
@@ -65,7 +65,7 @@ void loop(){
         //Serial.print("GOT ORDER!");
     }
 
-    Serial.println(orders);
+    //Serial.println(orders);
 
     delay(30);
 
@@ -99,7 +99,7 @@ void getJob(){
 }
 
 void doJob(){
-    //Serial.print("Job: " + (String) job);
+    //Serial.println("Job: " + (String) job);
     switch(job){
         case 'n':
         scan();
@@ -178,11 +178,11 @@ void goToShelf(int vertical){
     //Horizontal slowing down
     if(h < horizontal){
         if((h-horizontal) < HORIZTAL_MIN){
-            motorBackward(0, HORIZTAL_MIN);
+            motorForward(0, HORIZTAL_MIN);
         }else if((h-horizontal) < 100){
-            motorBackward(0, (h-horizontal));
+            motorForward(0, (h-horizontal));
         }else{
-            motorBackward(0, 100);
+            motorForward(0, 100);
         }
     }
     else motorStop(0);
@@ -204,7 +204,7 @@ void retrieveItem(){
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
-    //Serial.println((String) shelf + "getting to");
+    Serial.println((String) shelf + " getting to");
     int toH = angleShelf[shelf%4];
     //Serial.println("toH: " + (String) toH);
     int toV = verticality[0];
@@ -227,25 +227,31 @@ void retrieveItem(){
             motorForward(1, 100);
         }*/
         motorStop(1);
+        delay(10);
         //Once it has arrived to the vertical goal (right underneath the object), take out the fork
         extendArm();
         delay(100);
 
         //Go up to take the item
         Serial.println((String)angles[1]);
-        Serial.println((String)(toV-300));
-        while(angles[1] >= (toV -300)){
+        Serial.println((String)(toV-100));
+        while(angles[1] >= (toV -100)){
           //Serial.println("Went in");
           Serial.println((String)angles[1]);
+            motorBackward(1, 100);
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
                 //Serial.print((String) angles[x] + ", ");
             }
-            motorBackward(1, 100);
             delay(10);
         }
+        motorStop(1);
+        delay(20);
         retractArm();
-        origin();
+        job = 'o';
+    }
+    else{
+      goToShelf(toV+300);
     }
 
     //If the angle is bigger than the one we want to get to, go up
@@ -264,7 +270,7 @@ void storeItem(){
     if(shelf>3){
         toV = verticality[1];
     }
-    if(v <= toV-300 && h >= toH){
+    if(v <= toV-200 && h >= toH){
         /*while(angles[1] <= toV-500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
@@ -276,24 +282,25 @@ void storeItem(){
         //Once it has arrived to the vertical goal, take out the fork
         extendArm();
 
-        //Go up to take the item
-        while(angles[1] >= toV -300){
+        //Go down to store the item
+        while(angles[1] <= toV +50){
+            motorForward(1, 100);
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
                 //Serial.print((String) angles[x] + ", ");
             }
-            motorBackward(1, 100);
-            delay(10);
+            delay(5);
         }
         motorStop(1);
         //Retract the arm
+        delay(20);
         retractArm();
         delay(100);
         //Go to the origin
         job = 'o';
     }
     else{
-        goToShelf(toV+300);
+        goToShelf(toV-200);
     }
 }
 
