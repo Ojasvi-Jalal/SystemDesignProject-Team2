@@ -25,18 +25,15 @@ class Write(object):
 			json.dump(items, json_file, indent = 4 , sort_keys=True)
 
 	def remove_item(self, barcode):
-		print("ENTER: remove_item ")
 		with open('items.json', 'r') as json_file:
 			items = json.load(json_file)
 			items['items'][:] = [elem for elem in items['items'] if elem.get('barcode') != barcode]
 
 		with open('items.json', 'w') as json_file:
 			json.dump(items, json_file, indent = 4 , sort_keys=True)
-		print("EXIT: remove_item ")
 
 
 	def update_shelf(self, shelfID, item):
-		print("ENTER: update_shelf()")
 		print("SHELF ID SHELF ID ")
 		print(shelfID)
 		entry = {"shelfID": shelfID, "itemName": item.name, "expiryDate": None, "barcode": item.barcode}
@@ -44,12 +41,11 @@ class Write(object):
 		print("ç to pos {}: {}".format(shelfID, entry))
 		with open(SHELF_JSON_FILE, 'r') as json_file:
 			shelf = json.load(json_file)
-			shelf['shelf'][shelfID] = entry
+			shelf[str(shelfID)] = entry
 
 		with open(SHELF_JSON_FILE, 'w') as json_file:
 			json.dump(shelf, json_file, indent = 4 , sort_keys=True)
 
-		print("EXIT: update_shelf()")
 		
 
 	def clear_shelf(self, shelfID):
@@ -57,7 +53,7 @@ class Write(object):
 		
 		with open(SHELF_JSON_FILE, 'r') as json_file:
 			shelf = json.load(json_file)
-			shelf['shelf'][shelfID] = entry
+			shelf[str(shelfID)] = entry
 
 		with open(SHELF_JSON_FILE, 'w') as json_file:
 			json.dump(shelf, json_file, indent = 4 , sort_keys=True)
@@ -87,26 +83,25 @@ class Read(object):
 
 		with open(SHELF_JSON_FILE, 'r') as json_file:
 			shelf = json.load(json_file)
-			segment = next((elem for elem in shelf['shelf'] if elem['shelfID'] == shelfID), None)
-			if segment == None: 
-				return None		
-			else :
-				print("EXIT read_items()")
-				return Segment(shelfID, segment['itemName'], segment['expiryDate'], segment['barcode'])	
+			key = shelfID.__str__()
+			if key not in shelf:
+				return None
+			seg_json  = shelf[shelfID.__str__()]
+			return Segment(shelfID, seg_json['itemName'], seg_json['expiryDate'], seg_json['barcode'])	
 
 def generate_empty_shelf_json():
 	# Do we need a shelf item for the origin at pos = 0?
-	json_data = []
+	json_data = {}
 	for pos in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
-		json_data.append({
+		json_data[str(pos)] = {
 			"barcode": None,
 			"expiryDate": None,
 			"itemName": None,
 			"shelfID": pos
-		})
+		}
 
 	with open(SHELF_JSON_FILE, "w+") as f:
-		json.dump({"shelf": json_data}, f, indent = 4, sort_keys=True)
+		json.dump(json_data, f, indent = 4, sort_keys=True)
 
 def shelf_file_exists():
 	if not os.path.exists(SHELF_JSON_FILE):
