@@ -55,7 +55,7 @@ void loop(){
         //Serial.print("GOT ORDER!");
     }
 
-    //Serial.print(orders);
+    Serial.println(orders);
     
     delay(30);
 
@@ -198,6 +198,7 @@ void retrieveItem(){
     if(v <= toV && h >= toH){
       Serial.println("Got to the right place");
       Serial.println((String) v);
+      Serial.println((String) toV);
         /*while(angles[1] <= toV+500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
