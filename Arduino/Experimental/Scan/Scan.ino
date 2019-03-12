@@ -17,10 +17,11 @@ int shelf = 0;
 int items[4] = {};
 int stats[4] = {};
 int counter = 0;
-int angleShelf[4] = {210, 390, 616, 790};
-int verticality[2] = {-1500, -4300};
+int angleShelf[4] = {250, 440, 635, 825};
+int verticality[2] = {-1500, -4700};
 String orders;
 int reset = 0;
+bool armOut = 0;
 
 int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
@@ -164,6 +165,7 @@ void origin(){
       job = '0';
       delay(200);
       Serial.println("o");
+      //extendArm();
     }
     angles[0] = 0;
     angles[1] = 0;
@@ -204,7 +206,7 @@ void retrieveItem(){
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
-    Serial.println((String) shelf + " getting to");
+    //Serial.println((String) shelf + " getting to");
     int toH = angleShelf[shelf%4];
     //Serial.println("toH: " + (String) toH);
     int toV = verticality[0];
@@ -212,7 +214,7 @@ void retrieveItem(){
     if(shelf>3){
         toV = verticality[1];
     }
-    if(v <= toV+300 && h >= toH){
+    if(v <= toV+400 && h >= toH){
       /*Serial.println("Got to the right place");
       Serial.println((String) v);
       Serial.println((String) toV);
@@ -234,8 +236,8 @@ void retrieveItem(){
 
         //Go up to take the item
         Serial.println((String)angles[1]);
-        Serial.println((String)(toV-100));
-        while(angles[1] >= (toV -100)){
+        Serial.println((String)(toV-200));
+        while(angles[1] >= (toV +100)){
           //Serial.println("Went in");
           Serial.println((String)angles[1]);
             motorBackward(1, 100);
@@ -251,14 +253,8 @@ void retrieveItem(){
         job = 'o';
     }
     else{
-      goToShelf(toV+300);
+      goToShelf(toV+400);
     }
-
-    //If the angle is bigger than the one we want to get to, go up
-
-    //Go horizontal
-
-
 }
 
 void storeItem(){
@@ -270,7 +266,7 @@ void storeItem(){
     if(shelf>3){
         toV = verticality[1];
     }
-    if(v <= toV-200 && h >= toH){
+    if(v <= toV-700 && h >= toH){
         /*while(angles[1] <= toV-500){
             //Get the angles at the moment
             for(int x = 0; x < ROTARY_NUM; x++){
@@ -283,10 +279,14 @@ void storeItem(){
         extendArm();
 
         //Go down to store the item
-        while(angles[1] <= toV +50){
+        int button = digitalRead(3);
+        Serial.println("******" +(String) (toV+50) + "******");
+        while(angles[1] <= toV){
+          //Serial.println((String) angles[1]);
+            button = digitalRead(3);
             motorForward(1, 100);
             for(int x = 0; x < ROTARY_NUM; x++){
-                angles[x] += (int8_t) Wire.read();
+                angles[x] -= (int8_t) Wire.read();
                 //Serial.print((String) angles[x] + ", ");
             }
             delay(5);
@@ -300,7 +300,7 @@ void storeItem(){
         job = 'o';
     }
     else{
-        goToShelf(toV-200);
+        goToShelf(toV-700);
     }
 }
 
@@ -358,13 +358,14 @@ void endTest(){
 
 void extendArm(){
     motorBackward(GRAB_MOTOR, 80);
-    delay(900);
+    delay(750);
     motorAllStop();
 }
 void retractArm(){
     motorForward(GRAB_MOTOR, 80);
-    delay(900);
+    delay(750);
     motorAllStop();
+    //armOut = 1;
 }
 
 void goVertical(int angle){
