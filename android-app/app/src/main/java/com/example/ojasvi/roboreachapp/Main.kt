@@ -86,7 +86,7 @@ class Main : AppCompatActivity() {
 
     private fun setUpSocket() {
 
-        //host = "http://129.215.2.236:8000" // TODO: remove for prod to use 192.168.105.131 (gabumon)
+        //host = "http://129.215.2.183:8000" // TODO: remove for prod to use 192.168.105.131 (gabumon)
         sio = IO.socket(host)
 
         sio.on(Socket.EVENT_CONNECT) {
@@ -101,7 +101,6 @@ class Main : AppCompatActivity() {
                 storeButton.isEnabled = true
                 inventoryButton.isEnabled = true
             }
-            sio.emit("get_data")
         }
 
         sio.on(Socket.EVENT_DISCONNECT) {
@@ -111,10 +110,10 @@ class Main : AppCompatActivity() {
             snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text).setTextColor(Color.parseColor("#999900"))
             snack.show()
             runOnUiThread {
-                val storeButton: Button = findViewById(R.id.store)
-                val inventoryButton: Button = findViewById(R.id.inventory)
-                storeButton.isEnabled = false
-                inventoryButton.isEnabled = false
+//                val storeButton: Button = findViewById(R.id.store)
+//                val inventoryButton: Button = findViewById(R.id.inventory)
+//                storeButton.isEnabled = false
+//                inventoryButton.isEnabled = false
             }
         }
 
@@ -126,11 +125,12 @@ class Main : AppCompatActivity() {
         }
 
         sio.on("retrieve_result") { parameters ->
+            sio.emit("get_data")
             runOnUiThread{ progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
             if (success != null && !success) { // failure
-                val error: String = response.getString("message")
+                val error: String = response.getString("error")
                 Log.d("SIO", "retrieve_result ERROR: $error")
                 runOnUiThread {
                     AlertDialog.Builder(this)
@@ -148,7 +148,7 @@ class Main : AppCompatActivity() {
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
             if (success != null && !success) { // failure
-                val error: String = response.getString("message")
+                val error: String = response.getString("error")
                 Log.d("SIO", "store_result ERROR: $error")
                 runOnUiThread {
                     AlertDialog.Builder(this)
@@ -278,7 +278,6 @@ class Main : AppCompatActivity() {
         val scanButton: Button = findViewById(R.id.scan_button)
         scanButton.setOnClickListener {
             progressDialog = indeterminateProgressDialog("Syncing state...")
-            progressDialog.setCancelable(false)
             progressDialog.show()
             var handler = Handler().postDelayed(Runnable {
                 progressDialog.dismiss()
@@ -461,7 +460,8 @@ class Main : AppCompatActivity() {
             if (item.barcode != null)
                 arg.put("barcode", item.barcode)
             if (item.expiration != null)
-                Log.d("SIO", "add_item triggered: $arg")
+                arg.put("expiry", item.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            Log.d("SIO", "add_item triggered: $arg")
             sio.emit("add_item", arg)
         } else {
             AlertDialog.Builder(this)
