@@ -133,7 +133,9 @@ def store_item(json):
     sio.write_char("s")
     sio.write_char(pos.__str__())
 
-    res = sio.wait_for_response()
+    #res = sio.wait_for_response()
+    send_item_stored(True)
+    return 
     if res is None:
         send_item_stored(False, "Timeout")
 
@@ -144,7 +146,10 @@ def retrieve_item(json):
     sio.write_char("r")
     sio.write_char(pos.__str__())
 
-    res = sio.wait_for_response()
+    #res = sio.wait_for_response()
+    send_item_stored(True)
+    return 
+
     if res is None:
         send_item_retrieved(False, "Timeout")
 
@@ -160,7 +165,7 @@ def horizontal_move(json):
 def scan():
     sio.write_char("n")
     # Read positions of each shelf position
-
+    return 
     while True:
         print(sio.wait_for_response())
         pass
