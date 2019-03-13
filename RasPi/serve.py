@@ -42,7 +42,7 @@ def db_add(pos: int, name, expiry, barcode):
     with lock:
         logging.info("Adding item at position {} with name={}, expriry={}, barcode={}".format(pos, name, expiry, barcode))
         if pos in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
-            write.update_shelf(pos, Item(barcode, name))
+            write.update_shelf(pos, Item(barcode, name, expiry))
             return True
         else:
             return False
@@ -139,7 +139,8 @@ def store_item(json):
 
 @socketio.on("retrieve_item")
 def retrieve_item(json):
-    pos = json.get("pos")
+    pos = json.get("pos")    
+    db_remove(pos)
     sio.write_char("r")
     sio.write_char(pos.__str__())
 

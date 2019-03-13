@@ -36,12 +36,17 @@ class Write(object):
 	def update_shelf(self, shelfID, item):
 		print("SHELF ID SHELF ID ")
 		print(shelfID)
-		entry = {"shelfID": shelfID, "itemName": item.name, "expiryDate": None, "barcode": item.barcode}
+		entry = {"shelfID": shelfID, "itemName": item.name, "expiryDate": item.expiry, "barcode": item.barcode}
 		 
 		print("ç to pos {}: {}".format(shelfID, entry))
 		with open(SHELF_JSON_FILE, 'r') as json_file:
 			shelf = json.load(json_file)
-			shelf[str(shelfID)] = entry
+			for section in shelf['shelf']:
+			  if section['shelfID'] == shelfID:
+			    section = entry
+			    # Not sure about the next line but it works!
+			    shelf['shelf'][shelfID] = entry
+			    break
 
 		with open(SHELF_JSON_FILE, 'w') as json_file:
 			json.dump(shelf, json_file, indent = 4 , sort_keys=True)
@@ -53,7 +58,12 @@ class Write(object):
 		
 		with open(SHELF_JSON_FILE, 'r') as json_file:
 			shelf = json.load(json_file)
-			shelf[str(shelfID)] = entry
+			for section in shelf['shelf']:
+			  if section['shelfID'] == shelfID:
+			    section = entry
+			    # Not sure about the next line but it works!
+			    shelf['shelf'][shelfID] = entry
+			    break
 
 		with open(SHELF_JSON_FILE, 'w') as json_file:
 			json.dump(shelf, json_file, indent = 4 , sort_keys=True)
@@ -84,9 +94,13 @@ class Read(object):
 		with open(SHELF_JSON_FILE, 'r') as json_file:
 			shelf = json.load(json_file)
 			key = shelfID.__str__()
-			if key not in shelf:
-				return None
-			seg_json  = shelf[shelfID.__str__()]
+			seg_json = None
+			for section in shelf['shelf']:
+			  if section['shelfID'] == shelfID:
+			    seg_json = section
+			    break
+			if seg_json == None:
+			  return None
 			return Segment(shelfID, seg_json['itemName'], seg_json['expiryDate'], seg_json['barcode'])	
 
 def generate_empty_shelf_json():
