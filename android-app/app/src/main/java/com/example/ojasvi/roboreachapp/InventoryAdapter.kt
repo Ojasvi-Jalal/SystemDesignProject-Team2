@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import org.jetbrains.anko.indeterminateProgressDialog
 import com.alespero.expandablecardview.ExpandableCardView
+import kotlinx.android.synthetic.main.inventory.view.*
+import org.jetbrains.anko.find
 import java.time.format.DateTimeFormatter
 
 class InventoryAdapter(private val sections: List<ShelfSection>, private val dialog: android.support.v7.app.AlertDialog, private val main: Main): RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {

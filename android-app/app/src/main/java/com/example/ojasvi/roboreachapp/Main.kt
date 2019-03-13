@@ -125,7 +125,6 @@ class Main : AppCompatActivity() {
         }
 
         sio.on("retrieve_result") { parameters ->
-            sio.emit("get_data")
             runOnUiThread{ progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
@@ -200,6 +199,7 @@ class Main : AppCompatActivity() {
         }
 
         sio.on("add_item") { parameters ->
+            runOnUiThread { progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
             if (success != null && !success) {
