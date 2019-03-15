@@ -49,37 +49,38 @@ class SerialIO:
     def read_next(self) -> str:
         if self.mock_io:
             return None
-        return self.serial_in.readline()
 
-    def data_available(self) -> bool:
-        if self.mock_io:
-            return False
-        return self.serial_in.in_waiting
+        return self.serial_in.readline().decode()
 
-    def wait_for_response(self, timeout_ms = 10000):
-        response = "\r\n"
-        time_started = time.time() 
+    def read_next_line(self):
+        next = self.read_next()
 
-        while response != "\r\n" and 1000 * (time.time() - time_started) < timeout_ms:
-            time.sleep(WAIT_FOR_RESPONSE_MS / 1000)
-            response = self.read_next()
-            logging.info("Waiting:: response={} start = {}s timeout = {}ms => start + timeout = {}".format(response, time_started, timeout_ms, time_started + (timeout_ms / 1000)))
+        if next is None:
+            return None
+        elif next == "\r\n" or next == "":
+            return None
 
-        logging.info("Done at response={} start = {}s timeout = {}ms => start + timeout = {}".format(response, time_started, timeout_ms, time_started + (timeout_ms / 1000)))
+        return next.replace("\r\n", "")
 
-        if not response == "\r\n":
-            return response.replace("\r\n", "")
+    def wait_for_next_line(self, timeout_ms=10000):
+        time_started_ms = time.time() * 1000
+        while True:
+            line = self.read_next_line()
+            if line is not None:
+                return line
+
+            time_now_ms = time.time() * 1000
+            if time_now_ms - time_started_ms >= timeout_ms:
+                logging.info("wait_for_next_line timed out after {}ms".format(time_now_ms - time_started_ms))
+                return None # Indicate timeout
         
-        logging.info("Failed to recieve any data: timeout")
-        return None
-
-
     def read_lines_until(self, text, timeout_per_message=10000, max_attempts=10):
         lines = []
         time_started = time.time()
         attempts = 0
         while True:
-            res = self.wait_for_response(timeout_per_message)
+            res = self.wait_for_next_line(timeout_per_message)
+            logging.info("read_lines_until: read line {}".format(res))
             if res == text:
                 lines.append(text)
                 return lines
@@ -94,6 +95,11 @@ class SerialIO:
                 # Ignore empty new lines sent
                 attempts = 0
                 lines.append(res)
+
+    def data_available(self):
+        if self.mock_io:
+            return False
+        return self.serial_in.in_waiting
 
 
 # Code for testing

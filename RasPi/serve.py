@@ -107,37 +107,15 @@ def add_item(item):
             return 
             
     db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
-
     # Now get the robot to store the item at the specified position
     sio.write_char("s")
     sio.write_char(item["pos"].__str__())
 
-    emit("add_item", {"success": True})
-
-@socketio.on("remove_item")
-def remove_item(json):
-    if "pos" not in json:
-        emit("add_item", {"success": False, "message": "No pos provided"})
-        return 
-
-    if not db_remove(json["pos"]):
-        emit("add_item", {"success": False, "message": "Could not find an item with that pos to remove"})
-        return 
-
-    emit("remove_item", {"success": True})
-
-
-@socketio.on("store_item")
-def store_item(json):
-    pos = json.get("pos")
-    sio.write_char("s")
-    sio.write_char(pos.__str__())
-
-    #res = sio.wait_for_response()
-    send_item_stored(True)
-    return 
-    if res is None:
+    res = sio.read_lines_until("o", max_attempts=2, timeout_per_message=30000)
+    if res is None or len(res) == 0 or res[-1] != "o":
         send_item_stored(False, "Timeout")
+
+    send_item_stored(True)
 
 @socketio.on("retrieve_item")
 def retrieve_item(json):
@@ -145,13 +123,14 @@ def retrieve_item(json):
     db_remove(pos)
     sio.write_char("r")
     sio.write_char(pos.__str__())
-
-    #res = sio.wait_for_response()
     send_item_stored(True)
-    return 
+    emit("get_data", db_get_all())
 
-    if res is None:
+    res = sio.read_lines_until("o", max_attempts=2, timeout_per_message=30000)
+    if res is None or len(res) == 0 or res[-1] != "o":
         send_item_retrieved(False, "Timeout")
+
+    send_item_retrieved(True)
 
 
 @socketio.on("horizontal_move")
@@ -165,14 +144,18 @@ def horizontal_move(json):
 def scan():
     sio.write_char("n")
     # Read positions of each shelf position
-    return 
-    while True:
-        print(sio.wait_for_response())
-        pass
 
-    scan_result = sio.read_lines_until("o", max_attempts=10, timeout_per_message=10000)
-    print(scan_result)
+    scan_result = sio.read_lines_until("o", max_attempts=3, timeout_per_message=10000)
     logging.info("Scan result = {}".format(",".join(scan_result)))
+
+    try:
+        pos_ints = []
+        for x in scan_result[:-1]:
+            pos_ints.append(int(x))
+        update_db_after_scan(pos_ints)
+    except ValueError:
+        logging.exception("Failed to interpret scan result: got strings that could not be parsed into ints")
+
 
 
 @socketio.on("origin")
@@ -181,6 +164,16 @@ def origin():
 
 def main_run_once():
     pos = 5
+
+    # print("Waiting for serial...")
+    # lines = sio.read_lines_until("END", max_attempts=3)
+    # print("DONE!")
+    # print(lines)
+    # while True:
+    #     next = sio.wait_for_next_line()
+    #     if next != "\r\n" and next != "":
+    #         print(">>{} ".format(next))
+
     #  scan()
 
 if __name__ == '__main__':
