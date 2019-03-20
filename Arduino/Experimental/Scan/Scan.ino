@@ -17,7 +17,7 @@ int shelf = 0;
 int items[4] = {};
 int stats[4] = {};
 int counter = 0;
-int angleShelf[4] = {250, 440, 635, 825};
+int angleShelf[4] = {250, 440, 632, 830};
 int verticality[2] = {-1500, -4700};
 String orders;
 int reset = 0;
@@ -235,11 +235,11 @@ void retrieveItem(){
         delay(100);
 
         //Go up to take the item
-        Serial.println((String)angles[1]);
-        Serial.println((String)(toV-200));
+        //Serial.println((String)angles[1]);
+        //Serial.println((String)(toV-200));
         while(angles[1] >= (toV +100)){
           //Serial.println("Went in");
-          Serial.println((String)angles[1]);
+          //Serial.println((String)angles[1]);
             motorBackward(1, 100);
             for(int x = 0; x < ROTARY_NUM; x++){
                 angles[x] += (int8_t) Wire.read();
