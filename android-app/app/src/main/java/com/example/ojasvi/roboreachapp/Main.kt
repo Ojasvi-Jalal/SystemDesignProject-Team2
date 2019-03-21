@@ -77,11 +77,25 @@ class Main : AppCompatActivity() {
         setUpStoreButton()
         setUpInventoryButton()
         setUpScanButton()
+        setUpHelpButton()
 
         //generateFakeItems()
 
         doAsync { sio.emit("get_data") }
 
+    }
+
+    private fun setUpHelpButton() {
+        val helpButton = findViewById<Button>(R.id.help_button)
+        helpButton.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+                    .setView(R.layout.help_dialog)
+                    .show()
+            val closeButton = alertDialog.findViewById<ImageButton>(R.id.exitButton)
+            closeButton?.setOnClickListener {
+                alertDialog.dismiss()
+            }
+        }
     }
 
     private fun setUpSocket() {
