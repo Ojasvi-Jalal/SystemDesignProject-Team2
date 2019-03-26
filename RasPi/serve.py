@@ -95,41 +95,64 @@ def get_data():
 
 @socketio.on("add_item")
 def add_item(item):
+    # Check format of socketio request
     if "pos" not in item:
         emit("add_item", {"success": False, "message": "No pos on item"})
         return 
 
     # Check if the shelf compartment is free
+    # It's important to use the lock here as only one thread should access the file at once
     with lock:
         shelf_item = read.read_shelf(item["pos"])
+
+        # The shelf position is full so return an error to the Android app
         if shelf_item.itemName is not None:
             emit("add_item", {"success": False, "message": "Position {} already contains the item {}".format(item["pos"], shelf_item.itemName)})
             return 
-            
+    
+    # Add the new item to the database
     db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
+
     # Now get the robot to store the item at the specified position
+    logging.info("Sending store command to robot: s{}".format(pos))
     sio.write_char("s")
     sio.write_char(item["pos"].__str__())
 
+    logging.info("Waiting for robot to store item and return to origin...")
+    # Finally wait for the robot to return back to the origion
     res = sio.read_lines_until("o", max_attempts=2, timeout_per_message=30000)
     if res is None or len(res) == 0 or res[-1] != "o":
+        logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
         send_item_stored(False, "Timeout")
+        return 
 
+    # Send success back to the android app
+    logging.info("item stored successfully")
     send_item_stored(True)
 
 @socketio.on("retrieve_item")
 def retrieve_item(json):
     pos = json.get("pos")    
     db_remove(pos)
+
+    logging.info("Got request to retieve item at position {} - sending command r{}".format(pos, pos))
     sio.write_char("r")
     sio.write_char(pos.__str__())
-    send_item_stored(True)
+
+    # Send the new updated database to the Android App
     emit("get_data", db_get_all())
 
+    # Read the status of the robot. This waits until it returns to origin (when it sends the character 'o')
+    logging.info("Waiting for robot to return back to origion")
     res = sio.read_lines_until("o", max_attempts=2, timeout_per_message=30000)
     if res is None or len(res) == 0 or res[-1] != "o":
+        # Timeout occured if we didn't recieve a 'o' after a while
+        logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))
         send_item_retrieved(False, "Timeout")
+        return
 
+    # Everything has completed succcessfully, indicate success to Android app
+    logging.info("Item successfully retrieved")
     send_item_retrieved(True)
 
 
@@ -142,11 +165,16 @@ def horizontal_move(json):
 
 @socketio.on("scan")
 def scan():
+    logging.info("Got request to perform scan. Sending scan command: n")
     sio.write_char("n")
     # Read positions of each shelf position
 
     scan_result = sio.read_lines_until("o", max_attempts=3, timeout_per_message=10000)
     logging.info("Scan result = {}".format(",".join(scan_result)))
+
+    if len(scan_result) == 0 or scan_result[-1] != "o":
+        logging.error("Robot scan failed due to timeout. Got response {}".format(scan_result))
+        return
 
     try:
         pos_ints = []
@@ -156,6 +184,7 @@ def scan():
     except ValueError:
         logging.exception("Failed to interpret scan result: got strings that could not be parsed into ints")
 
+    logging.info("Scanning complete")
 
 
 @socketio.on("origin")
