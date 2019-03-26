@@ -131,7 +131,8 @@ void doJob(){
 void scan(){
     int v = angles[1];
     int h = angles[0];
-    int d = -5500;
+    int d = -5000;
+    Serial.println((String)v);
     if(v > d){
         if(-(v-d) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
@@ -142,7 +143,7 @@ void scan(){
         }
     }else if(h < 950){
         motorStop(1);
-        motorForward(0, HORIZTAL_MIN);
+        motorBackward(0, HORIZTAL_MIN);
         if(irSensor == 0) detect();
     }else{
       for(int i = 0; i < 4; i++) items[i] = 0;
@@ -157,7 +158,7 @@ void origin(){
     //Read from buttons
     int x = digitalRead(3);
     int y = digitalRead(5);
-    if(x == 1) motorBackward(0, HORIZTAL_ORG);
+    if(x == 1) motorForward(0, HORIZTAL_ORG);
     else motorStop(0);
     if(y == 1) motorForward(1, VERTICAL_ORG);
     else motorStop(1);
@@ -344,7 +345,7 @@ void test(){
       counter++;
     }
     else{
-      job = "0";
+      //job = "0";
       counter = 0;
       orders.concat("e");
     }
@@ -354,7 +355,7 @@ void test(){
 void endTest(){
     for(int i = 0; i < 4; i++) Serial.println( (String) stats[i] + ", ");
     for(int i = 0; i < 4; i++) stats[i] = 0;
-    job = "0";
+    //job = "0";
 }
 
 void extendArm(){

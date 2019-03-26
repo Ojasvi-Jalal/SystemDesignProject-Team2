@@ -1,3 +1,4 @@
+/*
 //Keeping track of the angles of up to 6 motors (we are only using three, but the readings give the six of them)
 int angles[6] = {};
 
@@ -33,3 +34,4 @@ int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
 int HORIZTAL_MIN = 80;
 int HORIZTAL_ORG = 80;
+*/
