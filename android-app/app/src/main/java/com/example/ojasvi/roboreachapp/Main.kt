@@ -50,7 +50,8 @@ class Main : AppCompatActivity() {
     private lateinit var sio: Socket
     private var host: String = ""
     private var shelves: MutableList<Shelf> = mutableListOf()
-    private lateinit var alertDialog: AlertDialog
+    lateinit var alertDialog: AlertDialog
+    private val lookupDatabase = LinkedHashMap<String, MutableList<String>>()
     lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,6 +143,7 @@ class Main : AppCompatActivity() {
             runOnUiThread{ progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
+            Log.d("SIO", "retrieve_result success=$success")
             if (success != null && !success) { // failure
                 val error: String = response.getString("error")
                 Log.d("SIO", "retrieve_result ERROR: $error")
@@ -160,6 +162,7 @@ class Main : AppCompatActivity() {
             runOnUiThread{ progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
+            Log.d("SIO", "store_result success=$success")
             if (success != null && !success) { // failure
                 val error: String = response.getString("error")
                 Log.d("SIO", "store_result ERROR: $error")
@@ -263,9 +266,13 @@ class Main : AppCompatActivity() {
         sio.emit("remove_item", arg)
     }
 
-    fun retrieveItem(pos: String) {
+    fun retrieveItem(pos: String, itemName: String?) {
         Log.d("SIO", "Retrieving item in position $pos")
         val arg = JSONObject().put("pos", pos.toIntOrNull())
+        if(!lookupDatabase.containsKey("Recents"))
+            lookupDatabase["Recents"] = mutableListOf()
+        if(itemName != null)
+            lookupDatabase["Recents"]?.add(itemName)
         sio.emit("retrieve_item", arg)
     }
 
@@ -311,6 +318,7 @@ class Main : AppCompatActivity() {
 
             val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
             val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
+            val largeSwitch: Switch? = alertDialog.findViewById(R.id.large_switch)
 
             if(expiryField != null) {
 //                val listener = MaskedTextChangedListener("[0000]-[00]-[00]", expiryField)
@@ -358,7 +366,7 @@ class Main : AppCompatActivity() {
                     progressDialog = indeterminateProgressDialog("Storing item...")
                     progressDialog.show()
                     //progressDialog.setCancelable(false)
-                    sendItem(newItem, progressDialog)
+                    sendItem(newItem, largeSwitch!!.isChecked, progressDialog)
                 }
 
             }
@@ -425,8 +433,7 @@ class Main : AppCompatActivity() {
         val lookupButton = alertDialog.findViewById<Button>(R.id.quickLookupButton)
         lookupButton?.setOnClickListener {
             // TODO: fill this hashmap with more values
-            alertDialog.dismiss()
-            val lookupDatabase = LinkedHashMap<String, MutableList<String>>()
+            //alertDialog.dismiss()
             lookupDatabase["Food"] = mutableListOf()
             lookupDatabase["Food"]?.add("Orange")
             lookupDatabase["Food"]?.add("Kiwi")
@@ -441,7 +448,7 @@ class Main : AppCompatActivity() {
             val categoriesView = pickerDialog.findViewById<RecyclerView>(R.id.categories)
             val itemsView = pickerDialog.findViewById<RecyclerView>(R.id.items)
             categoriesView?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-            categoriesView?.adapter = CategoryAdapter(lookupDatabase, itemsView)
+            categoriesView?.adapter = CategoryAdapter(lookupDatabase, itemsView, alertDialog, pickerDialog)
         }
     }
 
@@ -458,12 +465,17 @@ class Main : AppCompatActivity() {
         }
     }
 
-    private fun sendItem(item: Item, progressDialog: ProgressDialog) {
+    private fun sendItem(item: Item, large: Boolean, progressDialog: ProgressDialog) {
+
         // Find a free shelf section:
         var freeSections: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()
         // TODO: check if below is required
         // Takes out shelf 0 (origin?)
         freeSections = freeSections?.filter { it.name != "0" }
+
+        if(large) // allow only large sections 5 or 6 if true
+            freeSections = freeSections?.filter { it.name == "5" || it.name == "6" }
+
         if (freeSections != null && freeSections.isNotEmpty()) {
             val freeSection = freeSections?.get(0)
             freeSection?.item = item

@@ -28,7 +28,7 @@ class InventoryAdapter(private val sections: List<ShelfSection>, private val dia
             dialog.dismiss()
             main.progressDialog = holder.itemView.context.indeterminateProgressDialog("Retrieving item...")
             main.progressDialog.show()
-            main.retrieveItem(sections[position].name)
+            main.retrieveItem(sections[position].name, sections[position].item?.title)
         }
     }
 
