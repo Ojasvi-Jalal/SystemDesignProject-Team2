@@ -12,8 +12,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.HORIZONTAL
+import android.support.v7.widget.RecyclerView.VERTICAL
 import android.text.InputType
 import android.util.Log
 import android.view.View
@@ -438,15 +441,18 @@ class Main : AppCompatActivity() {
             lookupDatabase["Food"]?.add("Orange")
             lookupDatabase["Food"]?.add("Kiwi")
             lookupDatabase["Food"]?.add("Pear")
+            lookupDatabase["Food"]?.add("Garlic")
             lookupDatabase["Drinks"] = mutableListOf()
             lookupDatabase["Drinks"]?.add("Coke")
             lookupDatabase["Drinks"]?.add("Juice")
             lookupDatabase["Drinks"]?.add("Water")
+            lookupDatabase["Drinks"]?.add("Energy drink")
             val pickerDialog = AlertDialog.Builder(this)
                     .setView(R.layout.activity_picker)
                     .show()
             val categoriesView = pickerDialog.findViewById<RecyclerView>(R.id.categories)
             val itemsView = pickerDialog.findViewById<RecyclerView>(R.id.items)
+            itemsView?.addItemDecoration(DividerItemDecoration(this, VERTICAL))
             categoriesView?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
             categoriesView?.adapter = CategoryAdapter(lookupDatabase, itemsView, alertDialog, pickerDialog)
         }
