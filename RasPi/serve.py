@@ -57,10 +57,10 @@ def db_remove(pos: int):
         logging.error("Failed to remove item at pos {}: pos not in range".format(pos))
         return False
 
-def send_item_retrieved(success, error_message = False):
+def send_item_retrieved(success, error_message = None):
     emit("retrieve_result", {"success": success, "error": error_message})
     
-def send_item_stored(success, error_message = False):
+def send_item_stored(success, error_message = None):
     emit("store_result", {"success": success, "error": error_message})
 
 def update_db_after_scan(existing_indexes):
@@ -99,7 +99,8 @@ def add_item(item):
     if "pos" not in item:
         emit("add_item", {"success": False, "message": "No pos on item"})
         return 
-
+    pos = item.get("pos")
+    
     # Check if the shelf compartment is free
     # It's important to use the lock here as only one thread should access the file at once
     with lock:
@@ -120,7 +121,7 @@ def add_item(item):
 
     logging.info("Waiting for robot to store item and return to origin...")
     # Finally wait for the robot to return back to the origion
-    res = sio.read_lines_until("o", max_attempts=2, timeout_per_message=30000)
+    res = sio.read_lines_until("o", timeout_per_message=STORE_TIMEOUT)
     if res is None or len(res) == 0 or res[-1] != "o":
         logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
         send_item_stored(False, "Timeout")
@@ -132,7 +133,7 @@ def add_item(item):
 
 @socketio.on("retrieve_item")
 def retrieve_item(json):
-    pos = json.get("pos")    
+    pos = json.get("pos")
     db_remove(pos)
 
     logging.info("Got request to retieve item at position {} - sending command r{}".format(pos, pos))
@@ -143,8 +144,8 @@ def retrieve_item(json):
     emit("get_data", db_get_all())
 
     # Read the status of the robot. This waits until it returns to origin (when it sends the character 'o')
-    logging.info("Waiting for robot to return back to origion")
-    res = sio.read_lines_until("o", max_attempts=2, timeout_per_message=30000)
+    logging.info("Waiting for robot to return back to origin")
+    res = sio.read_lines_until("o", timeout_per_message=RETRIVE_TIMEOUT)
     if res is None or len(res) == 0 or res[-1] != "o":
         # Timeout occured if we didn't recieve a 'o' after a while
         logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))

@@ -1,2 +1,2 @@
 zip -r sdp_pi.zip RasPi
-scp sdp_pi.zip student@gabumon:/home/student/
+scp sdp_pi.zip pi@gabumon:/home/pi/

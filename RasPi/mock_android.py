@@ -26,6 +26,17 @@ def add_item(res):
     print("add_item")
     print(res)
 
+@sio.on("retrieve_result")
+def retrieve_result(res):
+    print("RETRIEVE RESULT")
+    print(res)
+
+@sio.on("store_result")
+def retrieve_result(res):
+    print("STORE RESULT")
+    print(res)
+
+
 def main():
     if len(sys.argv) == 1:
         url = "0.0.0.0:8000"
@@ -36,9 +47,9 @@ def main():
     print("Connecting to {}".format(full_url))
     
     sio.connect(full_url)
-    sio.emit("add_item", {"pos": 3, "name": "Grape"})
-    sio.emit("add_item", {"pos": 3, "name": "Pineapple"})
-    sio.emit("scan")
+    # sio.emit("add_item", {"pos": 3, "name": "Grape"})
+    # sio.emit("add_item", {"pos": 3, "name": "Pineapple"})
+    sio.emit("add_item", {"pos": 2, "name": "test"})
 
     # # INVALID returns error as no position is given
     # print(">Failed move to:")

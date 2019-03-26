@@ -37,7 +37,7 @@ class SerialIO:
     def write_char(self, char: str) -> bool:
         logging.debug("Sending to serial device: {}".format(char))
         if len(char) != 1:
-            log.error("Tried to send char to serial device with length {}, must have length of 1".format(len(char)))            
+            logging.error("Tried to send char to serial device with length {}, must have length of 1".format(len(char)))            
             return False
 
         # Convert to ASCII value, so for example "l" -> 108
@@ -74,10 +74,9 @@ class SerialIO:
                 logging.info("wait_for_next_line timed out after {}ms".format(time_now_ms - time_started_ms))
                 return None # Indicate timeout
         
-    def read_lines_until(self, text, timeout_per_message=10000, max_attempts=10):
+    def read_lines_until(self, text, timeout_per_message=10000):
         lines = []
         time_started = time.time()
-        attempts = 0
         while True:
             res = self.wait_for_next_line(timeout_per_message)
             logging.info("read_lines_until: read line {}".format(res))
@@ -86,14 +85,10 @@ class SerialIO:
                 return lines
             elif res is None:
                 # Timeout occured
-                logging.info("timeout occured at attempts = {}/{}".format(attempts, max_attempts))
-                if attempts >= max_attempts:
-                    logging.info("read_lines_until timeout due to max_attempts reached of {}".format(max_attempts))
-                    return lines     # We can tell that it timed out due to the last element != text
-                attempts += 1
+                logging.info("timeout occured after {}ms".format(timeout_per_message))
+                return lines # We know timeout occured as final item != text
             elif attempts != "":
                 # Ignore empty new lines sent
-                attempts = 0
                 lines.append(res)
 
     def data_available(self):

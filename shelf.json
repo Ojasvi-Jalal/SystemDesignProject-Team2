@@ -1,0 +1,26 @@
+{
+    "4": {
+        "barcode": null,
+        "expiryDate": null,
+        "itemName": null,
+        "shelfID": 4
+    },
+    "5": {
+        "barcode": null,
+        "expiryDate": null,
+        "itemName": null,
+        "shelfID": 5
+    },
+    "6": {
+        "barcode": null,
+        "expiryDate": null,
+        "itemName": null,
+        "shelfID": 6
+    },
+    "7": {
+        "barcode": null,
+        "expiryDate": null,
+        "itemName": null,
+        "shelfID": 7
+    }
+}

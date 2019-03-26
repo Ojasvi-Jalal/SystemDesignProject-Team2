@@ -21,38 +21,8 @@
         {
             "barcode": null,
             "expiryDate": null,
-            "itemName": null,
+            "itemName": "Grape",
             "shelfID": 3
-        },
-        {
-            "barcode": null,
-            "expiryDate": null,
-            "itemName": null,
-            "shelfID": 4
-        },
-        {
-            "barcode": null,
-            "expiryDate": null,
-            "itemName": null,
-            "shelfID": 5
-        },
-        {
-            "barcode": null,
-            "expiryDate": null,
-            "itemName": null,
-            "shelfID": 6
-        },
-        {
-            "barcode": null,
-            "expiryDate": null,
-            "itemName": null,
-            "shelfID": 7
-        },
-        {
-            "barcode": null,
-            "expiryDate": null,
-            "itemName": null,
-            "shelfID": 8
         }
     ]
 }
