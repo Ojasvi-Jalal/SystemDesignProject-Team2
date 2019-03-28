@@ -180,24 +180,24 @@ class Main : AppCompatActivity() {
             }
         }
 
-        sio.on("move_to") { parameters ->
-            val response: JSONObject? = parameters[0] as? JSONObject
-            val success = response?.getBoolean("success")
-            if (success != null && !success) { // failure
-                val error: String = response.getString("message")
-                Log.d("SIO", "move_to ERROR: $error")
-                runOnUiThread {
-                    AlertDialog.Builder(this)
-                            .setTitle("Error")
-                            .setMessage(error)
-                            .setIcon(R.drawable.ic_error)
-                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
-                            .show()
-                }
-            } else { // success
-                Log.d("SIO", "move_to SUCCESS")
-            }
-        }
+//        sio.on("move_to") { parameters ->
+//            val response: JSONObject? = parameters[0] as? JSONObject
+//            val success = response?.getBoolean("success")
+//            if (success != null && !success) { // failure
+//                val error: String = response.getString("message")
+//                Log.d("SIO", "move_to ERROR: $error")
+//                runOnUiThread {
+//                    AlertDialog.Builder(this)
+//                            .setTitle("Error")
+//                            .setMessage(error)
+//                            .setIcon(R.drawable.ic_error)
+//                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+//                            .show()
+//                }
+//            } else { // success
+//                Log.d("SIO", "move_to SUCCESS")
+//            }
+//        }
 
         sio.on("scan") {parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
@@ -263,11 +263,11 @@ class Main : AppCompatActivity() {
         sio.connect()
     }
 
-    private fun removeItem(pos: String) {
-        Log.d("SIO", "Removing item in position $pos")
-        val arg = JSONObject().put("pos", pos.toIntOrNull())
-        sio.emit("remove_item", arg)
-    }
+//    private fun removeItem(pos: String) {
+//        Log.d("SIO", "Removing item in position $pos")
+//        val arg = JSONObject().put("pos", pos.toIntOrNull())
+//        sio.emit("remove_item", arg)
+//    }
 
     fun retrieveItem(pos: String, itemName: String?) {
         Log.d("SIO", "Retrieving item in position $pos")
