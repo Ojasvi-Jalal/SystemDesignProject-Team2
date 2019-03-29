@@ -8,7 +8,7 @@ using namespace std;
 #define ROTARY_NUM 6
 
 // angle is the motor's angle.
-int angle = 0;
+int angles[6] = {};
 
 void setup(){
   SDPsetup();
@@ -16,49 +16,14 @@ void setup(){
 }
 
 void loop(){
-
-    // Start moving up
-    motorBackward(1,30);
-    do{
-        // Request motor deltas
-        Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
-        if(Wire.available()){
-            Serial.print("Incoming value: ");
-            int incoming = (int8_t) Wire.read();
-            Serial.println((String) incoming);
-            for(int x = 1; x < ROTARY_NUM; x++){
-                Wire.read();
-            }
-            angle = angle + (int) incoming;
-        }
-        Serial.print("Current angle: ");
-        Serial.println((String) angle);
-        delay(200);
-
-    }while(angle > -180);
-
-    Serial.println("About to stop");
-    motorAllStop();
-    delay(3000);
-
-    motorForward(1,30);
-    do{
-        // Request motor deltas
-        Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
-        if(Wire.available()){
-            Serial.print("Incoming value: ");
-            int incoming = (int8_t) Wire.read();
-            Serial.println((String) incoming);
-            for(int x = 1; x < ROTARY_NUM; x++){
-                Wire.read();
-            }
-            angle = angle + (int) incoming;
-        }
-        Serial.print("Current angle: ");
-        Serial.println((String) angle);
-        delay(200);
-
-    }while(angle < 0);
-    motorAllStop();
-    delay(3000);
+  Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
+  if(Wire.available()){
+      Serial.print("Incoming value: ");
+      for(int x = 0; x < ROTARY_NUM; x++){
+          angles[x] += (int8_t) Wire.read();
+          Serial.print((String) angles[x] + ", ");
+      }
+      Serial.println((String) readDigitalSensorData(3));
+  }
+  delay(100);
 }

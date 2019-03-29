@@ -7,9 +7,9 @@
 void SDPsetup() {
   //Initial set up for arduino connected to the power board.
   pinMode(2,INPUT);
-  pinMode(3,INPUT_PULLUP);
+  pinMode(3,INPUT);
   pinMode(4,INPUT);
-  pinMode(5,INPUT_PULLUP);
+  pinMode(5,OUTPUT);
   pinMode(6,OUTPUT);
   pinMode(7,INPUT);
   pinMode(8,OUTPUT);
@@ -17,11 +17,11 @@ void SDPsetup() {
   pinMode(10,INPUT);
   pinMode(11,INPUT);
   pinMode(12,INPUT);
-  pinMode(13,INPUT);
+  pinMode(13,OUTPUT);
   pinMode(A0,INPUT);
   pinMode(A1,INPUT);
   pinMode(A2,INPUT);
-  pinMode(A3,INPUT);
+  pinMode(A3,INPUT_PULLUP);
   digitalWrite(8,HIGH); //Pin 8 must be high to turn the radio on!
   Serial.begin(115200); // Serial rate the radio is configured to.
   Wire.begin(); //Makes arduino master of the I2C line.
