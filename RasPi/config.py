@@ -13,3 +13,12 @@ BAUD_RATE = 115200
 # be longer that timeout if characters are being sent very slowly
 RETRIVE_TIMEOUT = 10000
 STORE_TIMEOUT = 10000
+
+# Data pin used by PIR
+PIR_DATA_PIN = 15
+
+# Max rate of scans in seconds. So 60 would be a max scan rate of once per second 
+MAX_SCAN_RATE_SEC = 60
+
+# How long to wait (in seconds) after last motion detected until rescan takes place
+DELAY_BEFORE_SCAN_SEC = 5
