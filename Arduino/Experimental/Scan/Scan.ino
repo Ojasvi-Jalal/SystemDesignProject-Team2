@@ -13,12 +13,11 @@ using namespace std;
 int angles[6] = {};
 
 //Variables for the sensors data
-int distance = 0;
 int irSensor = 1;
 
 // defines pins numbers for the ultrasonic sensor
-const int trigPin = 3;
-const int echoPin = A3;
+const int trigPin = 9;
+const int echoPin = A1;
 
 // defines variables for the ultrasonic sensor
 long duration;

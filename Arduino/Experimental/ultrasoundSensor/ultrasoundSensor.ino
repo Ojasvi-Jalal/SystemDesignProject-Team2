@@ -11,8 +11,8 @@
 #include <string.h>
 
 // defines pins numbers
-const int trigPin = 3;
-const int echoPin = A3;
+const int trigPin = 9;
+const int echoPin = A1;
 
 // defines variables
 long duration;
