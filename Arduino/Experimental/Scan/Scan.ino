@@ -11,18 +11,38 @@ using namespace std;
 
 // angle is the motor's angle.
 int angles[6] = {};
+
+//Variables for the sensors data
+int distance = 0;
 int irSensor = 1;
+
+// defines pins numbers for the ultrasonic sensor
+const int trigPin = 3;
+const int echoPin = A3;
+
+// defines variables for the ultrasonic sensor
+long duration;
+int distance;
+
+//Job the robot has to do
 char job = 'o';
+
+//Shelf the robot has to go to
 int shelf = 0;
+
+//Shelf storage
 int items[4] = {};
 int stats[4] = {};
 int counter = 0;
+
+//Coordinates of the shelf, vertically and horizontally
 int angleShelf[4] = {250, 440, 632, 830};
 int verticality[2] = {-1500, -4700};
 String orders;
 int reset = 0;
 bool armOut = 0;
 
+//Setting the speed of the movement
 int VERTICAL_MIN = 100;
 int VERTICAL_ORG = 100;
 int HORIZTAL_MIN = 80;
@@ -30,6 +50,9 @@ int HORIZTAL_ORG = 80;
 
 void setup(){
     SDPsetup();
+    //Prepare the pins for the ultrasonic sensor
+    pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+    pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
     //Serial.println("Started");
 }
@@ -46,6 +69,7 @@ void loop(){
     }
     //Serial.print(((String) readDigitalSensorData(2)) + ", ");
     irSensor = readDigitalSensorData(3);
+    readUltrasound();
     if (readDigitalSensorData(2) == 0){
         reset++;
     }else{
@@ -144,7 +168,7 @@ void scan(){
     }else if(h < 950){
         motorStop(1);
         motorBackward(0, HORIZTAL_MIN);
-        if(irSensor == 0) detect();
+        if(irSensor == 0 || (distance>=12 && distance<=25)) detect();
     }else{
       for(int i = 0; i < 4; i++) items[i] = 0;
         Serial.println("e");
@@ -370,21 +394,38 @@ void retractArm(){
     //armOut = 1;
 }
 
-void goVertical(int angle){
-    //vertical position of the robot
-    int v = angles[1];
+void readUltrasound(){
+    // Clears the trigPin
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
 
-    if(v > angle){
-        if(-(v-angle) >= VERTICAL_MIN){
-            motorBackward(1, VERTICAL_MIN);
-        }else if((v-angle) < 100){
-            motorBackward(1, -(v-angle));
-        }else{
-            motorBackward(1, 100);
-        }
-    }
+    // Sets the trigPin on HIGH state for 10 micro seconds
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+
+    // Reads the echoPin, returns the sound wave travel time in microseconds
+    duration = pulseIn(echoPin, HIGH);
+
+    // Calculating the distance
+    distance= duration*0.034/2;
 }
 
-void goHorizontal(int angle){
-
-}
+// void goVertical(int angle){
+//     //vertical position of the robot
+//     int v = angles[1];
+//
+//     if(v > angle){
+//         if(-(v-angle) >= VERTICAL_MIN){
+//             motorBackward(1, VERTICAL_MIN);
+//         }else if((v-angle) < 100){
+//             motorBackward(1, -(v-angle));
+//         }else{
+//             motorBackward(1, 100);
+//         }
+//     }
+// }
+//
+// void goHorizontal(int angle){
+//
+// }
