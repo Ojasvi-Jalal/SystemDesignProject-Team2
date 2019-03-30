@@ -73,6 +73,7 @@ void loop(){
     irSensor = readDigitalSensorData(3);
     readUltrasound();
     if(distance < 10) holding = true;
+    else holding = false;
 
     //Serial.print(((String) digitalRead(3)) + ", ");
     //Serial.print(((String) digitalRead(5)) + ", ");
