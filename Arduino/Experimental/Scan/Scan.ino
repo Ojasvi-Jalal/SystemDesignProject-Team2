@@ -35,8 +35,9 @@ int stats[4] = {};
 int counter = 0;
 
 //Coordinates of the shelf, vertically and horizontally
-int angleShelf[4] = {250, 440, 632, 830};
-int verticality[2] = {-1500, -4700};
+int angleShelf[4] = {380, 575, 583, 987};
+int angleShelfDown [2] = {502, 865};
+int verticality[2] = {235, 4700};
 String orders;
 int reset = 0;
 bool armOut = 0;
@@ -62,7 +63,7 @@ void loop(){
     if(Wire.available()){
         //Serial.print("Incoming value: ");
         for(int x = 0; x < ROTARY_NUM; x++){
-            angles[x] += (int8_t) Wire.read();
+            angles[x] -= (int8_t) Wire.read();
             //Serial.print((String) angles[x] + ", ");
         }
     }
@@ -156,15 +157,15 @@ void scan(){
     int h = angles[0];
     int d = -5000;
     Serial.println((String)v);
-    if(v > d){
-        if(-(v-d) < VERTICAL_MIN){
+    if(v < d){
+        if((d-v) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
-        }else if((v-d) < 100){
-            motorBackward(1, -(v-d));
+        }else if((d-v) < 100){
+            motorBackward(1, (d-v));
         }else{
             motorBackward(1, 100);
         }
-    }else if(h < 950){
+    }else if(h < 1000){
         motorStop(1);
         motorBackward(0, HORIZTAL_MIN);
         if(irSensor == 0 || (distance>=12 && distance<=25)) detect();
@@ -214,11 +215,11 @@ void goToShelf(int vertical){
     else motorStop(0);
 
     //Vertical slowing down
-    if(v > vertical){
-        if(-(v-vertical) < VERTICAL_MIN){
+    if(v < vertical){
+        if((vertical-v) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
-        }else if((v-vertical) < 100){
-            motorBackward(1, -(v-vertical));
+        }else if((vertical-v) < 100){
+            motorBackward(1, (vertical-v));
         }else{
             motorBackward(1, 100);
         }
