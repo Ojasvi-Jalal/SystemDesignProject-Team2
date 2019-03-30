@@ -22,6 +22,8 @@ const int echoPin = A1;
 // defines variables for the ultrasonic sensor
 long duration;
 int distance;
+bool holding;
+int level = 0;
 
 //Job the robot has to do
 char job = 'o';
@@ -30,17 +32,17 @@ char job = 'o';
 int shelf = 0;
 
 //Shelf storage
-int items[4] = {};
-int stats[4] = {};
+int items[6] = {};
+int stats[6] = {};
 int counter = 0;
 
 //Coordinates of the shelf, vertically and horizontally
-int angleShelf[4] = {380, 575, 583, 987};
-int angleShelfDown [2] = {502, 865};
-int verticality[2] = {235, 4700};
+int angleShelf[6] = {380, 575, 783, 987, 502, 865};
+int verticality[2] = {235, 3600};
+const int up = 1500;
 String orders;
 int reset = 0;
-bool armOut = 0;
+bool armOut = false;
 
 //Setting the speed of the movement
 int VERTICAL_MIN = 100;
@@ -70,14 +72,7 @@ void loop(){
     //Serial.print(((String) readDigitalSensorData(2)) + ", ");
     irSensor = readDigitalSensorData(3);
     readUltrasound();
-    if (readDigitalSensorData(2) == 0){
-        reset++;
-    }else{
-        reset = 0;
-    }if (reset > 50){
-        reset = 0;
-        if (orders.charAt(orders.length() - 1) != 'n');  //orders.concat('n');
-    }
+    if(distance < 10) holding = true;
 
     //Serial.print(((String) digitalRead(3)) + ", ");
     //Serial.print(((String) digitalRead(5)) + ", ");
@@ -139,7 +134,7 @@ void doJob(){
             origin();
             break;
         case 'u':
-            up();
+            goUp();
             break;
         case 'r':
             retrieveItem();
@@ -153,33 +148,58 @@ void doJob(){
 }
 
 void scan(){
+    retractArm();
+    if(holding){
+        Serial.println("x");
+        Serial.println("Can't Scan with hands full!");
+        level = 0;
+        job = 'o';
+    }
     int v = angles[1];
     int h = angles[0];
-    int d = -5000;
-    Serial.println((String)v);
-    if(v < d){
-        if((d-v) < VERTICAL_MIN){
+    if (level == 0) level = 2;
+    int vaim = verticality[level-1]+up;
+    if(v < vaim && level == 2){
+        if((vaim-v) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
-        }else if((d-v) < 100){
-            motorBackward(1, (d-v));
+        }else if((vaim-v) < 100){
+            motorBackward(1, (vaim-v));
         }else{
             motorBackward(1, 100);
         }
-    }else if(h < 1000){
+    }else if(v > vaim && level == 1){
+        if((v-vaim) < VERTICAL_MIN){
+            motorForward(1, VERTICAL_MIN);
+        }else if((v-vaim) < 100){
+            motorForward(1, (v-vaim));
+        }else{
+            motorForward(1, 100);
+        }
+    }else if(level == 2 && h < 1000){
         motorStop(1);
         motorBackward(0, HORIZTAL_MIN);
-        if(irSensor == 0 || (distance>=12 && distance<=25)) detect();
+        if(irSensor == 0 || (distance>=12 && distance<=20)) detect();
+    }else if(level == 1 && h > 200){
+        motorStop(1);
+        motorForward(0, HORIZTAL_MIN);
+        if(irSensor == 0 || (distance>=12 && distance<=20)) detect();
     }else{
-      for(int i = 0; i < 4; i++) items[i] = 0;
-        Serial.println("e");
+        for(int i = 0; i < 6; i++) items[i] = 0;
         motorStop(0);
-        job = 'o';
+        if (level == 1){
+            level = 0;
+            job = 'o';
+            Serial.println("e");
+        }else{
+            level = 1;
+        }
     }
 }
 
 void origin(){
     //Serial.print("ORIGINATING");
     //Read from buttons
+    retractArm();
     int x = digitalRead(3);
     int y = digitalRead(5);
     if(x == 1) motorForward(0, HORIZTAL_ORG);
@@ -190,13 +210,14 @@ void origin(){
       job = '0';
       delay(200);
       Serial.println("o");
-      //extendArm();
+      extendArm();
     }
     angles[0] = 0;
     angles[1] = 0;
 }
 
 void goToShelf(int vertical){
+    retractArm();
     int v = angles[1];
     int h = angles[0];
 
@@ -340,10 +361,12 @@ int getVangle(){
 
 void detect(){
     int pos = angles[0];
-    if(pos > 214 && pos < 285) setItem(0);
-    if(pos > 416 && pos < 479) setItem(1);
-    if(pos > 609 && pos < 679) setItem(2);
-    if(pos > 816 && pos < 884) setItem(3);
+    if(pos > 360 && pos < 400  && level == 2) setItem(0);
+    if(pos > 555 && pos < 595  && level == 2) setItem(1);
+    if(pos > 763 && pos < 803  && level == 2) setItem(2);
+    if(pos > 967 && pos < 1007 && level == 2) setItem(3);
+    if(pos > 835 && pos < 935  && level == 1) setItem(4);
+    if(pos > 450 && pos < 550  && level == 1) setItem(5);
 }
 
 void setItem(int i){
@@ -354,9 +377,9 @@ void setItem(int i){
     }
 }
 
-void up(){
+void goUp(){
     //Serial.print("UP");
-    if(angles[1] > -1000) motorBackward(1, 100);
+    if(angles[1] < 2000) motorBackward(1, 100);
     else{
         motorStop(1);
         job = '0';
@@ -377,21 +400,24 @@ void test(){
 }
 
 void endTest(){
-    for(int i = 0; i < 4; i++) Serial.println( (String) stats[i] + ", ");
-    for(int i = 0; i < 4; i++) stats[i] = 0;
+    for(int i = 0; i < 6; i++) Serial.println( (String) stats[i] + ", ");
+    for(int i = 0; i < 6; i++) stats[i] = 0;
     //job = "0";
 }
 
 void extendArm(){
+    if(armOut) return;
     motorBackward(GRAB_MOTOR, 80);
     delay(750);
     motorAllStop();
+    armOut = true;
 }
 void retractArm(){
+    if(!armOut) return;
     motorForward(GRAB_MOTOR, 80);
     delay(750);
     motorAllStop();
-    //armOut = 1;
+    armOut = false;
 }
 
 void readUltrasound(){
