@@ -222,16 +222,16 @@ void goToShelf(int vertical){
     int v = angles[1];
     int h = angles[0];
 
-    int horizontal = angleShelf[shelf%4];
+    int horizontal = angleShelf[shelf];
 
     //Horizontal slowing down
     if(h < horizontal){
-        if((h-horizontal) < HORIZTAL_MIN){
-            motorForward(0, HORIZTAL_MIN);
-        }else if((h-horizontal) < 100){
-            motorForward(0, (h-horizontal));
+        if((horizontal-h) < HORIZTAL_MIN){
+            motorBackward(0, HORIZTAL_MIN);
+        }else if((horizontal-h) < 100){
+            motorBackward(0, (horizontal-h));
         }else{
-            motorForward(0, 100);
+            motorBackward(0, 100);
         }
     }
     else motorStop(0);
@@ -250,13 +250,20 @@ void goToShelf(int vertical){
 }
 
 void retrieveItem(){
+    if(holding){
+        Serial.println("x");
+        Serial.println("Can't Retrieve with hands full!");
+        job = 'o';
+        return;
+    }
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
     //Serial.println((String) shelf + " getting to");
-    int toH = angleShelf[shelf%4];
+    int toH = angleShelf[shelf];
     //Serial.println("toH: " + (String) toH);
     int toV = verticality[0];
+    if(shelf >= 4) toV = verticality[1];
     //Serial.println((String) shelf);
     if(shelf>3){
         toV = verticality[1];
@@ -305,6 +312,12 @@ void retrieveItem(){
 }
 
 void storeItem(){
+    if((!holding) && (!armOut)){
+        Serial.println("x");
+        Serial.println("Can't Store with hands empty!");
+        job = 'o';
+        return;
+    }
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
@@ -366,8 +379,8 @@ void detect(){
     if(pos > 555 && pos < 595  && level == 2) setItem(1);
     if(pos > 763 && pos < 803  && level == 2) setItem(2);
     if(pos > 967 && pos < 1007 && level == 2) setItem(3);
-    if(pos > 835 && pos < 935  && level == 1) setItem(4);
-    if(pos > 450 && pos < 550  && level == 1) setItem(5);
+    if(pos > 835 && pos < 935  && level == 1) setItem(5);
+    if(pos > 450 && pos < 550  && level == 1) setItem(4);
 }
 
 void setItem(int i){
@@ -411,6 +424,7 @@ void extendArm(){
     motorBackward(GRAB_MOTOR, 80);
     delay(750);
     motorAllStop();
+    delay(50);
     armOut = true;
 }
 void retractArm(){
@@ -418,6 +432,7 @@ void retractArm(){
     motorForward(GRAB_MOTOR, 80);
     delay(750);
     motorAllStop();
+    delay(50);
     armOut = false;
 }
 
