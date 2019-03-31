@@ -42,7 +42,7 @@ int verticality[2] = {235, 3600};
 const int up = 1500;
 String orders;
 int reset = 0;
-bool armOut = false;
+bool armOut = true;
 
 //Setting the speed of the movement
 int VERTICAL_MIN = 100;
@@ -64,10 +64,16 @@ void loop(){
 
     if(Wire.available()){
         //Serial.print("Incoming value: ");
-        for(int x = 0; x < ROTARY_NUM; x++){
-            angles[x] -= (int8_t) Wire.read();
+        angles[0] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        angles[1] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        //for(int x = 0; x < ROTARY_NUM; x++){
+        //    angles[x] -= (int8_t) Wire.read();
             //Serial.print((String) angles[x] + ", ");
-        }
+        //}
     }
     //Serial.print(((String) readDigitalSensorData(2)) + ", ");
     irSensor = readDigitalSensorData(3);
