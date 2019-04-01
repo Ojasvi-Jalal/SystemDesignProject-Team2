@@ -19,9 +19,9 @@ WAIT_FOR_RESPONSE_MS=100
 # IMPORTANT: All times in milliseconds
 # Timeout is how long to wait max for each character sent by serial. So total time could
 # be longer that timeout if characters are being sent very slowly
-RETRIVE_TIMEOUT = 10000
-STORE_TIMEOUT = 10000
-SCAN_TIMEOUT = 10000			# Per message
+RETRIVE_TIMEOUT = 1000
+STORE_TIMEOUT = 1000
+SCAN_TIMEOUT = 2000			# Per message
 # Data pin used by PIR
 PIR_DATA_PIN = 15
 
@@ -42,3 +42,7 @@ UNKNOWN_ITEM_NAME = "Unknown"
 # Lock file created to stop PIR sensor from running when shelf is moving
 # This prevents the PIR sensor from trying to scan from movement detected by movement
 PIR_BLOCK_FILE = expanduser("~/.disable_pir")
+
+SCAN_TIMEOUT_MESSAGE = "Timeout"
+STORE_TIMEOUT_MESSAGE = "Timeout"
+RETRIEVE_TIMEOUT_MESSAGE = "Timeout"

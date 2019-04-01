@@ -45,7 +45,7 @@ def retrieve_result(res):
 
 def main():
     if len(sys.argv) == 1:
-        url = "0.0.0.0:8000"
+        url = "129.215.3.128:8000"
     else:
         url = sys.argv[1]
 
@@ -57,7 +57,9 @@ def main():
     # sio.emit("add_item", {"pos": 3, "name": "Pineapple"})
     #sio.emit("add_item", {"pos": 2, "name": "test"})
 
-    sio.emit("scan")
+    print(sio.emit("scan_result", {"thing": "THING", "success": False}))
+    sio.wait()
+
     # # INVALID returns error as no position is given
     # print(">Failed move to:")
     # sio.emit("move_to", {})
@@ -111,7 +113,6 @@ def main():
     # sio.emit("get_data")
 
 
-    sio.wait()
 
 if __name__ == "__main__":
     main()

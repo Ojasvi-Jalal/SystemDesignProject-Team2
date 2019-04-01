@@ -86,6 +86,7 @@ def update_db_after_scan(existing_indexes):
 @socketio.on("get_data")
 def get_data():
     emit("get_data", db_get_all())
+    send_scan_complete(False)
 
 @socketio.on("add_item")
 def add_item(item):
@@ -119,7 +120,7 @@ def add_item(item):
         res = sio.read_lines_until("o", timeout_per_message=STORE_TIMEOUT)
         if res is None or len(res) == 0 or res[-1] != "o":
             logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
-            send_item_stored(False, "Timeout")
+            send_item_stored(False, STORE_TIMEOUT_MESSAGE)
             return 
 
         # Send success back to the android app
@@ -145,7 +146,7 @@ def retrieve_item(json):
         if res is None or len(res) == 0 or res[-1] != "o":
             # Timeout occured if we didn't recieve a 'o' after a while
             logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))
-            send_item_retrieved(False, "Timeout")
+            send_item_retrieved(False, RETRIEVE_TIMEOUT_MESSAGE)
             return
 
         # Everything has completed succcessfully, indicate success to Android app
@@ -161,7 +162,7 @@ def scan():
         send_scan_complete(True)
     else:
         logging.info("Sending scan failed message to Android")
-        send_scan_complete(False)
+        send_scan_complete(False, SCAN_TIMEOUT_MESSAGE)
 
 def do_scan():
     with DisablePir():
@@ -209,8 +210,8 @@ if __name__ == '__main__':
 
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().setLevel(logging.DEBUG)
-    log = logging.getLogger('werkzeug')
-    log.setLevel(logging.ERROR)
+    # log = logging.getLogger('werkzeug')
+    # log.setLevel(logging.ERROR)
 
 
     parser = argparse.ArgumentParser()
