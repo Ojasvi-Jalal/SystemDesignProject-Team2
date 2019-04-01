@@ -166,16 +166,19 @@ def horizontal_move(json):
 
 @socketio.on("scan")
 def scan():
-    logging.info("Got request to perform scan. Sending scan command: n")
+    logging.info("Got request from Android to perform scan. Sending scan command: n")
+    do_scan()
+
+def do_scan():
     sio.write_char("n")
     # Read positions of each shelf position
 
-    scan_result = sio.read_lines_until("o", max_attempts=3, timeout_per_message=10000)
+    scan_result = sio.read_lines_until("o", timeout_per_message=SCAN_TIMEOUT)
     logging.info("Scan result = {}".format(",".join(scan_result)))
 
     if len(scan_result) == 0 or scan_result[-1] != "o":
         logging.error("Robot scan failed due to timeout. Got response {}".format(scan_result))
-        return
+        return False
 
     try:
         pos_ints = []
@@ -184,27 +187,27 @@ def scan():
         update_db_after_scan(pos_ints)
     except ValueError:
         logging.exception("Failed to interpret scan result: got strings that could not be parsed into ints")
+        return False
 
     logging.info("Scanning complete")
+    return True
 
 
 @socketio.on("origin")
 def origin():
     sio.write_char("o")
+ 
+
+@app.route('/pir_scan')
+def index():
+    logging.info("pir_scan: performing scan as requested by PIR sensor")
+    if do_scan():
+        return "Success"
+    else:
+        return "Failed"
 
 def main_run_once():
-    pos = 5
-
-    # print("Waiting for serial...")
-    # lines = sio.read_lines_until("END", max_attempts=3)
-    # print("DONE!")
-    # print(lines)
-    # while True:
-    #     next = sio.wait_for_next_line()
-    #     if next != "\r\n" and next != "":
-    #         print(">>{} ".format(next))
-
-    #  scan()
+    pass
 
 if __name__ == '__main__':
     global sio

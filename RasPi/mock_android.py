@@ -3,6 +3,7 @@
 
 import socketio
 import sys
+import requests
 
 sio = socketio.Client()
 
@@ -50,6 +51,9 @@ def main():
     # sio.emit("add_item", {"pos": 3, "name": "Grape"})
     # sio.emit("add_item", {"pos": 3, "name": "Pineapple"})
     sio.emit("add_item", {"pos": 2, "name": "test"})
+
+    # Try sending GET request
+    print(requests.get("http://{}/pir_scan".format(url)).text)
 
     # # INVALID returns error as no position is given
     # print(">Failed move to:")
