@@ -11,8 +11,9 @@ the robot. The Raspberry Pi communicates with the Arduino via the RF dongle.
 
 1. Plug in the power supply to start the raspberry pi. It may take up to two minutes for the pi to start
 2. Insert the RF dongle into the PI
-3. From a DICE computer, SSH into the raspberry pi using the command `ssh student@gabumon`. The password is `password`
-4. At the Raspberry PI command line, enter the following commands to start the Flask server
+3. Plug in the PIR sensor into GPIO ports (see below picture)
+4. From a DICE computer, SSH into the raspberry pi using the command `ssh student@gabumon`. The password is `password`
+5. At the Raspberry PI command line, enter the following commands to start the Flask server
 
 ```bash
 cd SystemDesignProject-Team2
@@ -22,6 +23,11 @@ python3 RasPi/Networking/serve.py
 Once you see the line `Running on http://0.0.0.0:8000/ (Press CTRL+C to quit)` printed to the console
 then the server is started and ready to start receiving requests.
 
+### Setup PIR
+
+Plug in the PIR sensor into the GPIO ports:
+
+![img](pir.png)
 
 ## SocketIO API
 
