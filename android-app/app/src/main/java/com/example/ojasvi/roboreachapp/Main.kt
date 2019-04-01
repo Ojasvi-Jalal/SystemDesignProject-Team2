@@ -199,6 +199,27 @@ class Main : AppCompatActivity() {
 //            }
 //        }
 
+        sio.on("scan_result") { parameters ->
+            runOnUiThread{ progressDialog.dismiss() } // enable interaction again
+            val response: JSONObject? = parameters[0] as? JSONObject
+            val success = response?.getBoolean("success")
+            Log.d("SIO", "store_result success=$success")
+            if (success != null && !success) { // failure
+                val error: String = response.getString("error")
+                Log.d("SIO", "store_result ERROR: $error")
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage(error)
+                            .setIcon(R.drawable.ic_error)
+                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                            .show()
+                }
+            }
+            else
+                sio.emit("get_data")
+        }
+
         sio.on("scan") {parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
@@ -238,6 +259,8 @@ class Main : AppCompatActivity() {
             }
             sio.emit("get_data")
         }
+
+
 
         sio.on("remove_item") { parameters ->
             val response: JSONObject? = parameters[0] as? JSONObject
@@ -303,9 +326,6 @@ class Main : AppCompatActivity() {
         scanButton.setOnClickListener {
             progressDialog = indeterminateProgressDialog("Syncing state...")
             progressDialog.show()
-            var handler = Handler().postDelayed(Runnable {
-                progressDialog.dismiss()
-            }, 32000)
             sio.emit("scan")
             Log.d("SIO", "Scan event sent")
         }
