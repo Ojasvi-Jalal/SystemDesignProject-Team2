@@ -63,6 +63,9 @@ def send_item_retrieved(success, error_message = None):
 def send_item_stored(success, error_message = None):
     emit("store_result", {"success": success, "error": error_message})
 
+def send_scan_complete(success, error_message = None):
+    emit("scan_result", {"success": success, "error": error_message})
+
 def update_db_after_scan(existing_indexes):
     for i in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
         if read.read_shelf(i).itemName is not None:
@@ -167,7 +170,12 @@ def horizontal_move(json):
 @socketio.on("scan")
 def scan():
     logging.info("Got request from Android to perform scan. Sending scan command: n")
-    do_scan()
+    if do_scan():
+        logging.info("Sending scan success message to Android")
+        send_scan_complete(True)
+    else:
+        logging.info("Sending scan failed message to Android")
+        send_scan_complete(False)
 
 def do_scan():
     sio.write_char("n")

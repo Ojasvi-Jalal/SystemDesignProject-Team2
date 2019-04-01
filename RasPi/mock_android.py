@@ -36,6 +36,11 @@ def retrieve_result(res):
 def retrieve_result(res):
     print("STORE RESULT")
     print(res)
+@sio.on("scan_result")
+def retrieve_result(res):
+    print("SCAN RESULT")
+    print(res)
+
 
 
 def main():
@@ -52,9 +57,7 @@ def main():
     # sio.emit("add_item", {"pos": 3, "name": "Pineapple"})
     sio.emit("add_item", {"pos": 2, "name": "test"})
 
-    # Try sending GET request
-    print(requests.get("http://{}/pir_scan".format(url)).text)
-
+    sio.emit("scan")
     # # INVALID returns error as no position is given
     # print(">Failed move to:")
     # sio.emit("move_to", {})
