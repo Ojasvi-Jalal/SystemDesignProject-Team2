@@ -21,7 +21,7 @@ const int echoPin = A1;
 
 // defines variables for the ultrasonic sensor
 long duration;
-int distance;
+int distance = 100;
 bool holding;
 int level = 0;
 
@@ -37,8 +37,8 @@ int stats[6] = {};
 int counter = 0;
 
 //Coordinates of the shelf, vertically and horizontally
-int angleShelf[6] = {380, 575, 783, 987, 502, 865};
-int verticality[2] = {235, 3600};
+int angleShelf[6] = {360, 560, 755, 955, 475, 840};
+int verticality[2] = {100, 3600};
 const int up = 1500;
 String orders;
 int reset = 0;
@@ -60,24 +60,11 @@ void setup(){
 }
 
 void loop(){
-    Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
 
-    if(Wire.available()){
-        //Serial.print("Incoming value: ");
-        angles[0] -= (int8_t) Wire.read();
-        angles[5] -= (int8_t) Wire.read();
-        angles[1] -= (int8_t) Wire.read();
-        angles[5] -= (int8_t) Wire.read();
-        angles[5] -= (int8_t) Wire.read();
-        angles[5] -= (int8_t) Wire.read();
-        //for(int x = 0; x < ROTARY_NUM; x++){
-        //    angles[x] -= (int8_t) Wire.read();
-            //Serial.print((String) angles[x] + ", ");
-        //}
-    }
+    readPos();
     //Serial.print(((String) readDigitalSensorData(2)) + ", ");
     irSensor = readDigitalSensorData(3);
-    readUltrasound();
+    //readUltrasound();
     if(distance < 10) holding = true;
     else holding = false;
 
@@ -94,7 +81,7 @@ void loop(){
 
     //Serial.println(orders);
 
-    delay(30);
+    //delay(30);
 
    //Serial.print("DOING JOB");
     doJob();
@@ -234,10 +221,10 @@ void goToShelf(int vertical){
     if(h < horizontal){
         if((horizontal-h) < HORIZTAL_MIN){
             motorBackward(0, HORIZTAL_MIN);
-        }else if((horizontal-h) < 100){
+        }else if((horizontal-h) < 70){
             motorBackward(0, (horizontal-h));
         }else{
-            motorBackward(0, 100);
+            motorBackward(0, 70);
         }
     }
     else motorStop(0);
@@ -252,7 +239,7 @@ void goToShelf(int vertical){
             motorBackward(1, 100);
         }
     }
-    else motorStop(0);
+    else motorStop(1);
 }
 
 void retrieveItem(){
@@ -268,44 +255,20 @@ void retrieveItem(){
     //Serial.println((String) shelf + " getting to");
     int toH = angleShelf[shelf];
     //Serial.println("toH: " + (String) toH);
-    int toV = verticality[0];
-    if(shelf >= 4) toV = verticality[1];
+    int toV = verticality[1];
+    if(shelf >= 4) toV = verticality[0];
     //Serial.println((String) shelf);
-    if(shelf>3){
-        toV = verticality[1];
-    }
-    if(v <= toV+400 && h >= toH){
-      /*Serial.println("Got to the right place");
-      Serial.println((String) v);
-      Serial.println((String) toV);
-      Serial.println((String) h);
-      Serial.println((String) toH);
-        /*while(angles[1] <= toV+500){
-            //Get the angles at the moment
-            for(int x = 0; x < ROTARY_NUM; x++){
-                angles[x] += (int8_t) Wire.read();
-                //Serial.print((String) angles[x] + ", ");
-            }
-            motorForward(1, 100);
-        }*/
+    if(v >= toV && h >= toH){
         motorStop(1);
+        motorStop(0);
         delay(10);
         //Once it has arrived to the vertical goal (right underneath the object), take out the fork
         extendArm();
         delay(100);
-
-        //Go up to take the item
-        //Serial.println((String)angles[1]);
-        //Serial.println((String)(toV-200));
-        while(angles[1] >= (toV +100)){
-          //Serial.println("Went in");
-          //Serial.println((String)angles[1]);
+        
+        while(angles[1] <= (toV + up)){
+            readPos();
             motorBackward(1, 100);
-            for(int x = 0; x < ROTARY_NUM; x++){
-                angles[x] += (int8_t) Wire.read();
-                //Serial.print((String) angles[x] + ", ");
-            }
-            delay(10);
         }
         motorStop(1);
         delay(20);
@@ -313,49 +276,34 @@ void retrieveItem(){
         job = 'o';
     }
     else{
-      goToShelf(toV+400);
+      goToShelf(toV);
     }
 }
 
 void storeItem(){
-    if((!holding) && (!armOut)){
-        Serial.println("x");
-        Serial.println("Can't Store with hands empty!");
-        job = 'o';
-        return;
-    }
+    //if((!holding) && (!armOut)){
+    //    Serial.println("x");
+    //    Serial.println("Can't Store with hands empty!");
+    //    job = 'o';
+    //    return;
+    //}
     int v = angles[1];
     int h = angles[0];
     //Angles to get to
-    int toH = angleShelf[shelf%4];
-    int toV = verticality[0];
-    if(shelf>3){
-        toV = verticality[1];
-    }
-    if(v <= toV-700 && h >= toH){
-        /*while(angles[1] <= toV-500){
-            //Get the angles at the moment
-            for(int x = 0; x < ROTARY_NUM; x++){
-                angles[x] += (int8_t) Wire.read();
-            }
-            motorForward(1, 100);
-        }*/
+    //Serial.println((String) shelf + " getting to");
+    int toH = angleShelf[shelf];
+    //Serial.println("toH: " + (String) toH);
+    int toV = verticality[1] + up;
+    if(shelf >= 4) toV = verticality[0] + up;
+    //Serial.println((String) shelf);
+    if(v >= toV && h >= toH){
         motorStop(1);
+        motorStop(0);
         //Once it has arrived to the vertical goal, take out the fork
         extendArm();
-
-        //Go down to store the item
-        int button = digitalRead(3);
-        Serial.println("******" +(String) (toV+50) + "******");
-        while(angles[1] <= toV){
-          //Serial.println((String) angles[1]);
-            button = digitalRead(3);
+        while(angles[1] >= toV - up){
             motorForward(1, 100);
-            for(int x = 0; x < ROTARY_NUM; x++){
-                angles[x] -= (int8_t) Wire.read();
-                //Serial.print((String) angles[x] + ", ");
-            }
-            delay(5);
+            readPos();
         }
         motorStop(1);
         //Retract the arm
@@ -366,7 +314,7 @@ void storeItem(){
         job = 'o';
     }
     else{
-        goToShelf(toV-700);
+        goToShelf(toV);
     }
 }
 
@@ -381,12 +329,12 @@ int getVangle(){
 
 void detect(){
     int pos = angles[0];
-    if(pos > 360 && pos < 400  && level == 2) setItem(0);
-    if(pos > 555 && pos < 595  && level == 2) setItem(1);
-    if(pos > 763 && pos < 803  && level == 2) setItem(2);
-    if(pos > 967 && pos < 1007 && level == 2) setItem(3);
-    if(pos > 835 && pos < 935  && level == 1) setItem(5);
-    if(pos > 450 && pos < 550  && level == 1) setItem(4);
+    if(pos > (angleShelf[0] - 25) && pos < (angleShelf[0] + 25)  && level == 2) setItem(0);
+    if(pos > (angleShelf[1] - 25) && pos < (angleShelf[1] + 25)  && level == 2) setItem(1);
+    if(pos > (angleShelf[2] - 25) && pos < (angleShelf[2] + 25)  && level == 2) setItem(2);
+    if(pos > (angleShelf[3] - 25) && pos < (angleShelf[3] + 25)  && level == 2) setItem(3);
+    if(pos > (angleShelf[5] - 25) && pos < (angleShelf[5] + 25)  && level == 1) setItem(5);
+    if(pos > (angleShelf[4] - 25) && pos < (angleShelf[4] + 25)  && level == 1) setItem(4);
 }
 
 void setItem(int i){
@@ -428,7 +376,7 @@ void endTest(){
 void extendArm(){
     if(armOut) return;
     motorBackward(GRAB_MOTOR, 80);
-    delay(750);
+    delay(1500);
     motorAllStop();
     delay(50);
     armOut = true;
@@ -436,7 +384,7 @@ void extendArm(){
 void retractArm(){
     if(!armOut) return;
     motorForward(GRAB_MOTOR, 80);
-    delay(750);
+    delay(1500);
     motorAllStop();
     delay(50);
     armOut = false;
@@ -449,7 +397,7 @@ void readUltrasound(){
 
     // Sets the trigPin on HIGH state for 10 micro seconds
     digitalWrite(trigPin, HIGH);
-    delayMicroseconds(10);
+    delayMicroseconds(2);
     digitalWrite(trigPin, LOW);
 
     // Reads the echoPin, returns the sound wave travel time in microseconds
@@ -477,3 +425,15 @@ void readUltrasound(){
 // void goHorizontal(int angle){
 //
 // }
+
+void readPos(){
+    Wire.requestFrom(ROTARY_SLAVE_ADDRESS, ROTARY_NUM);
+    if(Wire.available()){
+        angles[0] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        angles[1] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+        angles[5] -= (int8_t) Wire.read();
+    }
+}
