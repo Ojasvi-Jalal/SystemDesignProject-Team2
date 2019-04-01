@@ -1,4 +1,4 @@
-ROBOT_MIN_POS = 4
+ROBOT_MIN_POS = 0
 ROBOT_MAX_POS = 7
 RF_DEVICE = "/dev/ttyACM0"
 SHELF_JSON_FILE = "shelf.json"
@@ -25,3 +25,8 @@ DELAY_BEFORE_SCAN_SEC = 5
 
 # Where to notify a scan needed
 SCAN_URL = "http://localhost:8000/pir_scan"
+
+# Name of a unknown item
+# Unknown item is where the sensor detects an item on the shelf that is not in the database
+# So a user has added an item to the shelf without the robort
+UNKNOWN_ITEM_NAME = "Unknown"

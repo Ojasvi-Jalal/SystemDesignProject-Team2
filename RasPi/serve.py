@@ -67,12 +67,19 @@ def send_scan_complete(success, error_message = None):
     emit("scan_result", {"success": success, "error": error_message})
 
 def update_db_after_scan(existing_indexes):
+    logging.info("Updating database from scan result")
     for i in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
         if read.read_shelf(i).itemName is not None:
             # Check that detector found item in this position
             if i not in existing_indexes:
                 logging.info("Found item that exists in database but not detected in shelf: pos = {}. Removing from db...".format(i))
                 db_remove(i)
+        else:
+            # Check that detector did not find item in this posision
+            if i in existing_indexes:
+                logging.info("Found item that does not exist in item database at pos = {} - Adding unknown item to database".format(i))
+                # We need to add an unknown item to the database
+                db_add(i, UNKNOWN_ITEM_NAME, None, None)
 
 
 # Move the shelf to a position. Example
