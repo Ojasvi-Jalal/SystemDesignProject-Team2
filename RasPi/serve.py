@@ -19,7 +19,7 @@ from Segment import Segment
 from threading import Lock
 import time
 import os
-
+from disable_pir import DisablePir
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -66,6 +66,7 @@ def send_item_stored(success, error_message = None):
 def send_scan_complete(success, error_message = None):
     emit("scan_result", {"success": success, "error": error_message})
 
+
 def update_db_after_scan(existing_indexes):
     logging.info("Updating database from scan result")
     for i in range(ROBOT_MIN_POS, ROBOT_MAX_POS + 1):
@@ -81,23 +82,6 @@ def update_db_after_scan(existing_indexes):
                 # We need to add an unknown item to the database
                 db_add(i, UNKNOWN_ITEM_NAME, None, None)
 
-
-# Move the shelf to a position. Example
-# move_to, {"pos": 8}
-# This endpoint probabily won't be needed in the future but useful for testing
-@socketio.on('move_to')
-def move_to(message):
-    pos = message.get("pos")
-    if pos is None:
-        emit("move_to", {"success": False, "message": "No pos provided"})
-        return 
-
-    if not (ROBOT_MIN_POS <= pos <= ROBOT_MAX_POS):
-        emit("move_to", {"success": False, "message": "Provided pos {} is out of range. Expected value between {} and {}".format(pos, ROBOT_MIN_POS, ROBOT_MAX_POS)})
-        return 
-
-    sio.write_char(pos.__str__())
-    emit("move_to", {"success": True})
 
 @socketio.on("get_data")
 def get_data():
@@ -124,54 +108,49 @@ def add_item(item):
     # Add the new item to the database
     db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
 
-    # Now get the robot to store the item at the specified position
-    logging.info("Sending store command to robot: s{}".format(pos))
-    sio.write_char("s")
-    sio.write_char(item["pos"].__str__())
+    with DisablePir():
+        # Now get the robot to store the item at the specified position
+        logging.info("Sending store command to robot: s{}".format(pos))
+        sio.write_char("s")
+        sio.write_char(item["pos"].__str__())
 
-    logging.info("Waiting for robot to store item and return to origin...")
-    # Finally wait for the robot to return back to the origion
-    res = sio.read_lines_until("o", timeout_per_message=STORE_TIMEOUT)
-    if res is None or len(res) == 0 or res[-1] != "o":
-        logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
-        send_item_stored(False, "Timeout")
-        return 
+        logging.info("Waiting for robot to store item and return to origin...")
+        # Finally wait for the robot to return back to the origion
+        res = sio.read_lines_until("o", timeout_per_message=STORE_TIMEOUT)
+        if res is None or len(res) == 0 or res[-1] != "o":
+            logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
+            send_item_stored(False, "Timeout")
+            return 
 
-    # Send success back to the android app
-    logging.info("item stored successfully")
-    send_item_stored(True)
+        # Send success back to the android app
+        logging.info("item stored successfully")
+        send_item_stored(True)
 
 @socketio.on("retrieve_item")
 def retrieve_item(json):
-    pos = json.get("pos")
-    db_remove(pos)
+    with DisablePir():
+        pos = json.get("pos")
+        db_remove(pos)
 
-    logging.info("Got request to retieve item at position {} - sending command r{}".format(pos, pos))
-    sio.write_char("r")
-    sio.write_char(pos.__str__())
+        logging.info("Got request to retieve item at position {} - sending command r{}".format(pos, pos))
+        sio.write_char("r")
+        sio.write_char(pos.__str__())
 
-    # Send the new updated database to the Android App
-    emit("get_data", db_get_all())
+        # Send the new updated database to the Android App
+        emit("get_data", db_get_all())
 
-    # Read the status of the robot. This waits until it returns to origin (when it sends the character 'o')
-    logging.info("Waiting for robot to return back to origin")
-    res = sio.read_lines_until("o", timeout_per_message=RETRIVE_TIMEOUT)
-    if res is None or len(res) == 0 or res[-1] != "o":
-        # Timeout occured if we didn't recieve a 'o' after a while
-        logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))
-        send_item_retrieved(False, "Timeout")
-        return
+        # Read the status of the robot. This waits until it returns to origin (when it sends the character 'o')
+        logging.info("Waiting for robot to return back to origin")
+        res = sio.read_lines_until("o", timeout_per_message=RETRIVE_TIMEOUT)
+        if res is None or len(res) == 0 or res[-1] != "o":
+            # Timeout occured if we didn't recieve a 'o' after a while
+            logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))
+            send_item_retrieved(False, "Timeout")
+            return
 
-    # Everything has completed succcessfully, indicate success to Android app
-    logging.info("Item successfully retrieved")
-    send_item_retrieved(True)
-
-
-@socketio.on("horizontal_move")
-def horizontal_move(json):
-    pos = json.get("pos")
-    sio.write_char("h")
-    sio.write_char(pos.__str__())
+        # Everything has completed succcessfully, indicate success to Android app
+        logging.info("Item successfully retrieved")
+        send_item_retrieved(True)
 
 
 @socketio.on("scan")
@@ -185,33 +164,28 @@ def scan():
         send_scan_complete(False)
 
 def do_scan():
-    sio.write_char("n")
-    # Read positions of each shelf position
+    with DisablePir():
+        sio.write_char("n")
+        # Read positions of each shelf position
 
-    scan_result = sio.read_lines_until("o", timeout_per_message=SCAN_TIMEOUT)
-    logging.info("Scan result = {}".format(",".join(scan_result)))
+        scan_result = sio.read_lines_until("o", timeout_per_message=SCAN_TIMEOUT)
+        logging.info("Scan result = {}".format(",".join(scan_result)))
 
-    if len(scan_result) == 0 or scan_result[-1] != "o":
-        logging.error("Robot scan failed due to timeout. Got response {}".format(scan_result))
-        return False
+        if len(scan_result) == 0 or scan_result[-1] != "o":
+            logging.error("Robot scan failed due to timeout. Got response {}".format(scan_result))
+            return False
 
-    try:
-        pos_ints = []
-        for x in scan_result[:-1]:
-            pos_ints.append(int(x))
-        update_db_after_scan(pos_ints)
-    except ValueError:
-        logging.exception("Failed to interpret scan result: got strings that could not be parsed into ints")
-        return False
+        try:
+            pos_ints = []
+            for x in scan_result[:-1]:
+                pos_ints.append(int(x))
+            update_db_after_scan(pos_ints)
+        except ValueError:
+            logging.exception("Failed to interpret scan result: got strings that could not be parsed into ints")
+            return False
 
-    logging.info("Scanning complete")
-    return True
-
-
-@socketio.on("origin")
-def origin():
-    sio.write_char("o")
- 
+        logging.info("Scanning complete")
+        return True
 
 @app.route('/pir_scan')
 def index():
@@ -237,6 +211,7 @@ if __name__ == '__main__':
     logging.getLogger().setLevel(logging.DEBUG)
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
+
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock-serial", action='store_true', help="Don't create or communicate over serial. Instead all communications are printed to standard out ")

@@ -12,6 +12,7 @@ import sys
 import time 
 import argparse
 from enum import Enum 
+import os 
 
 try:
     import RPi.GPIO as GPIO
@@ -29,11 +30,15 @@ class State(Enum):
     NOTIFY_SCAN_DETECTED = "NOTIFY_SCAN_DETECTED"
     COOLOFF_NOTHING_DETECTED = "COOLOF_NOTHING_DETECTED"
     COOLOFF_DETECTED = "COOLOFF_DETECTED"
+    PIR_BLOCKED = "PIR_BLOCKED"
 
 # Globals used to keep track of last PIR update
 state = State.NOTHING_DETECTED
 after_detection_start = 0
 cooloff_start = 0 
+
+def block_exists():
+    return os.path.exists(PIR_BLOCK_FILE)
 
 def notify_scan_needed():
     logging.info("Notifying PIR needed")
@@ -53,6 +58,12 @@ def on_pir_update(value: int):
     global after_detection_start
     global cooloff_start
     prev_state = state
+
+    # First most important is to check for lock file
+    if block_exists():
+        state = State.PIR_BLOCKED
+    elif state == State.PIR_BLOCKED:
+        state = State.NOTHING_DETECTED
 
     if value is not None:
         # Do the state transision transition

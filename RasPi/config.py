@@ -1,9 +1,17 @@
+from os.path import expanduser
+
 ROBOT_MIN_POS = 0
 ROBOT_MAX_POS = 7
+
+# Name of the radio device on the raspberry pi and the baud rate to read and write at 
 RF_DEVICE = "/dev/ttyACM0"
-SHELF_JSON_FILE = "shelf.json"
-WAIT_FOR_RESPONSE_MS=100
 BAUD_RATE = 115200
+
+# Name of JSON database file
+SHELF_JSON_FILE = "shelf.json"
+
+# I don't think this is used anywhere but I'm too scared to remove it 
+WAIT_FOR_RESPONSE_MS=100
 
 
 # Robot timeouts
@@ -30,3 +38,7 @@ SCAN_URL = "http://localhost:8000/pir_scan"
 # Unknown item is where the sensor detects an item on the shelf that is not in the database
 # So a user has added an item to the shelf without the robort
 UNKNOWN_ITEM_NAME = "Unknown"
+
+# Lock file created to stop PIR sensor from running when shelf is moving
+# This prevents the PIR sensor from trying to scan from movement detected by movement
+PIR_BLOCK_FILE = expanduser("~/.disable_pir")
