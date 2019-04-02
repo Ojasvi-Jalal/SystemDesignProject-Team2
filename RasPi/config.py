@@ -19,9 +19,14 @@ WAIT_FOR_RESPONSE_MS=100
 # IMPORTANT: All times in milliseconds
 # Timeout is how long to wait max for each character sent by serial. So total time could
 # be longer that timeout if characters are being sent very slowly
-RETRIVE_TIMEOUT = 1000
-STORE_TIMEOUT = 1000
-SCAN_TIMEOUT = 2000			# Per message
+RETRIVE_TIMEOUT = 30000
+STORE_TIMEOUT = 30000
+SCAN_TIMEOUT = 30000			# Per message
+ORIGIN_TIMEOUT = 10000
+
+# How often to ping Android when waiting for serial input
+
+PING_INTERVAL_MS = 1000
 # Data pin used by PIR
 PIR_DATA_PIN = 15
 

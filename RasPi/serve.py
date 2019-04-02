@@ -86,7 +86,6 @@ def update_db_after_scan(existing_indexes):
 @socketio.on("get_data")
 def get_data():
     emit("get_data", db_get_all())
-    send_scan_complete(False)
 
 @socketio.on("add_item")
 def add_item(item):
@@ -189,7 +188,11 @@ def do_scan():
         return True
 
 def get_store_retrieve_error(timeout):
-    res = sio.read_lines_until("o", timeout_per_message=timeout)
+    def ping():
+        logging.info("store_retrieve ping!")
+        send("Ping!")
+
+    res = sio.read_lines_until("o", timeout_per_message=timeout, ping_func=ping, ping_timeout_ms=PING_INTERVAL_MS)
     logging.info("get_store_retrieve_error: got response of {}".format(res))
     if len(res) == 0:
         return TIMEOUT_ERROR_MESSAGE
@@ -198,6 +201,7 @@ def get_store_retrieve_error(timeout):
     if res[-1] == "o":
         return None
 
+    # Exception
     if res[0] == "x":
         if len(res) == 0:
             return "Unknown exception"
@@ -228,8 +232,8 @@ if __name__ == '__main__':
 
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().setLevel(logging.DEBUG)
-    # log = logging.getLogger('werkzeug')
-    # log.setLevel(logging.ERROR)
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
 
 
     parser = argparse.ArgumentParser()
@@ -241,6 +245,10 @@ if __name__ == '__main__':
 
     # Setup serial
     sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
+    # def ping():
+    #     send("Ping!")
+
+    # sio.wait_for_next_line(timeout_ms=10000, ping_func=ping)
 
     if os.environ.get('WERKZEUG_RUN_MAIN') is None:
         main_run_once()

@@ -11,6 +11,11 @@ sio = socketio.Client()
 def on_connect():
     print('connection established')
 
+@sio.on("message")
+def on_connect(message):
+    print(message)
+
+
 @sio.on('move_to')
 def move_to_response(res):
     print("move_to")
@@ -52,8 +57,8 @@ def main():
     print("Connecting to {}".format(full_url))
     
     sio.connect(full_url)
-    sio.emit("add_item", {"pos": 4, "name": "Grape"})
-    sio.emit("add_item", {"pos": 5, "name": "Pineapple"})
+    sio.emit("retrieve_item", {"pos": 6, "name": "Grape"})
+    #sio.emit("add_item", {"pos": 5, "name": "Pineapple"})
     #sio.emit("retrieve_item", {"pos": 3})
     #sio.emit("rsetrieve_item", {"pos": 4})
     sio.wait()

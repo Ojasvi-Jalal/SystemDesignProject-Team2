@@ -28,6 +28,13 @@ class SerialIO:
                 timeout=1
             )
 
+            logging.info("Waiting for origin to send two os")
+            self.wait_for_origin()
+
+
+    def wait_for_origin(self):
+        return self.read_lines_until("o", timeout_ms=ORIGIN_TIMEOUT) + self.read_lines_until("o", timeout_ms=ORIGIN_TIMEOUT)
+
     def write(self, message: str):
         if self.mock_io:
             print("SEND {}".format(message))
@@ -62,8 +69,11 @@ class SerialIO:
 
         return next.replace("\r\n", "")
 
-    def wait_for_next_line(self, timeout_ms=10000):
+    def wait_for_next_line(self, timeout_ms=10000, ping_func = None, ping_timeout_ms = 1000):
+        print("ping_func = {} ping_timeout_ms = {}".format(ping_func, ping_timeout_ms))
         time_started_ms = time.time() * 1000
+        ping_timer = time.time() * 1000
+
         while True:
             line = self.read_next_line()
             if line is not None:
@@ -73,17 +83,22 @@ class SerialIO:
             if time_now_ms - time_started_ms >= timeout_ms:
                 logging.info("wait_for_next_line timed out after {}ms".format(time_now_ms - time_started_ms))
                 return None # Indicate timeout
+
+            if ping_func and time_now_ms - ping_timer >= ping_timeout_ms:
+                logging.info("Calling ping function")
+                ping_func()
+                ping_timer = time_now_ms
         
-    def read_lines_until(self, text, timeout_per_message=10000):
-        return self.read_lines_until_any([text], timeout_per_message)
+    def read_lines_until(self, text, timeout_per_message=10000, ping_func = None, ping_timeout_ms = 1000):
+        return self.read_lines_until_any([text], timeout_per_message, ping_func=ping_func, ping_timeout_ms=ping_timeout_ms)
 
     # Read lines from serial until it finds a line with text that matches exactly an entry 
     # in the options list
-    def read_lines_until_any(self, options, timeout_per_message):
+    def read_lines_until_any(self, options, timeout_per_message, ping_func = None, ping_timeout_ms = 1000):
         lines = []
         time_started = time.time()
         while True:
-            res = self.wait_for_next_line(timeout_per_message)
+            res = self.wait_for_next_line(timeout_per_message, ping_func=ping_func, ping_timeout_ms=ping_timeout_ms)
             logging.info("read_lines_until: read line {}".format(res))
             if res in options:
                 lines.append(res)
@@ -92,7 +107,7 @@ class SerialIO:
                 # Timeout occured
                 logging.info("timeout occured after {}ms".format(timeout_per_message))
                 return lines # We know timeout occured as final item != text
-            elif attempts != "":
+            elif res != "":
                 # Ignore empty new lines sent
                 lines.append(res)
 
