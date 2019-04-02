@@ -29,6 +29,7 @@ class LauncherActivity : AppCompatActivity() {
         if(configured) {
             editor.apply()
             startActivity(Intent(this, Main::class.java))
+            finish()
         }
         else {
             val continueButton = findViewById<Button>(R.id.continueButton)

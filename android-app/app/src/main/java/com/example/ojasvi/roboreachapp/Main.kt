@@ -497,10 +497,10 @@ class Main : AppCompatActivity() {
         var freeSections: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()
         // TODO: check if below is required
         // Takes out shelf 0 (origin?)
-        freeSections = freeSections?.filter { it.name != "0" }
+        // freeSections = freeSections?.filter { it.name != "0" }
 
         if(large) // allow only large sections 5 or 6 if true
-            freeSections = freeSections?.filter { it.name == "5" || it.name == "6" }
+            freeSections = freeSections?.filter { it.name == "4" || it.name == "5" }
 
         if (freeSections != null && freeSections.isNotEmpty()) {
             val freeSection = freeSections?.get(0)
