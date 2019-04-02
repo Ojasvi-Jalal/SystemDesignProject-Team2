@@ -75,13 +75,18 @@ class SerialIO:
                 return None # Indicate timeout
         
     def read_lines_until(self, text, timeout_per_message=10000):
+        return self.read_lines_until_any([text], timeout_per_message)
+
+    # Read lines from serial until it finds a line with text that matches exactly an entry 
+    # in the options list
+    def read_lines_until_any(self, options, timeout_per_message):
         lines = []
         time_started = time.time()
         while True:
             res = self.wait_for_next_line(timeout_per_message)
             logging.info("read_lines_until: read line {}".format(res))
-            if res == text:
-                lines.append(text)
+            if res in options:
+                lines.append(res)
                 return lines
             elif res is None:
                 # Timeout occured
@@ -90,6 +95,7 @@ class SerialIO:
             elif attempts != "":
                 # Ignore empty new lines sent
                 lines.append(res)
+
 
     def data_available(self):
         if self.mock_io:

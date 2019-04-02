@@ -117,10 +117,10 @@ def add_item(item):
 
         logging.info("Waiting for robot to store item and return to origin...")
         # Finally wait for the robot to return back to the origion
-        res = sio.read_lines_until("o", timeout_per_message=STORE_TIMEOUT)
-        if res is None or len(res) == 0 or res[-1] != "o":
+        store_error = get_store_retrieve_error(STORE_TIMEOUT)
+        if store_error is not None:
             logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
-            send_item_stored(False, STORE_TIMEOUT_MESSAGE)
+            send_item_stored(False, store_error)
             return 
 
         # Send success back to the android app
@@ -142,11 +142,11 @@ def retrieve_item(json):
 
         # Read the status of the robot. This waits until it returns to origin (when it sends the character 'o')
         logging.info("Waiting for robot to return back to origin")
-        res = sio.read_lines_until("o", timeout_per_message=RETRIVE_TIMEOUT)
-        if res is None or len(res) == 0 or res[-1] != "o":
+        retrieve_error = get_store_retrieve_error(RETRIVE_TIMEOUT)
+        if retrieve_error is not None:
             # Timeout occured if we didn't recieve a 'o' after a while
             logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))
-            send_item_retrieved(False, RETRIEVE_TIMEOUT_MESSAGE)
+            send_item_retrieved(False, retrieve_error)
             return
 
         # Everything has completed succcessfully, indicate success to Android app
@@ -187,6 +187,24 @@ def do_scan():
 
         logging.info("Scanning complete")
         return True
+
+def get_store_retrieve_error(timeout):
+    res = sio.read_lines_until("o", timeout_per_message=timeout)
+    logging.info("get_store_retrieve_error: got response of {}".format(res))
+    if len(res) == 0:
+        return TIMEOUT_ERROR_MESSAGE
+
+    # Success
+    if res[-1] == "o":
+        return None
+
+    if res[0] == "x":
+        if len(res) == 0:
+            return "Unknown exception"
+        return res[1]
+
+    return "Unknown error"
+
 
 @app.route('/pir_scan')
 def index():

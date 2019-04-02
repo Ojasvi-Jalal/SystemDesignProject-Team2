@@ -8,7 +8,7 @@ RF_DEVICE = "/dev/ttyACM0"
 BAUD_RATE = 115200
 
 # Name of JSON database file
-SHELF_JSON_FILE = "shelf.json"
+SHELF_JSON_FILE = expanduser("~/shelf.json")
 
 # I don't think this is used anywhere but I'm too scared to remove it 
 WAIT_FOR_RESPONSE_MS=100
@@ -44,5 +44,4 @@ UNKNOWN_ITEM_NAME = "Unknown"
 PIR_BLOCK_FILE = expanduser("~/.disable_pir")
 
 SCAN_TIMEOUT_MESSAGE = "Timeout"
-STORE_TIMEOUT_MESSAGE = "Timeout"
-RETRIEVE_TIMEOUT_MESSAGE = "Timeout"
+TIMEOUT_ERROR_MESSAGE = "Timeout"
