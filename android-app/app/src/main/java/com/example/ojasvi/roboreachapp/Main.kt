@@ -143,7 +143,7 @@ class Main : AppCompatActivity() {
         }
 
         sio.on("retrieve_result") { parameters ->
-            runOnUiThread{ progressDialog.dismiss() } // enable interaction again
+            runOnUiThread{ if(::progressDialog.isInitialized) progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
             Log.d("SIO", "retrieve_result success=$success")
@@ -162,7 +162,7 @@ class Main : AppCompatActivity() {
         }
 
         sio.on("store_result") { parameters ->
-            runOnUiThread{ progressDialog.dismiss() } // enable interaction again
+            runOnUiThread{ if(::progressDialog.isInitialized) progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
             Log.d("SIO", "store_result success=$success")
@@ -200,13 +200,13 @@ class Main : AppCompatActivity() {
 //        }
 
         sio.on("scan_result") { parameters ->
-            runOnUiThread{ progressDialog.dismiss() } // enable interaction again
+            runOnUiThread{ if(::progressDialog.isInitialized) progressDialog.dismiss() } // enable interaction again
             val response: JSONObject? = parameters[0] as? JSONObject
             val success = response?.getBoolean("success")
-            Log.d("SIO", "store_result success=$success")
+            Log.d("SIO", "scan_result success=$success")
             if (success != null && !success) { // failure
                 val error: String = response.getString("error")
-                Log.d("SIO", "store_result ERROR: $error")
+                Log.d("SIO", "scan_result ERROR: $error")
                 runOnUiThread {
                     AlertDialog.Builder(this)
                             .setTitle("Error")
