@@ -40,6 +40,8 @@ int counter = 0;
 int angleShelf[6] = {360, 560, 755, 955, 475, 840};
 int verticality[2] = {100, 3600};
 const int up = 1500;
+const int scanUp = 2000;
+
 String orders;
 int reset = 0;
 bool armOut = true;
@@ -152,7 +154,7 @@ void scan(){
     int v = angles[1];
     int h = angles[0];
     if (level == 0) level = 2;
-    int vaim = verticality[level-1]+up;
+    int vaim = verticality[level-1]+scanUp;
     if(v < vaim && level == 2){
         if((vaim-v) < VERTICAL_MIN){
             motorBackward(1, VERTICAL_MIN);
@@ -265,7 +267,7 @@ void retrieveItem(){
         //Once it has arrived to the vertical goal (right underneath the object), take out the fork
         extendArm();
         delay(100);
-        
+
         while(angles[1] <= (toV + up)){
             readPos();
             motorBackward(1, 100);
