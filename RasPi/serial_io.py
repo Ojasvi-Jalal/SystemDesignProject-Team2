@@ -29,22 +29,22 @@ class SerialIO:
             )
 
             logging.info("Waiting for origin to send two os")
-            self.wait_for_origin()
+            logging.info("Got {}".format(self.wait_for_origin()))
 
 
     def wait_for_origin(self):
-        return self.read_lines_until("o", timeout_ms=ORIGIN_TIMEOUT) + self.read_lines_until("o", timeout_ms=ORIGIN_TIMEOUT)
+        return self.read_lines_until("o", timeout_per_message=ORIGIN_TIMEOUT) + self.read_lines_until("o", timeout_per_message=ORIGIN_TIMEOUT)
 
     def write(self, message: str):
         if self.mock_io:
-            print("SEND {}".format(message))
+            logging.info("SEND {}".format(message))
             return
         self.serial_out.write(message)
 
     def write_char(self, char: str) -> bool:
         logging.debug("Sending to serial device: {}".format(char))
         if len(char) != 1:
-            logging.error("Tried to send char to serial device with length {}, must have length of 1".format(len(char)))            
+            logging.error("Tried to send char to serial device with length {}, must have length of 1".format(len(char)))
             return False
 
         # Convert to ASCII value, so for example "l" -> 108
@@ -85,19 +85,20 @@ class SerialIO:
                 return None # Indicate timeout
 
             if ping_func and time_now_ms - ping_timer >= ping_timeout_ms:
-                logging.info("Calling ping function")
                 ping_func()
                 ping_timer = time_now_ms
-        
+
     def read_lines_until(self, text, timeout_per_message=10000, ping_func = None, ping_timeout_ms = 1000):
         return self.read_lines_until_any([text], timeout_per_message, ping_func=ping_func, ping_timeout_ms=ping_timeout_ms)
 
-    # Read lines from serial until it finds a line with text that matches exactly an entry 
+    # Read lines from serial until it finds a line with text that matches exactly an entry
     # in the options list
     def read_lines_until_any(self, options, timeout_per_message, ping_func = None, ping_timeout_ms = 1000):
+        logging.info("read_lines_until_any options={} timeout_per_message={} ping_func={} ping_timeout_ms={}".format(options, timeout_per_message, ping_func, ping_timeout_ms))
         lines = []
         time_started = time.time()
         while True:
+            logging.info("Waiting for next line...")
             res = self.wait_for_next_line(timeout_per_message, ping_func=ping_func, ping_timeout_ms=ping_timeout_ms)
             logging.info("read_lines_until: read line {}".format(res))
             if res in options:
@@ -133,4 +134,3 @@ def create_test_serial_console():
 
         while sio.data_available():
             print(sio.read_next())
-

@@ -3,14 +3,14 @@ from os.path import expanduser
 ROBOT_MIN_POS = 0
 ROBOT_MAX_POS = 7
 
-# Name of the radio device on the raspberry pi and the baud rate to read and write at 
+# Name of the radio device on the raspberry pi and the baud rate to read and write at
 RF_DEVICE = "/dev/ttyACM0"
 BAUD_RATE = 115200
 
 # Name of JSON database file
 SHELF_JSON_FILE = expanduser("~/shelf.json")
 
-# I don't think this is used anywhere but I'm too scared to remove it 
+# I don't think this is used anywhere but I'm too scared to remove it
 WAIT_FOR_RESPONSE_MS=100
 
 
@@ -21,17 +21,16 @@ WAIT_FOR_RESPONSE_MS=100
 # be longer that timeout if characters are being sent very slowly
 RETRIVE_TIMEOUT = 30000
 STORE_TIMEOUT = 30000
-SCAN_TIMEOUT = 30000			# Per message
-ORIGIN_TIMEOUT = 10000
+SCAN_TIMEOUT = 60000			# Per message
+ORIGIN_TIMEOUT = 1000
 
 # How often to ping Android when waiting for serial input
-
 PING_INTERVAL_MS = 1000
 # Data pin used by PIR
 PIR_DATA_PIN = 15
 
 # Minimun gap between scans triggered by PIR sensor. So 60 would be a rate of 1 / minutes
-MIN_PIR_SCAN_INTERVAL = 10
+MIN_PIR_SCAN_INTERVAL = 60
 
 # How long to wait (in seconds) after last motion detected until rescan takes place
 DELAY_BEFORE_SCAN_SEC = 5

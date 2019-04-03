@@ -55,9 +55,9 @@ def main():
 
     full_url = 'http://{}'.format(url)
     print("Connecting to {}".format(full_url))
-    
+
     sio.connect(full_url)
-    sio.emit("retrieve_item", {"pos": 6, "name": "Grape"})
+    sio.emit("scan")
     #sio.emit("add_item", {"pos": 5, "name": "Pineapple"})
     #sio.emit("retrieve_item", {"pos": 3})
     #sio.emit("rsetrieve_item", {"pos": 4})

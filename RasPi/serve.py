@@ -1,6 +1,17 @@
 # python3 serve.py --mock-serial
 
 import logging
+
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S', filename='serve.log')
+
+logging.getLogger().addHandler(logging.StreamHandler())
+logging.getLogger().setLevel(logging.DEBUG)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 import sys
 # Server
 from flask import Flask, request
@@ -9,7 +20,7 @@ from serial_io import *
 # Debugging stuff
 import argparse
 # Configuration
-from config import * 
+from config import *
 # Server
 from flask_socketio import SocketIO, send, emit
 # Json
@@ -59,7 +70,7 @@ def db_remove(pos: int):
 
 def send_item_retrieved(success, error_message = None):
     emit("retrieve_result", {"success": success, "error": error_message})
-    
+
 def send_item_stored(success, error_message = None):
     emit("store_result", {"success": success, "error": error_message})
 
@@ -92,9 +103,9 @@ def add_item(item):
     # Check format of socketio request
     if "pos" not in item:
         emit("add_item", {"success": False, "message": "No pos on item"})
-        return 
+        return
     pos = item.get("pos")
-    
+
     # Check if the shelf compartment is free
     # It's important to use the lock here as only one thread should access the file at once
     with lock:
@@ -103,8 +114,8 @@ def add_item(item):
         # The shelf position is full so return an error to the Android app
         if shelf_item.itemName is not None:
             emit("add_item", {"success": False, "message": "Position {} already contains the item {}".format(item["pos"], shelf_item.itemName)})
-            return 
-    
+            return
+
     # Add the new item to the database
     db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
 
@@ -120,7 +131,7 @@ def add_item(item):
         if store_error is not None:
             logging.error("Timeout occured when storing item {} at position {}".format(item.get("name"), pos))
             send_item_stored(False, store_error)
-            return 
+            return
 
         # Send success back to the android app
         logging.info("item stored successfully")
@@ -128,6 +139,7 @@ def add_item(item):
 
 @socketio.on("retrieve_item")
 def retrieve_item(json):
+
     with DisablePir():
         pos = json.get("pos")
         db_remove(pos)
@@ -163,21 +175,34 @@ def scan():
         logging.info("Sending scan failed message to Android")
         send_scan_complete(False, SCAN_TIMEOUT_MESSAGE)
 
+    emit("get_data", db_get_all())
+
+
 def do_scan():
+    logging.info("do_scan called()")
     with DisablePir():
+        logging.info("Sending scan")
         sio.write_char("n")
         # Read positions of each shelf position
+        logging.info("Waiting for result")
 
-        scan_result = sio.read_lines_until("o", timeout_per_message=SCAN_TIMEOUT)
+        def ping():
+            send("Ping!")
+
+        scan_result = sio.read_lines_until("o", timeout_per_message=SCAN_TIMEOUT, ping_func=ping)
         logging.info("Scan result = {}".format(",".join(scan_result)))
 
         if len(scan_result) == 0 or scan_result[-1] != "o":
             logging.error("Robot scan failed due to timeout. Got response {}".format(scan_result))
             return False
 
+        if len(scan_result) < 2 or scan_result[-2] != "e":
+            logging.info("Invalid scan result: expected 'e' but found none")
+            return False
+
         try:
             pos_ints = []
-            for x in scan_result[:-1]:
+            for x in scan_result[:-2]:
                 pos_ints.append(int(x))
             update_db_after_scan(pos_ints)
         except ValueError:
@@ -213,7 +238,10 @@ def get_store_retrieve_error(timeout):
 @app.route('/pir_scan')
 def index():
     logging.info("pir_scan: performing scan as requested by PIR sensor")
-    if do_scan():
+    res = do_scan()
+    logging.info("Did scan res = {}. Sending data update to Android after scan".format(res))
+    emit("get_data", db_get_all())
+    if res:
         return "Success"
     else:
         return "Failed"
@@ -224,27 +252,14 @@ def main_run_once():
 if __name__ == '__main__':
     global sio
 
-    # Setup logging
-    logging.basicConfig(
-        format='%(asctime)s %(levelname)-8s %(message)s',
-        level=logging.DEBUG,
-        datefmt='%Y-%m-%d %H:%M:%S', filename='serve.log')
-
-    logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().setLevel(logging.DEBUG)
-    log = logging.getLogger('werkzeug')
-    log.setLevel(logging.ERROR)
-
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock-serial", action='store_true', help="Don't create or communicate over serial. Instead all communications are printed to standard out ")
     args = parser.parse_args()
-
+    sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
     # Setup database
     init_database()
 
     # Setup serial
-    sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
     # def ping():
     #     send("Ping!")
 
@@ -256,4 +271,3 @@ if __name__ == '__main__':
 
     # Start server on port 8000
     app.run(debug=True, port=8000, host='0.0.0.0')
-
