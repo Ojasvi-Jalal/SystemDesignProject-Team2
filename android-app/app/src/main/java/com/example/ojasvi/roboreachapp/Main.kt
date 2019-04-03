@@ -281,6 +281,10 @@ class Main : AppCompatActivity() {
             }
         }
 
+        sio.on("message") { parameters ->
+            Log.d("SIO", parameters[0] as String)
+        }
+
 
         Log.d("SIO", "Attempting to connect to $host")
         sio.connect()
