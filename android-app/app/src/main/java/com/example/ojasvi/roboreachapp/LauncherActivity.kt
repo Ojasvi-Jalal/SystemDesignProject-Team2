@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.client.android.Intents;
 
 
 class LauncherActivity : AppCompatActivity() {
@@ -50,6 +51,7 @@ class LauncherActivity : AppCompatActivity() {
         val integrator = IntentIntegrator(this)
         integrator.setOrientationLocked(true)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
         integrator.initiateScan()
     }
 
