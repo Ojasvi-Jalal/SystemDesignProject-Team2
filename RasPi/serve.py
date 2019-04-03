@@ -23,6 +23,7 @@ import argparse
 from config import *
 # Server
 from flask_socketio import SocketIO, send, emit
+import socketio
 # Json
 from dataAccess import Write, Read, init_database
 from Item import Item
@@ -177,8 +178,9 @@ def scan():
 
     emit("get_data", db_get_all())
 
-
-def do_scan():
+# use_local_socketio means = True means to use socketio context no implicit flask_scoketio context
+# see https://github.com/miguelgrinberg/Flask-SocketIO/issues/40
+def do_scan(use_local_socketio = False):
     logging.info("do_scan called()")
     with DisablePir():
         logging.info("Sending scan")
@@ -187,7 +189,10 @@ def do_scan():
         logging.info("Waiting for result")
 
         def ping():
-            send("Ping!")
+            if use_local_socketio:
+                socketio.send("Ping!")
+            else:
+                send("Ping!")
 
         scan_result = sio.read_lines_until("o", timeout_per_message=SCAN_TIMEOUT, ping_func=ping)
         logging.info("Scan result = {}".format(",".join(scan_result)))
@@ -238,9 +243,10 @@ def get_store_retrieve_error(timeout):
 @app.route('/pir_scan')
 def index():
     logging.info("pir_scan: performing scan as requested by PIR sensor")
-    res = do_scan()
+    res = do_scan(use_local_socketio=True)
+
     logging.info("Did scan res = {}. Sending data update to Android after scan".format(res))
-    emit("get_data", db_get_all())
+    socketio.emit("get_data", db_get_all())
     if res:
         return "Success"
     else:

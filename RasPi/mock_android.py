@@ -57,10 +57,12 @@ def main():
     print("Connecting to {}".format(full_url))
 
     sio.connect(full_url)
-    sio.emit("scan")
+    #sio.emit("scan")
     #sio.emit("add_item", {"pos": 5, "name": "Pineapple"})
     #sio.emit("retrieve_item", {"pos": 3})
     #sio.emit("rsetrieve_item", {"pos": 4})
+
+    requests.get("http://{}/pir_scan".format(url))
     sio.wait()
 
 
