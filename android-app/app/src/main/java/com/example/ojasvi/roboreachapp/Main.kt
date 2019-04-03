@@ -347,10 +347,18 @@ class Main : AppCompatActivity() {
             val expiryField: EditText? = alertDialog.findViewById<EditText>(R.id.expiry)
             val largeSwitch: Switch? = alertDialog.findViewById(R.id.large_switch)
 
+            val largeFree: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()?.filter { it.name == "4" || it.name == "5" }
+            if(largeFree != null && largeFree.isEmpty()) { // no empty large shelves, disable large item switch
+                largeSwitch?.isEnabled = false
+                largeSwitch?.visibility = View.GONE
+                val fullText: TextView? = alertDialog.findViewById(R.id.full_text)
+                fullText?.visibility = View.VISIBLE
+                fullText?.setOnClickListener {
+                    longSnackbar(it, "All large sections are full!")
+                }
+            }
+
             if(expiryField != null) {
-//                val listener = MaskedTextChangedListener("[0000]-[00]-[00]", expiryField)
-//                expiryField.addTextChangedListener(listener)
-//                expiryField.onFocusChangeListener = listener
                 expiryField.inputType = InputType.TYPE_NULL
                 expiryField.focusable = View.NOT_FOCUSABLE
                 expiryField.keyListener = null
@@ -488,10 +496,20 @@ class Main : AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
                     .setView(R.layout.inventory)
                     .show()
+            val notice = dialog.findViewById<TextView>(R.id.empty_notice)
+            var items = listOf<ShelfSection>()
+            if(current != null)
+                items = current!!.sections.filter { it.value.item != null }.values.toList()
+            if(items.isEmpty()) {
+                notice?.visibility = View.VISIBLE
+                Log.d("INVENTORY", "Inventory error message displayed")
+            }
+            else
+                Log.d("INVENTORY", "Current: items")
             val recycler = dialog.findViewById<RecyclerView>(R.id.inventory_recycler)
             recycler?.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
             if (current != null)
-                recycler?.adapter = InventoryAdapter(current!!.sections.filter { it.value.item != null }.values.toList(), dialog, this)
+                recycler?.adapter = InventoryAdapter(items, dialog, this)
         }
     }
 
@@ -499,11 +517,8 @@ class Main : AppCompatActivity() {
 
         // Find a free shelf section:
         var freeSections: List<ShelfSection>? = current?.sections?.filter { it.value.item == null || it!!.value.item?.title == "null" }?.values?.toList()
-        // TODO: check if below is required
-        // Takes out shelf 0 (origin?)
-        // freeSections = freeSections?.filter { it.name != "0" }
 
-        if(large) // allow only large sections 5 or 6 if true
+        if(large) // allow only large sections 4 or 5 if true
             freeSections = freeSections?.filter { it.name == "4" || it.name == "5" }
 
         if (freeSections != null && freeSections.isNotEmpty()) {
