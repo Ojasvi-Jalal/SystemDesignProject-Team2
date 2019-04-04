@@ -25,8 +25,8 @@ STORE_TIMEOUT = 30000
 SCAN_TIMEOUT = 60000			# Per message
 ORIGIN_TIMEOUT = 1000
 
-# How often to ping Android when waiting for serial input
-PING_INTERVAL_MS = 1000
+# How often to ping Android when waiting for serial input. time in ms between two pings
+PING_INTERVAL_MS = 500
 # Data pin used by PIR
 PIR_DATA_PIN = 15
 

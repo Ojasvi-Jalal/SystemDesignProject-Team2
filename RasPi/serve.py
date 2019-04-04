@@ -239,14 +239,16 @@ def get_store_retrieve_error(timeout):
 
     return "Unknown error"
 
-
+# PIR initiated scan
 @app.route('/pir_scan')
 def index():
     logging.info("pir_scan: performing scan as requested by PIR sensor")
+    socketio.emit("scan")
     res = do_scan(use_local_socketio=True)
 
     logging.info("Did scan res = {}. Sending data update to Android after scan".format(res))
     socketio.emit("get_data", db_get_all())
+    
     if res:
         return "Success"
     else:
