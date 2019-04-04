@@ -16,13 +16,21 @@ class InventoryAdapter(private val sections: List<ShelfSection>, private val dia
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.card.setTitle(if(sections[position].item != null) sections[position].item?.title else "Empty")
+        var title: String?
+        if(sections[position].item != null) {
+            title = sections[position].item?.title
+            if(title != null && title.length >= 22)
+                title = title.take(22) + "..."
+        }
+        else
+            title = "Empty"
+        holder.card.setTitle(title)
         if(sections[position].item != null && sections[position].item!!.expiresSoon())
             holder.card.setIcon(R.drawable.ic_error)
         else
             holder.card.setIcon(R.drawable.ic_fine)
         val expiresText = holder.itemView.findViewById<TextView>(R.id.expires)
-        expiresText.text = if(sections[position].item != null && sections[position].item?.expiration != null) sections[position].item?.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE) else "-"
+        expiresText.text = if(sections[position].item != null && sections[position].item?.expiration != null) sections[position].item?.expiration?.format(DateTimeFormatter.ISO_LOCAL_DATE) else "N/A"
         val retrieveButton = holder.itemView.findViewById<Button>(R.id.retrieve)
         retrieveButton.setOnClickListener {
             dialog.dismiss()

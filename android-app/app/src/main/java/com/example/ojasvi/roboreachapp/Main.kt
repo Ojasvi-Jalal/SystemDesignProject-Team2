@@ -44,6 +44,7 @@ import org.json.JSONObject
 import java.lang.Thread.sleep
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.HashMap
 
 class Main : AppCompatActivity() {
 
@@ -118,6 +119,7 @@ class Main : AppCompatActivity() {
                 val inventoryButton: Button = findViewById(R.id.inventory)
                 storeButton.isEnabled = true
                 inventoryButton.isEnabled = true
+                sio.emit("get_data")
             }
         }
 
@@ -301,8 +303,9 @@ class Main : AppCompatActivity() {
         val arg = JSONObject().put("pos", pos.toIntOrNull())
         if(!lookupDatabase.containsKey("Recents"))
             lookupDatabase["Recents"] = mutableListOf()
-        if(itemName != null)
-            lookupDatabase["Recents"]?.add(itemName)
+        if(itemName != null && lookupDatabase.containsKey("Recents"))
+            if(!lookupDatabase["Recents"]!!.contains(itemName))
+                lookupDatabase["Recents"]?.add(itemName)
         sio.emit("retrieve_item", arg)
     }
 
@@ -394,6 +397,13 @@ class Main : AppCompatActivity() {
                     longSnackbar(it, "Incorrect expiry date format!")
                 }
                 else {
+                    // Adding to recents
+                    if(!lookupDatabase.containsKey("Recents"))
+                        lookupDatabase["Recents"] = mutableListOf()
+                    if(lookupDatabase.containsKey("Recents"))
+                        if(!lookupDatabase["Recents"]!!.contains(name))
+                            lookupDatabase["Recents"]?.add(name)
+                    // continuing store
                     Log.d("STORE ITEM", "Started item store")
                     val newItem: Item =
                             Item(name, if (expiry != "") LocalDate.parse(expiry, DateTimeFormatter.ISO_LOCAL_DATE) else null, if (barcode != null) barcode else null)
@@ -421,35 +431,63 @@ class Main : AppCompatActivity() {
     }
 
     private fun getItemData(barcode: String) {
-        val requestQueue = Volley.newRequestQueue(this)
-        // Request a string response from the provided URL.
-        val stringRequest = StringRequest(Request.Method.GET, "https://world.openfoodfacts.org/api/v0/product/$barcode.json",
-                Response.Listener<String> { response ->
-                    val responseJSON: JSONObject = JSONObject(response)
-                    val productName: String
-                    if (responseJSON.getString("status_verbose") == "product found") {
-                        productName = responseJSON.getJSONObject("product").getString("product_name")
-                        val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
-                        nameField?.setText(productName)
-                    }
-                    else {
-                        alertDialog.dismiss()
+
+        val mock = true // Flag to use mock database if no internet connectivity available for demo
+
+        if(mock) {
+            /* Mock data for no internet connection */
+            val mockItemDatabase: HashMap<String, String> = hashMapOf()
+            // mockItemDatabase["barcode here"] = "Item name here"
+            mockItemDatabase["03045015"] = "String. 40m. - Tesco"
+            mockItemDatabase["03246566"] = "Tesco Cashew Nuts - 25g"
+            mockItemDatabase["42182634"] = "Vaseline - 100ml"
+            mockItemDatabase["5000436574637"] = "Ibuprofen 200mg caplets - Tesco - 16x200mg"
+            /* End of mock data */
+            if(mockItemDatabase.containsKey(barcode)) {
+                val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
+                nameField?.setText(mockItemDatabase[barcode])
+            }
+            else {
+                AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("Product not found in database!")
+                        .setIcon(R.drawable.ic_error)
+                        .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                        .show()
+            }
+        }
+
+        else {
+            val requestQueue = Volley.newRequestQueue(this)
+            // Request a string response from the provided URL.
+            val stringRequest = StringRequest(Request.Method.GET, "https://world.openfoodfacts.org/api/v0/product/$barcode.json",
+                    Response.Listener<String> { response ->
+                        val responseJSON: JSONObject = JSONObject(response)
+                        val productName: String
+                        if (responseJSON.getString("status_verbose") == "product found") {
+                            productName = responseJSON.getJSONObject("product").getString("product_name")
+                            val nameField: EditText? = alertDialog.findViewById<EditText>(R.id.itemName)
+                            nameField?.setText(productName)
+                        } else {
+                            alertDialog.dismiss()
+                            AlertDialog.Builder(this)
+                                    .setTitle("Error")
+                                    .setMessage("Product not found in database!")
+                                    .setIcon(R.drawable.ic_error)
+                                    .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                                    .show()
+                        }
+
+                    },
+                    Response.ErrorListener {
                         AlertDialog.Builder(this)
                                 .setTitle("Error")
-                                .setMessage("Product not found in database!")
-                                .setIcon(R.drawable.ic_error)
-                                .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
+                                .setMessage("Request $barcode failed:\n${if (it.networkResponse == null) "No response" else "Error: $it.networkResponse"}")
                                 .show()
-                    }
+                    })
+            requestQueue.add(stringRequest)
+        }
 
-                },
-                Response.ErrorListener {
-                    AlertDialog.Builder(this)
-                            .setTitle("Error")
-                            .setMessage("Request $barcode failed:\n${if (it.networkResponse == null) "No response" else "Error: $it.networkResponse"}")
-                            .show()
-                })
-        requestQueue.add(stringRequest)
     }
 
     private fun setUpScanButton(dialog: AlertDialog) {
@@ -474,10 +512,14 @@ class Main : AppCompatActivity() {
             lookupDatabase["Food"]?.add("Kiwi")
             lookupDatabase["Food"]?.add("Pear")
             lookupDatabase["Food"]?.add("Garlic")
+            lookupDatabase["Food"]?.add("Banana")
+            lookupDatabase["Food"]?.add("Nuts")
             lookupDatabase["Drinks"] = mutableListOf()
             lookupDatabase["Drinks"]?.add("Coke")
             lookupDatabase["Drinks"]?.add("Juice")
             lookupDatabase["Drinks"]?.add("Water")
+            lookupDatabase["Drinks"]?.add("Tea")
+            lookupDatabase["Drinks"]?.add("Coffee")
             lookupDatabase["Drinks"]?.add("Energy drink")
             val pickerDialog = AlertDialog.Builder(this)
                     .setView(R.layout.activity_picker)
