@@ -32,6 +32,8 @@ class State(Enum):
     COOLOFF_NOTHING_DETECTED = "COOLOF_NOTHING_DETECTED"
     COOLOFF_DETECTED = "COOLOFF_DETECTED"
     PIR_BLOCKED = "PIR_BLOCKED"
+    COOLOFF_DETECTED_PIR_BLOCKED = "COOLOFF_DETECTED_PIR_BLOCKED"
+    COOLOFF_NOTHING_DETECTED_PIR_BLOCKED = "COOLOFF_NOTHING_DETECTED_PIR_BLOCKED"
 
 # Globals used to keep track of last PIR update
 state = State.NOTHING_DETECTED
@@ -62,9 +64,18 @@ def on_pir_update(value: int):
 
     # First most important is to check for lock file
     if block_exists():
-        state = State.PIR_BLOCKED
+        if state == State.COOLOFF_DETECTED:
+            state = State.COOLOFF_DETECTED_PIR_BLOCKED
+        elif state == State.COOLOFF_NOTHING_DETECTED:
+            state = State.COOLOFF_NOTHING_DETECTED_PIR_BLOCKED
+        else:
+            state = State.PIR_BLOCKED
     elif state == State.PIR_BLOCKED:
         state = State.NOTHING_DETECTED
+    elif state == State.COOLOFF_DETECTED_PIR_BLOCKED:
+        state = State.COOLOFF_DETECTED
+    elif state == State.COOLOFF_NOTHING_DETECTED_PIR_BLOCKED:
+        state = State.COOLOFF_NOTHING_DETECTED
 
     if value is not None:
         # Do the state transision transition
