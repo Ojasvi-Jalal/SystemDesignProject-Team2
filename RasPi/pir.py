@@ -68,7 +68,7 @@ def on_pir_update(value: int):
             state = State.COOLOFF_DETECTED_PIR_BLOCKED
         elif state == State.COOLOFF_NOTHING_DETECTED:
             state = State.COOLOFF_NOTHING_DETECTED_PIR_BLOCKED
-        else:
+        elif not (state == State.COOLOFF_NOTHING_DETECTED_PIR_BLOCKED and state != State.COOLOFF_DETECTED_PIR_BLOCKED):
             state = State.PIR_BLOCKED
     elif state == State.PIR_BLOCKED:
         state = State.NOTHING_DETECTED
