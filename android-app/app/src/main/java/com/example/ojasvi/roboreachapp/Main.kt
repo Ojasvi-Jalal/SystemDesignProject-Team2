@@ -119,7 +119,7 @@ class Main : AppCompatActivity() {
                 val inventoryButton: Button = findViewById(R.id.inventory)
                 storeButton.isEnabled = true
                 inventoryButton.isEnabled = true
-                sio.emit("get_data")
+                //sio.emit("get_data")
             }
         }
 
@@ -222,22 +222,11 @@ class Main : AppCompatActivity() {
                 sio.emit("get_data")
         }
 
-        sio.on("scan") {parameters ->
-            val response: JSONObject? = parameters[0] as? JSONObject
-            val success = response?.getBoolean("success")
-            if (success != null && !success) {
-                val error: String = response.getString("message")
-                Log.d("SIO", "scan ERROR: $error")
-                runOnUiThread {
-                    AlertDialog.Builder(this)
-                            .setTitle("Error")
-                            .setMessage(error)
-                            .setIcon(R.drawable.ic_error)
-                            .setNeutralButton("Dismiss", DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
-                            .show()
-                }
-            } else { // success
-                Log.d("SIO", "scan SUCCESS")
+        sio.on("scan") {
+            Log.d("SIO", "Manual scan triggered")
+            runOnUiThread {
+                progressDialog = indeterminateProgressDialog("Automatic sync in progress...")
+                progressDialog.show()
             }
         }
 
