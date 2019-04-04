@@ -4,32 +4,39 @@ import logging
 import time
 from config import *
 
+
 class SerialIO:
 
     def __init__(self, input_device:str, output_device: str, mock_io = False):
         self.mock_io = mock_io
 
         if not mock_io:
-            self.serial_in = serial.Serial(
-                port=input_device,
-                baudrate = BAUD_RATE,
-                parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE,
-                bytesize=serial.EIGHTBITS,
-                timeout=1
-            )
-
-            self.serial_out = serial.Serial(
-                port=output_device,
-                baudrate = BAUD_RATE,
-                parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE,
-                bytesize=serial.EIGHTBITS,
-                timeout=1
-            )
-
+            try:
+                self.connect(input_device)
+            except serial.serialutil.SerialException:
+                logging.exception("Trying backup device")
+                self.connect(BACKUP_RF_DEVICE)
             logging.info("Waiting for origin to send two os")
             logging.info("Got {}".format(self.wait_for_origin()))
+
+    def connect(self, device):
+        self.serial_in = serial.Serial(
+            port=device,
+            baudrate = BAUD_RATE,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.EIGHTBITS,
+            timeout=1
+        )
+
+        self.serial_out = serial.Serial(
+            port=device,
+            baudrate = BAUD_RATE,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.EIGHTBITS,
+            timeout=1
+        )
 
 
     def wait_for_origin(self):

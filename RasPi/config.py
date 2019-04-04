@@ -5,6 +5,7 @@ ROBOT_MAX_POS = 7
 
 # Name of the radio device on the raspberry pi and the baud rate to read and write at
 RF_DEVICE = "/dev/ttyACM0"
+BACKUP_RF_DEVICE = "/dev/ttyACM1"
 BAUD_RATE = 115200
 
 # Name of JSON database file
