@@ -75,8 +75,12 @@ def send_item_retrieved(success, error_message = None):
 def send_item_stored(success, error_message = None):
     emit("store_result", {"success": success, "error": error_message})
 
-def send_scan_complete(success, error_message = None):
-    emit("scan_result", {"success": success, "error": error_message})
+def send_scan_complete(success, error_message = None, use_local_socketio = False):
+    res = {"success": success, "error": error_message}
+    if use_local_socketio:
+        socketio.emit("scan_result", res)
+    else:
+        emit("scan_result", res)
 
 
 def update_db_after_scan(existing_indexes):
@@ -252,6 +256,11 @@ def index():
     socketio.emit("get_data", db_get_all())
 
     if res:
+        send_scan_complete(True, use_local_socketio=True)
+    else:
+        send_scan_complete(False, error_message=SCAN_TIMEOUT_MESSAGE, use_local_socketio=True)
+
+    if res:
         return "Success"
     else:
         return "Failed"
@@ -268,12 +277,6 @@ if __name__ == '__main__':
     sio = SerialIO(RF_DEVICE, RF_DEVICE, args.mock_serial)
     # Setup database
     init_database()
-
-    # Setup serial
-    # def ping():
-    #     send("Ping!")
-
-    # sio.wait_for_next_line(timeout_ms=10000, ping_func=ping)
 
     if os.environ.get('WERKZEUG_RUN_MAIN') is None:
         main_run_once()

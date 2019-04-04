@@ -1,5 +1,6 @@
 import logging 
 import requests
+import sys
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -41,7 +42,7 @@ def block_exists():
     return os.path.exists(PIR_BLOCK_FILE)
 
 def notify_scan_needed():
-    logging.info("Notifying PIR needed")
+    logging.info("Notifying serve.py scan needed as PIR detected movement")
     try:
         res = requests.get(SCAN_URL)
         result = res.text
@@ -122,14 +123,25 @@ def loop():
                 on_pir_update(None)
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--mock-ir", action='store_true', help="Simular PIR sensor for debugging purposes")
-    args = parser.parse_args()
+def test_loop():
+    val = 0
+    start = time.time()
 
+    while True:
+        new_val = GPIO.input(PIR_DATA_PIN)
+        if new_val != val:
+            print("{} {}".format(new_val, time.time() - start))
+            start = time.time()
+            val = new_val
+
+def main():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(PIR_DATA_PIN,GPIO.IN)     
-    loop()
+    GPIO.setup(PIR_DATA_PIN,GPIO.IN) 
+
+    if len(sys.argv) > 1:
+        test_loop()
+    else:    
+        loop()
 
 
 
