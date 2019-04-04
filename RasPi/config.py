@@ -30,7 +30,7 @@ PING_INTERVAL_MS = 1000
 PIR_DATA_PIN = 15
 
 # Minimun gap between scans triggered by PIR sensor. So 60 would be a rate of 1 / minutes
-MIN_PIR_SCAN_INTERVAL = 60
+MIN_PIR_SCAN_INTERVAL = 60 * 10
 
 # How long to wait (in seconds) after last motion detected until rescan takes place
 DELAY_BEFORE_SCAN_SEC = 5
