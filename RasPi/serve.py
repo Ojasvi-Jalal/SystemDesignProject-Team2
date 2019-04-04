@@ -117,9 +117,6 @@ def add_item(item):
             emit("add_item", {"success": False, "message": "Position {} already contains the item {}".format(item["pos"], shelf_item.itemName)})
             return
 
-    # Add the new item to the database
-    db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
-
     with DisablePir():
         # Now get the robot to store the item at the specified position
         logging.info("Sending store command to robot: s{}".format(pos))
@@ -134,6 +131,9 @@ def add_item(item):
             send_item_stored(False, store_error)
             return
 
+        # Success, Add the new item to the database
+        db_add(item.get("pos"), item.get("name"), item.get("expiry"), item.get("barcode"))
+
         # Send success back to the android app
         logging.info("item stored successfully")
         send_item_stored(True)
@@ -143,7 +143,6 @@ def retrieve_item(json):
 
     with DisablePir():
         pos = json.get("pos")
-        db_remove(pos)
 
         logging.info("Got request to retieve item at position {} - sending command r{}".format(pos, pos))
         sio.write_char("r")
@@ -160,6 +159,9 @@ def retrieve_item(json):
             logging.error("Timeout occured when attempting to retrieve using r{}".format(pos))
             send_item_retrieved(False, retrieve_error)
             return
+
+        # Success, remove item
+        db_remove(pos)
 
         # Everything has completed succcessfully, indicate success to Android app
         logging.info("Item successfully retrieved")
@@ -248,7 +250,7 @@ def index():
 
     logging.info("Did scan res = {}. Sending data update to Android after scan".format(res))
     socketio.emit("get_data", db_get_all())
-    
+
     if res:
         return "Success"
     else:
