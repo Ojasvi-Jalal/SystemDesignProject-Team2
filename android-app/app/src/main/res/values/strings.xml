@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RoboReachApp</string>
+    <string name="app_name">RoboReach</string>
     <string name="transition_string">transition_string</string>
     <string name="empty">Empty</string>
     % do not remove!
