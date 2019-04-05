@@ -382,7 +382,7 @@ void endTest(){
 
 void extendArm(){
     if(armOut) return;
-    motorBackward(GRAB_MOTOR, 80);
+    motorBackward(GRAB_MOTOR, 90);
     delay(1500);
     motorAllStop();
     delay(50);
@@ -390,8 +390,8 @@ void extendArm(){
 }
 void retractArm(){
     if(!armOut) return;
-    motorForward(GRAB_MOTOR, 100);
-    delay(1200);
+    motorForward(GRAB_MOTOR, 90);
+    delay(1500);
     motorAllStop();
     delay(50);
     armOut = false;
