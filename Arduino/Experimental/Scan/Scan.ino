@@ -14,6 +14,7 @@ int angles[6] = {};
 
 //Variables for the sensors data
 int irSensor = 1;
+int irSensor2 = 1;
 
 // defines pins numbers for the ultrasonic sensor
 const int trigPin = 9;
@@ -22,7 +23,7 @@ const int echoPin = A1;
 // defines variables for the ultrasonic sensor
 long duration;
 int distance = 100;
-bool holding;
+bool holding = false;
 int level = 0;
 
 //Job the robot has to do
@@ -37,8 +38,8 @@ int stats[6] = {};
 int counter = 0;
 
 //Coordinates of the shelf, vertically and horizontally
-int angleShelf[6] = {360, 560, 755, 955, 475, 840};
-int verticality[2] = {100, 3600};
+int angleShelf[6] = {360, 560, 755, 960, 480, 850};
+int verticality[2] = {0, 4000};
 const int up = 1500;
 const int scanUp = 2000;
 
@@ -55,8 +56,8 @@ int HORIZTAL_ORG = 80;
 void setup(){
     SDPsetup();
     //Prepare the pins for the ultrasonic sensor
-    pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-    pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+    //pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+    //pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
     //Serial.println("Started");
 }
@@ -66,9 +67,10 @@ void loop(){
     readPos();
     //Serial.print(((String) readDigitalSensorData(2)) + ", ");
     irSensor = readDigitalSensorData(3);
+    //irSensor2 = readDigitalSensorData(9);
     //readUltrasound();
-    if(distance < 10) holding = true;
-    else holding = false;
+    //if(irSensor2 == 0) holding = true;
+    holding = false;
 
     //Serial.print(((String) digitalRead(3)) + ", ");
     //Serial.print(((String) digitalRead(5)) + ", ");
@@ -145,12 +147,15 @@ void doJob(){
 
 void scan(){
     retractArm();
-    if(holding){
-        Serial.println("x");
-        Serial.println("Can't Scan with hands full!");
-        level = 0;
-        job = 'o';
-    }
+    //irSensor2 = readDigitalSensorData(9);
+    //if(irSensor2 == 0) holding = true;
+    //else holding = false;
+    //if(holding){
+    //    Serial.println("x");
+    //    Serial.println("Can't Scan with hands full!");
+    //    level = 0;
+    //    job = 'o';
+    //}
     int v = angles[1];
     int h = angles[0];
     if (level == 0) level = 2;
@@ -385,8 +390,8 @@ void extendArm(){
 }
 void retractArm(){
     if(!armOut) return;
-    motorForward(GRAB_MOTOR, 80);
-    delay(1500);
+    motorForward(GRAB_MOTOR, 100);
+    delay(1200);
     motorAllStop();
     delay(50);
     armOut = false;
